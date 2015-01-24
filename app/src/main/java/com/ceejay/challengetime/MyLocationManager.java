@@ -14,14 +14,12 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
-
 /**
  * Created by CJay on 23.01.2015 for Challenge Time.
+ *
  */
 public class MyLocationManager {
 
-    private ArrayList<LatLng> locations;
     private LocationManager locationManager;
     private String provider;
     private MyLocationListener mylistener;
@@ -56,7 +54,6 @@ public class MyLocationManager {
             mylistener.onLocationChanged(location);
             locationManager.requestLocationUpdates(provider, 500, 5, mylistener);
         }
-        // location updates: at least 1 meter and 200millsecs change
 
 
     }
@@ -67,10 +64,13 @@ public class MyLocationManager {
         public void onLocationChanged(Location location) {
             LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
             track.add(latLng);
+            Track.User = latLng;
             googleMap.clear();
             googleMap.addPolyline(track);
             googleMap.setContentDescription("");
-            googleMap.addCircle(new CircleOptions().center(latLng).radius(100).fillColor(Color.argb(100, 0, 255, 0)).strokeWidth(5).strokeColor(Color.BLACK));
+            googleMap.addCircle(new CircleOptions().center(Track.Start).radius(50).fillColor(Color.argb(100, 0, 255, 0)).strokeWidth(5).strokeColor(Color.BLACK));
+            googleMap.addCircle(new CircleOptions().center(Track.Stop).radius(50).fillColor(Color.argb(100, 255, 0, 0)).strokeWidth(5).strokeColor(Color.BLACK));
+            googleMap.addCircle(new CircleOptions().center(Track.User).radius(5).fillColor(Color.argb(100, 0, 0, 0)).strokeWidth(5).strokeColor(Color.BLACK));
             Toast.makeText(context,"Position",Toast.LENGTH_SHORT).show();
         }
 
