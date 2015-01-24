@@ -12,9 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends ActionBarActivity {
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
-    //Is das cool
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +29,7 @@ public class MapsActivity extends ActionBarActivity {
 
 
     private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
 
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                     .getMap();
@@ -58,13 +54,14 @@ public class MapsActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
 }
