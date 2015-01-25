@@ -34,8 +34,6 @@ public class MainActivity extends ActionBarActivity {
     long startTime = 0;
     Thread testThread;
     private void setUpMapIfNeeded() {
-
-
         Button buttonStart = (Button) findViewById(R.id.start);
 
         buttonStart.setOnClickListener(new View.OnClickListener() {
