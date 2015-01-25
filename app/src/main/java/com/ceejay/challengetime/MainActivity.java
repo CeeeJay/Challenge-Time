@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-public class MapsActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity {
 
     private GoogleMap mMap;
 
