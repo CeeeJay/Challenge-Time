@@ -1,4 +1,4 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.helper;
 
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.

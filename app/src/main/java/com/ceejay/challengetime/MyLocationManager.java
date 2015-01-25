@@ -1,22 +1,14 @@
 package com.ceejay.challengetime;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
@@ -69,17 +61,7 @@ public class MyLocationManager {
         public void onLocationChanged(Location location) {
             LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
             track.add(latLng);
-            Track.User = latLng;
-            googleMap.clear();
-            googleMap.addPolyline(track);
-            googleMap.setContentDescription("");
-            googleMap.addCircle(new CircleOptions().center(Track.Start).radius(50).fillColor(Color.argb(100, 0, 255, 0)).strokeWidth(5).strokeColor(Color.BLACK));
-            googleMap.addCircle(new CircleOptions().center(Track.Stop).radius(50).fillColor(Color.argb(100, 255, 0, 0)).strokeWidth(5).strokeColor(Color.BLACK));
-            googleMap.addCircle(new CircleOptions().center(Track.User).radius(5).fillColor(Color.argb(100, 0, 0, 0)).strokeWidth(5).strokeColor(Color.BLACK));
-            //googleMap.addGroundOverlay(new GroundOverlayOptions().position(Track.User,1).image(BitmapDescriptorFactory.fromResource(R.drawable.icon)));
-            Marker marker = googleMap.addMarker(new MarkerOptions().position(Track.User).icon(BitmapDescriptorFactory.fromResource(R.drawable.challenge)));
-
-            Toast.makeText(context,"Position",Toast.LENGTH_SHORT).show();
+            Transferor.User = latLng;
         }
 
         @Override

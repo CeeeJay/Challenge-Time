@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
+import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 public class MainActivity extends ActionBarActivity {
 
-    private GoogleMap mMap;
+    private GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,53 +27,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
-    boolean isRunning = false;
-    long startTime = 0;
-    Thread testThread;
     private void setUpMapIfNeeded() {
-        Button buttonStart = (Button) findViewById(R.id.start);
+        if (googleMap == null) {
 
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( Track.getStartLocation().distanceTo(Track.getUserLocation()) < 50 && !isRunning ){
+            googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
-                    testThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            while (isRunning){
-                                if(Track.getStopLocation().distanceTo(Track.getUserLocation()) < 50){
-                                    isRunning = false;
-                                }else {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            TextView textView = (TextView) findViewById(R.id.textView);
-                                            textView.setText(System.currentTimeMillis() - startTime + "");
-                                        }
+            if (googleMap != null) {
 
-                                    });
-                                }
-                            }
-                        }
-                    });
-
-                    isRunning = true;
-                    startTime = System.currentTimeMillis();
-                    testThread.start();
-                }
-            }
-        });
-
-        if (mMap == null) {
-
-            mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                new MyLocationManager(this,mMap);
+                new MyLocationManager( this , googleMap );
+                Transferor.mapManager = new MapManager( googleMap );
+                new Challenge( Transferor.User );
             }
         }
     }
