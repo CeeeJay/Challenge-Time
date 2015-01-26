@@ -9,13 +9,13 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.Polygon;
 
 /**
  * Created by CJay on 26.01.2015 for Challenge Time.
+ *
  */
 public class HexagonButton extends View {
 
@@ -35,6 +35,8 @@ public class HexagonButton extends View {
                 attrs,
                 R.styleable.HexagonButton);
 
+        setBackgroundColor(Color.argb(0,0,0,0));
+
     }
 
     public HexagonButton(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -49,15 +51,17 @@ public class HexagonButton extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
+       /* if(event.getAction() == MotionEvent.ACTION_DOWN){
             if(event.getX() < 200 && event.getY() < 200){
-                Toast.makeText(context,"Hello",Toast.LENGTH_SHORT).show();
-                return true;
+                //Transferor.currentChallange.start();
             }
-        }
+        }*/
         return super.onTouchEvent(event);
-
     }
+
+
+
+
 
     @Override
     public void draw(Canvas canvas) {
@@ -75,6 +79,7 @@ public class HexagonButton extends View {
         paint.setTextAlign(Paint.Align.CENTER);
 
         canvas.drawText("Go", 100, 125, paint);
+        super.draw(canvas);
     }
 }
 

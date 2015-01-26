@@ -30,17 +30,17 @@ public class MapManager {
     private HashMap<Marker,Challenge> markerAdapter;
     private HashMap<MarkerOptions,Challenge> markerOptionsMap;
 
-    public MapManager( Context context , GoogleMap googleMap  ) {
-        this.context = context;
+    public MapManager( Context ctx , GoogleMap gMap  ) {
+        context = ctx;
         markerAdapter = new HashMap<>();
         markerOptionsMap = new HashMap<>();
-        this.googleMap = googleMap;
-
+        googleMap = gMap;
+        googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 clear();
-                markerAdapter.get(marker).call();
+                markerAdapter.get(marker).focus();
                 markerAdapter.clear();
                 return true;
             }
@@ -73,12 +73,13 @@ public class MapManager {
         return marker;
     }
 
-    public void drawMarker(){
+    public void refreshMarker(){
         clear();
         for(MarkerOptions marker : markerOptionsMap.keySet()) {
             markerAdapter.put(googleMap.addMarker(marker), markerOptionsMap.get(marker));
         }
     }
+
 
     public void addPolyline( List<LatLng> track ){
         Polyline polyline = googleMap.addPolyline(new PolylineOptions().addAll(track));

@@ -1,9 +1,18 @@
 package com.ceejay.challengetime;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.TextView;
+
+import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.RunChallenge;
+import com.ceejay.challengetime.helper.StopWatch;
+import com.ceejay.challengetime.views.HexagonButton;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,6 +25,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Transferor.context = this;
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
     }
@@ -28,10 +38,61 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        Transferor.mapManager.drawMarker();
+        if(!Challenge.isActivated && !Challenge.isStarted) {
+            Challenge.focusedChallenge = null;
+            Transferor.mapManager.refreshMarker();
+        }else{
+            //Dialog dialog = new Dialog(this);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Challenge.focusedChallenge = null;
+                    Transferor.mapManager.refreshMarker();
+                }
+            });
+            alertDialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            alertDialog.show();
+        }
     }
 
+
+    StopWatch stopWatch;
     private void setUpMapIfNeeded() {
+
+        HexagonButton hexagonButton = (HexagonButton) findViewById(R.id.hex);
+        stopWatch = new StopWatch();
+
+        hexagonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!stopWatch.isClockRunning()){
+                    stopWatch.stop();
+                    stopWatch.start();
+                    stopWatch.addTicker(new StopWatch.Ticker() {
+                        @Override
+                        public void tick(long time) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TextView textView = (TextView)findViewById(R.id.textView);
+                                    textView.setText(stopWatch.getTime()+"");
+                                }
+                            });
+
+                        }
+                    });
+                }else{
+                    stopWatch.stop();
+                }
+
+            }
+        });
+
         if (googleMap == null) {
 
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();

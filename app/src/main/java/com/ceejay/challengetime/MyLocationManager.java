@@ -60,7 +60,6 @@ public class MyLocationManager {
         @Override
         public void onLocationChanged(Location location) {
             LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-            track.add(latLng);
             Transferor.User = latLng;
         }
 

@@ -11,13 +11,20 @@
     <com.ceejay.challengetime.views.HexagonButton
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:text = "Go"
         android:color = "@color/ripple_material_dark"
-        android:layout_marginStart="31dp"
+        android:layout_marginBottom="62dp"
+        android:id="@+id/hex"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="31dp" />
+        android:layout_alignEnd="@+id/textView" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView"
+        android:layout_alignBaseline="@+id/map"
+        android:layout_alignBottom="@+id/map"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

@@ -2,7 +2,6 @@ package com.ceejay.challengetime.challenge;
 
 import android.graphics.Color;
 import com.ceejay.challengetime.Transferor;
-import com.ceejay.challengetime.helper.StopWatch;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -23,7 +22,7 @@ public class RunChallenge extends Challenge {
     Circle stopArea;
     Polyline trackPolyline;
 
-    StopWatch stopWatch;
+
 
 
     public RunChallenge( LatLng location , PolylineOptions track ) {
@@ -34,20 +33,14 @@ public class RunChallenge extends Challenge {
     }
 
     @Override
-    public void call() {
-        startArea = Transferor.mapManager.addArea(startLocation, 50, Color.argb(70, 0, 255, 0));
-        stopArea = Transferor.mapManager.addArea(stopLocation, 50, Color.argb(70, 255, 0, 0));
+    public void focus() {
+        super.focus();
+        startArea = Transferor.mapManager.addArea(startLocation, sizeStartArea, Color.argb(70, 0, 255, 0));
+        stopArea = Transferor.mapManager.addArea(stopLocation, sizeStopArea, Color.argb(70, 255, 0, 0));
         trackPolyline = Transferor.mapManager.addPolyline(track);
     }
 
-    public void start(){
-        stopWatch = new StopWatch();
-    }
 
-    public void stop(){
-
-
-    }
 
 }
 
