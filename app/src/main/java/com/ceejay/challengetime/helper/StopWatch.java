@@ -1,5 +1,7 @@
 package com.ceejay.challengetime.helper;
 
+import java.util.ArrayList;
+
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.
  *
@@ -10,6 +12,12 @@ public class StopWatch {
     private long currentTime;
     private static Thread thread;
     private boolean isClockRunning = false;
+    private Runnable runnable;
+    private ArrayList<Ticker> tickers;
+
+    public StopWatch() {
+        tickers = new ArrayList<>();
+    }
 
     private void startClock(){
         if( thread == null ) {
@@ -19,6 +27,11 @@ public class StopWatch {
                 public void run() {
                     while (isClockRunning) {
                         currentTime = System.currentTimeMillis() - startTime;
+                        for(Ticker ticker : tickers) {
+                            if (ticker != null) {
+                                ticker.tick(currentTime);
+                            }
+                        }
                         try {
                             thread.sleep(1);
                         } catch (InterruptedException e) {
@@ -43,9 +56,6 @@ public class StopWatch {
         thread = null;
     }
 
-    public StopWatch() {
-    }
-
     public void setTime( long time ){
         currentTime = time;
         startTime = System.currentTimeMillis() - time;
@@ -64,6 +74,7 @@ public class StopWatch {
         stopClock();
         startTime = 0;
         currentTime = 0;
+        tickers.clear();
     }
 
     public long getTime(){
@@ -78,9 +89,13 @@ public class StopWatch {
         return isClockRunning;
     }
 
+    public void addTicker( Ticker ticker ){
+        tickers.add(ticker);
+    }
 
-
-
+    public interface Ticker{
+        public void tick( long time );
+    }
 
 }
 
