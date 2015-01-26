@@ -32,11 +32,10 @@ public class Challenge {
     }
 
     private void init(){
-        Transferor.mapManager.addMarker(this);
+        this.marker = Transferor.mapManager.addMarker(this);
     }
 
     public void call(){
-        marker.remove();
         Transferor.mapManager.addArea(latLng,50, Color.argb(70,0,255,0));
     }
 
@@ -46,10 +45,6 @@ public class Challenge {
 
     public Location getLocation() {
         return location;
-    }
-
-    public void setMarker( Marker marker ){
-        this.marker = marker;
     }
 
 

@@ -2,14 +2,14 @@ package com.ceejay.challengetime;
 
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.ceejay.challengetime.challenge.Challenge;
+import android.support.v4.app.FragmentActivity;
+import com.ceejay.challengetime.challenge.RunChallenge;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-public class MainActivity extends ActionBarActivity {
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+public class MainActivity extends FragmentActivity {
 
     private GoogleMap googleMap;
 
@@ -26,38 +26,37 @@ public class MainActivity extends ActionBarActivity {
         setUpMapIfNeeded();
     }
 
+    @Override
+    public void onBackPressed() {
+        Transferor.mapManager.drawMarker();
+    }
 
     private void setUpMapIfNeeded() {
         if (googleMap == null) {
 
-            googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+            googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-
                 new MyLocationManager( this , googleMap );
-                Transferor.mapManager = new MapManager( googleMap );
-                new Challenge( Transferor.User );
+                Transferor.mapManager = new MapManager( this , googleMap );
+                PolylineOptions track = new PolylineOptions();
+                track.add(new LatLng(49.28722,7.11929));
+                track.add(new LatLng(49.28765,7.11888));
+                track.add(new LatLng(49.28785,7.11932));
+                track.add(new LatLng(49.28845,7.11885));
+                track.add(new LatLng(49.28854,7.11897));
+                track.add(new LatLng(49.28865,7.11895));
+                track.add(new LatLng(49.28897,7.11870));
+                new RunChallenge( Transferor.User , track );
+
+                new RunChallenge( new LatLng(49.28854,7.11897) , track );
+
+
             }
         }
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
-    }
 
 }

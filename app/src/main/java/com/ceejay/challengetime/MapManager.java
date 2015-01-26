@@ -1,8 +1,10 @@
 package com.ceejay.challengetime;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.ceejay.challengetime.challenge.Challenge;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
@@ -23,17 +25,24 @@ import java.util.List;
 
 public class MapManager {
 
+    private Context context;
     private GoogleMap googleMap;
-    private HashMap<Marker,Challenge> list;
+    private HashMap<Marker,Challenge> markerAdapter;
+    private HashMap<MarkerOptions,Challenge> markerOptionsMap;
 
-    public MapManager( GoogleMap googleMap  ) {
-        list = new HashMap<>();
+    public MapManager( Context context , GoogleMap googleMap  ) {
+        this.context = context;
+        markerAdapter = new HashMap<>();
+        markerOptionsMap = new HashMap<>();
         this.googleMap = googleMap;
+
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                list.get(marker).call();
-                return false;
+                clear();
+                markerAdapter.get(marker).call();
+                markerAdapter.clear();
+                return true;
             }
         });
     }
@@ -42,30 +51,41 @@ public class MapManager {
         googleMap.clear();
     }
 
-    public void addArea( LatLng position , int radius , int color ){
-        Circle circle = googleMap.addCircle(new CircleOptions().center(position).radius(radius).fillColor(color).strokeWidth(0));
+    public Circle addArea( LatLng position , int radius , int color ){
+        return googleMap.addCircle(new CircleOptions().center(position).radius(radius).fillColor(color).strokeWidth(0));
     }
-    public void addArea( Location position , int radius , int color ){
+
+    public Circle addArea( Location position , int radius , int color ){
         CircleOptions circleOptions = new CircleOptions()
                 .center(new LatLng(position.getLatitude(),position.getLongitude()))
                 .radius(radius)
                 .fillColor(color)
                 .strokeWidth(0);
-        Circle circle = googleMap.addCircle(circleOptions);
+        return googleMap.addCircle(circleOptions);
     }
 
-    public void addMarker( Challenge challenge ){
-        Marker marker = googleMap.addMarker(new MarkerOptions().position(challenge.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.challenge)));
-        challenge.setMarker(marker);
-        list.put(marker,challenge);
+    public Marker addMarker( Challenge challenge ){
+        MarkerOptions markerOptions = new MarkerOptions().position(challenge.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.challenge));
+        Marker marker = googleMap.addMarker(markerOptions);
+        markerAdapter.put(marker, challenge);
+        markerOptionsMap.put(markerOptions, challenge);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(challenge.getLatLng(), 15));
+        return marker;
+    }
+
+    public void drawMarker(){
+        clear();
+        for(MarkerOptions marker : markerOptionsMap.keySet()) {
+            markerAdapter.put(googleMap.addMarker(marker), markerOptionsMap.get(marker));
+        }
     }
 
     public void addPolyline( List<LatLng> track ){
         Polyline polyline = googleMap.addPolyline(new PolylineOptions().addAll(track));
     }
 
-    public void addPolyline( PolylineOptions polylineOptions ){
-        Polyline polyline = googleMap.addPolyline(polylineOptions);
+    public Polyline addPolyline( PolylineOptions polylineOptions ){
+        return googleMap.addPolyline(polylineOptions);
     }
 
 
