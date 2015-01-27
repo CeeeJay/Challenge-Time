@@ -26,7 +26,7 @@ import java.util.List;
 public class MapManager {
 
     private Context context;
-    private GoogleMap googleMap;
+    public GoogleMap googleMap;
     private HashMap<Marker,Challenge> markerAdapter;
     private HashMap<MarkerOptions,Challenge> markerOptionsMap;
 
@@ -43,6 +43,12 @@ public class MapManager {
                 markerAdapter.get(marker).focus();
                 markerAdapter.clear();
                 return true;
+            }
+        });
+        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                Challenge.setUserLocation(location);
             }
         });
     }

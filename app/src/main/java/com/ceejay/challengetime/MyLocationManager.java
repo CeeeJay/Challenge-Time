@@ -6,9 +6,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
+import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
@@ -21,16 +21,10 @@ public class MyLocationManager {
     private String provider;
     private MyLocationListener mylistener;
     private Criteria criteria;
-    private GoogleMap googleMap;
     public PolylineOptions track;
-    public Context context;
 
-    public MyLocationManager(Context context, GoogleMap googleMap) {
+    public MyLocationManager(Context context) {
         track = new PolylineOptions();
-
-        this.context = context;
-
-        this.googleMap = googleMap;
 
         // Get the location manager
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -49,7 +43,7 @@ public class MyLocationManager {
 
         if (location != null) {
             mylistener.onLocationChanged(location);
-            locationManager.requestLocationUpdates(provider, 500, 5, mylistener);
+            locationManager.requestLocationUpdates(provider, 500, 2, mylistener);
         }
 
 
@@ -59,8 +53,7 @@ public class MyLocationManager {
 
         @Override
         public void onLocationChanged(Location location) {
-            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-            Transferor.User = latLng;
+            Challenge.setUserLocation(location);
         }
 
         @Override

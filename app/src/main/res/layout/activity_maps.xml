@@ -8,14 +8,7 @@
         android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <com.ceejay.challengetime.views.HexagonButton
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:color = "@color/ripple_material_dark"
-        android:layout_marginBottom="62dp"
-        android:id="@+id/hex"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/textView" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,6 +18,15 @@
         android:layout_alignBaseline="@+id/map"
         android:layout_alignBottom="@+id/map"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/start"
+        android:layout_above="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="83dp" />
 
 
 </RelativeLayout>
