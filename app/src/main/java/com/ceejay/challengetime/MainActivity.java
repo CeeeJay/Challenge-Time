@@ -75,8 +75,8 @@ public class MainActivity extends FragmentActivity {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-                Transferor.mapManager = new MapManager( this , googleMap );
-                new MyLocationManager(this);
+                Transferor.mapManager = new MapManager( googleMap );
+                //new LocationObserver(this);
                 PolylineOptions track = new PolylineOptions();
                 track.add(new LatLng(49.28722,7.11929));
                 track.add(new LatLng(49.28765,7.11888));

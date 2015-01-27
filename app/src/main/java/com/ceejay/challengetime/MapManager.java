@@ -25,13 +25,11 @@ import java.util.List;
 
 public class MapManager {
 
-    private Context context;
     public GoogleMap googleMap;
     private HashMap<Marker,Challenge> markerAdapter;
     private HashMap<MarkerOptions,Challenge> markerOptionsMap;
 
-    public MapManager( Context ctx , GoogleMap gMap  ) {
-        context = ctx;
+    public MapManager( GoogleMap gMap  ) {
         markerAdapter = new HashMap<>();
         markerOptionsMap = new HashMap<>();
         googleMap = gMap;
@@ -81,6 +79,7 @@ public class MapManager {
 
     public void refreshMarker(){
         clear();
+        markerAdapter.clear();
         for(MarkerOptions marker : markerOptionsMap.keySet()) {
             markerAdapter.put(googleMap.addMarker(marker), markerOptionsMap.get(marker));
         }

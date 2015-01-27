@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
  * Created by CJay on 23.01.2015 for Challenge Time.
  *
  */
-public class MyLocationManager {
+public class LocationObserver {
 
     private LocationManager locationManager;
     private String provider;
@@ -23,7 +23,7 @@ public class MyLocationManager {
     private Criteria criteria;
     public PolylineOptions track;
 
-    public MyLocationManager(Context context) {
+    public LocationObserver(Context context) {
         track = new PolylineOptions();
 
         // Get the location manager
@@ -53,6 +53,7 @@ public class MyLocationManager {
 
         @Override
         public void onLocationChanged(Location location) {
+            Toast.makeText(Transferor.context,"Location "+ location.getLatitude() + location.getLongitude() , Toast.LENGTH_SHORT).show();
             Challenge.setUserLocation(location);
         }
 
