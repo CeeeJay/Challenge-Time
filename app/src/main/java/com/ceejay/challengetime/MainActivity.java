@@ -9,15 +9,20 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.challenge.CheckpointChallenge;
 import com.ceejay.challengetime.challenge.RunChallenge;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends FragmentActivity {
 
     private GoogleMap googleMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 
             if (googleMap != null) {
                 Transferor.mapManager = new MapManager( googleMap );
-                //new LocationObserver(this);
+
                 PolylineOptions track = new PolylineOptions();
                 track.add(new LatLng(49.28722,7.11929));
                 track.add(new LatLng(49.28765,7.11888));
@@ -87,6 +92,14 @@ public class MainActivity extends FragmentActivity {
                 track.add(new LatLng(49.28897,7.11870));
                 new RunChallenge( new LatLng(49.28722,7.11929) , track );
 
+
+
+                ArrayList<LatLng> latLngs = new ArrayList<>();
+                latLngs.add(new LatLng(49.28722,7.11929));
+                latLngs.add(new LatLng(49.28845,7.11885));
+                latLngs.add(new LatLng(49.28897,7.11870));
+
+                new CheckpointChallenge( new LatLng(49.28897,7.11870) , latLngs );
 
             }
         }

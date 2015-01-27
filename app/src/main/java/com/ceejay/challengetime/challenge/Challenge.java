@@ -61,6 +61,11 @@ public class Challenge {
         stopWatch = new StopWatch();
         this.marker = Transferor.mapManager.addMarker(this);
     }
+    public Challenge( Location location ) {
+        latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        this.location = location;
+    }
+
 
     public void focus(){
         focusedChallenge = this;
