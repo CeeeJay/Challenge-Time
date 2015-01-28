@@ -39,11 +39,12 @@ public class LocationObserver {
         // the last known location of this provider
         Location location = locationManager.getLastKnownLocation(provider);
 
-        mylistener = new MyLocationListener();
-
         if (location != null) {
+
+            mylistener = new MyLocationListener();
             mylistener.onLocationChanged(location);
-            locationManager.requestLocationUpdates(provider, 500, 2, mylistener);
+            locationManager.requestLocationUpdates(provider, 500, 1, mylistener);
+
         }
 
 

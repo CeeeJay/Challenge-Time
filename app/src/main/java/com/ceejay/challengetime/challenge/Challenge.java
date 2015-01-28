@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.Marker;
  */
 public class Challenge {
 
+    private String challengeName;
     protected Location location;
     protected LatLng latLng;
     protected Marker marker;
@@ -64,6 +65,17 @@ public class Challenge {
     public Challenge( Location location ) {
         latLng = new LatLng(location.getLatitude(),location.getLongitude());
         this.location = location;
+        stopWatch = new StopWatch();
+        this.marker = ChallengeAdapter.getMapManager().addMarker(this);
+    }
+
+    public Challenge(){}
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+    public void setChallengeName(String challengeName) {
+        this.challengeName = challengeName;
     }
 
     protected void userLocationChanged(){
@@ -117,6 +129,14 @@ public class Challenge {
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Stopped at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
         stopWatch.stop();
+    }
+
+    public class Builder{
+
+
+
+
+
     }
 
 }

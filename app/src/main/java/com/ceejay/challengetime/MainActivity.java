@@ -77,6 +77,11 @@ public class MainActivity extends FragmentActivity {
                 ChallengeAdapter.setMapManager(new MapManager( googleMap ));
 
             }
+            HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
+            Bundle bundle = new Bundle();
+            bundle.putString("method","receive_new_challenges");
+
+            Stream.toChallenges(contact.send(bundle));
         }
     }
 }

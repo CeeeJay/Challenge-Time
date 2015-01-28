@@ -17,7 +17,7 @@ public class RunChallenge extends Challenge {
 
     Location startLocation;
     Location stopLocation;
-    PolylineOptions track;
+    PolylineOptions track = new PolylineOptions();
 
     private Circle startArea;
     private Circle stopArea;
@@ -25,8 +25,27 @@ public class RunChallenge extends Challenge {
     public RunChallenge( LatLng location , PolylineOptions track ) {
         super(location);
         this.track = track;
-        startLocation = LatLngConvert.toLocation(track.getPoints().get(0), "Start");
-        stopLocation = LatLngConvert.toLocation(track.getPoints().get(track.getPoints().size()-1),"Stop");
+        setStartLocation(track.getPoints().get(0));
+        setStopLocation(track.getPoints().get(track.getPoints().size()-1));
+    }
+
+    public RunChallenge( Location location ) {
+        super(location);
+        track.add(new LatLng(location.getLatitude(),location.getLongitude()));
+        setStartLocation(new LatLng(location.getLatitude(),location.getLongitude()));
+        setStopLocation(new LatLng(location.getLatitude(),location.getLongitude()));
+    }
+
+    public RunChallenge(){}
+
+    public void setStartLocation(LatLng startLatLng) {
+        this.startLocation = LatLngConvert.toLocation(startLatLng,"Start");
+        this.track.add(startLatLng);
+    }
+
+    public void setStopLocation(LatLng stopLatLng) {
+        this.stopLocation = LatLngConvert.toLocation(stopLatLng,"Stop");
+        this.track.add(stopLatLng);
     }
 
     @Override
