@@ -42,7 +42,7 @@ public class StopWatch {
                             }
                         }
                         try {
-                            thread.sleep(1);
+                            Thread.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -79,9 +79,7 @@ public class StopWatch {
     }
     public void pause(){
         stopClock();
-        vibrator.vibrate(500);
         vibrator.vibrate(pauseVibrate);
-
     }
     public void stop(){
         stopClock();
@@ -89,7 +87,6 @@ public class StopWatch {
         currentTime = 0;
         tickers.clear();
         vibrator.vibrate(stopVibrate);
-
     }
 
     public long getTime(){
@@ -102,13 +99,13 @@ public class StopWatch {
         return isClockRunning;
     }
 
-    public void setStartVibrate( int value ){
-        stopVibrate = value;
+    public void setStartVibrate( int startVibrate ){
+        this.startVibrate = startVibrate;
     }
-    public void setStopVibrate(int stopVibrate) {
+    public void setStopVibrate( int stopVibrate ) {
         this.stopVibrate = stopVibrate;
     }
-    public void setPauseVibrate(int pauseVibrate) {
+    public void setPauseVibrate( int pauseVibrate ) {
         this.pauseVibrate = pauseVibrate;
     }
 

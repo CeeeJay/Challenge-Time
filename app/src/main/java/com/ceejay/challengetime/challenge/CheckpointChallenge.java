@@ -1,7 +1,6 @@
 package com.ceejay.challengetime.challenge;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.Transferor;
 import com.ceejay.challengetime.helper.Distance;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,10 +29,24 @@ public class CheckpointChallenge extends Challenge {
         super.focus();
         circles.clear();
         for( LatLng checkpoint : checkpoints ){
-           circles.add(Transferor.mapManager.addArea(checkpoint, sizeStartArea, context.getResources().getColor(R.color.focused)));
+            if( whichCheckpoint < checkpoints.indexOf(checkpoint)) {
+                circles.add(ChallengeAdapter.getMapManager().addArea(checkpoint, sizeStartArea, context.getResources().getColor(R.color.focused)));
+            }else{
+                circles.add(ChallengeAdapter.getMapManager().addArea(checkpoint, sizeStartArea, context.getResources().getColor(R.color.checked)));
+            }
         }
-        circles.get(0).setFillColor(context.getResources().getColor(R.color.notstarted));
-        circles.get(circles.size()-1).setFillColor(context.getResources().getColor(R.color.notfinished));
+        if(isStarted) {
+            circles.get(0).setFillColor(context.getResources().getColor(R.color.started));
+        }else if(isActivated){
+            circles.get(0).setFillColor(context.getResources().getColor(R.color.activated));
+        }else{
+            circles.get(0).setFillColor(context.getResources().getColor(R.color.notstarted));
+        }
+        if(isFinished){
+            circles.get(circles.size()-1).setFillColor(context.getResources().getColor(R.color.finished));
+        }else{
+            circles.get(circles.size()-1).setFillColor(context.getResources().getColor(R.color.notfinished));
+        }
     }
 
     @Override
@@ -45,12 +58,12 @@ public class CheckpointChallenge extends Challenge {
                     whichCheckpoint++;
                 }
             }else if(whichCheckpoint == checkpoints.size() - 1){
-                if (Distance.between(userLocation, checkpoints.get(whichCheckpoint)) < sizeCheckpointArea) {
+                if (Distance.between(userLocation, checkpoints.get(checkpoints.size() - 1)) < sizeCheckpointArea) {
                     finish();
                 }
             }
         }else if( isActivated ){
-            if ( Distance.between(userLocation,checkpoints.get(whichCheckpoint)) > sizeStartArea ) {
+            if ( Distance.between(userLocation,checkpoints.get(0)) > sizeStartArea ) {
                 start();
             }
         }
@@ -59,7 +72,7 @@ public class CheckpointChallenge extends Challenge {
     @Override
     public void activate() {
         super.activate();
-        if(isActivated && ! isStarted){
+        if(isActivated && !isStarted){
             circles.get(0).setFillColor(context.getResources().getColor(R.color.activated));
         }
     }

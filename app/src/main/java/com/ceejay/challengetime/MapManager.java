@@ -1,6 +1,5 @@
 package com.ceejay.challengetime;
 
-import android.content.Context;
 import android.location.Location;
 
 import com.ceejay.challengetime.challenge.Challenge;
@@ -27,7 +26,7 @@ public class MapManager {
 
     public GoogleMap googleMap;
     private HashMap<Marker,Challenge> markerAdapter;
-    private HashMap<MarkerOptions,Challenge> markerOptionsMap;
+    public HashMap<MarkerOptions,Challenge> markerOptionsMap;
 
     public MapManager( GoogleMap gMap  ) {
         markerAdapter = new HashMap<>();
@@ -85,9 +84,8 @@ public class MapManager {
         }
     }
 
-
-    public void addPolyline( List<LatLng> track ){
-        Polyline polyline = googleMap.addPolyline(new PolylineOptions().addAll(track));
+    public Polyline addPolyline( List<LatLng> track ){
+        return googleMap.addPolyline(new PolylineOptions().addAll(track));
     }
 
     public Polyline addPolyline( PolylineOptions polylineOptions ){

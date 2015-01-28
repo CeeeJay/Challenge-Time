@@ -52,13 +52,15 @@ public class Challenge {
 
     public static boolean isActivated;
     public static boolean isStarted;
+    public static boolean isFinished;
 
     public Challenge( LatLng latLng ) {
         this.latLng = latLng;
         location = LatLngConvert.toLocation(latLng,"Start");
         stopWatch = new StopWatch();
-        this.marker = Transferor.mapManager.addMarker(this);
+        this.marker = ChallengeAdapter.getMapManager().addMarker(this);
     }
+
     public Challenge( Location location ) {
         latLng = new LatLng(location.getLatitude(),location.getLongitude());
         this.location = location;
@@ -104,6 +106,7 @@ public class Challenge {
     protected void finish(){
         isActivated = false;
         isStarted = false;
+        isFinished = true;
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_LONG).show();
     }
