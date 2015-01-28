@@ -1,6 +1,5 @@
 package com.ceejay.challengetime.challenge;
 
-import android.graphics.Color;
 import android.location.Location;
 
 import com.ceejay.challengetime.R;

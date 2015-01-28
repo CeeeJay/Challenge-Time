@@ -98,7 +98,7 @@ public class MainActivity extends FragmentActivity {
 
                 ArrayList<LatLng> latLngs = new ArrayList<>();
                 latLngs.add(new LatLng(49.28606,7.12685));
-                latLngs.add(new LatLng(49.28845,7.11885));
+                latLngs.add(new LatLng(49.29078,7.11938));
                 latLngs.add(new LatLng(49.28897,7.11870));
 
                 new CheckpointChallenge( latLngs );
