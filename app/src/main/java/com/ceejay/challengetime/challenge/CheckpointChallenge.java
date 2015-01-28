@@ -1,9 +1,8 @@
 package com.ceejay.challengetime.challenge;
 
-import android.graphics.Color;
-
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.Transferor;
-import com.ceejay.challengetime.helper.LatLngConvert;
+import com.ceejay.challengetime.helper.Distance;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,15 +14,14 @@ import java.util.ArrayList;
  */
 public class CheckpointChallenge extends Challenge {
 
-    private ArrayList<LatLng> checkpoints;
     protected int sizeCheckpointArea = 40;
-    protected int whichCheckpoint = 0;
-    protected ArrayList<Circle> circles;
+    private int whichCheckpoint = 0;
+    private ArrayList<LatLng> checkpoints;
+    private ArrayList<Circle> circles;
 
-    public CheckpointChallenge(LatLng latLng , ArrayList<LatLng> checkpoints) {
-        super(latLng);
-        this.checkpoints = new ArrayList<>(checkpoints);
-        location = LatLngConvert.toLocation(checkpoints.get(0),"Start");
+    public CheckpointChallenge(ArrayList<LatLng> checkpoints) {
+        super(checkpoints.get(0));
+        this.checkpoints = checkpoints;
         circles = new ArrayList<>();
     }
 
@@ -32,35 +30,50 @@ public class CheckpointChallenge extends Challenge {
         super.focus();
         circles.clear();
         for( LatLng checkpoint : checkpoints ){
-           circles.add(Transferor.mapManager.addArea(checkpoint, sizeStartArea, Color.argb(70, 0, 0, 255)));
+           circles.add(Transferor.mapManager.addArea(checkpoint, sizeStartArea, context.getResources().getColor(R.color.focused)));
         }
+        circles.get(0).setFillColor(context.getResources().getColor(R.color.notstarted));
+        circles.get(circles.size()-1).setFillColor(context.getResources().getColor(R.color.notfinished));
     }
 
     @Override
     public void userLocationChanged() {
-        super.userLocationChanged();
-        if(isActivated && isStarted){
-            if( checkpoints.size() > 1 && userLocation.distanceTo(LatLngConvert.toLocation(checkpoints.get(whichCheckpoint),"Checkpoint")) < sizeCheckpointArea ){
-                circles.get(whichCheckpoint).setFillColor(Color.argb(70, 0, 255, 0));
-                whichCheckpoint++;
+        if( isActivated && isStarted ){
+            if(whichCheckpoint < checkpoints.size() - 1) {
+                if(Distance.between(userLocation, checkpoints.get(whichCheckpoint)) < sizeCheckpointArea) {
+                    circles.get(whichCheckpoint).setFillColor(context.getResources().getColor(R.color.checked));
+                    whichCheckpoint++;
+                }
+            }else if(whichCheckpoint == checkpoints.size() - 1){
+                if (Distance.between(userLocation, checkpoints.get(whichCheckpoint)) < sizeCheckpointArea) {
+                    finish();
+                }
+            }
+        }else if( isActivated ){
+            if ( Distance.between(userLocation,checkpoints.get(whichCheckpoint)) > sizeStartArea ) {
+                start();
             }
         }
     }
 
     @Override
-    public void start() {
-        if ( userLocation.distanceTo(LatLngConvert.toLocation(checkpoints.get(whichCheckpoint),"StartCheckpoint")) > sizeStartArea ) {
-            circles.get(0).setFillColor(Color.argb(70, 0, 255, 0));
-            whichCheckpoint = 1;
+    public void activate() {
+        super.activate();
+        if(isActivated && ! isStarted){
+            circles.get(0).setFillColor(context.getResources().getColor(R.color.activated));
         }
     }
 
     @Override
+    public void start() {
+        circles.get(0).setFillColor(context.getResources().getColor(R.color.started));
+        whichCheckpoint = 1;
+    }
+
+    @Override
     public void finish() {
-        if (checkpoints.size() >= whichCheckpoint - 1 && userLocation.distanceTo(LatLngConvert.toLocation(checkpoints.get(whichCheckpoint), "Checkpoint")) < sizeCheckpointArea) {
-            circles.get(whichCheckpoint).setFillColor(Color.argb(70, 0, 255, 0));
-            super.finish();
-        }
+        circles.get(whichCheckpoint).setFillColor(context.getResources().getColor(R.color.finished));
+        super.finish();
     }
 
     @Override

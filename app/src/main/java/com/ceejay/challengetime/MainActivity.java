@@ -3,10 +3,8 @@ package com.ceejay.challengetime;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,7 +17,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -30,6 +27,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Transferor.context = this;
+        Challenge.setContext(this);
         setContentView(R.layout.activity_maps);
 
         Button startButton = (Button) findViewById(R.id.start);
@@ -93,16 +91,17 @@ public class MainActivity extends FragmentActivity {
                 track.add(new LatLng(49.28854,7.11897));
                 track.add(new LatLng(49.28865,7.11895));
                 track.add(new LatLng(49.28897,7.11870));
+                track.add(new LatLng(49.28606,7.12685));
                 new RunChallenge( new LatLng(49.28722,7.11929) , track );
 
 
 
                 ArrayList<LatLng> latLngs = new ArrayList<>();
-                latLngs.add(new LatLng(49.28722,7.11929));
+                latLngs.add(new LatLng(49.28606,7.12685));
                 latLngs.add(new LatLng(49.28845,7.11885));
                 latLngs.add(new LatLng(49.28897,7.11870));
 
-                new CheckpointChallenge( new LatLng(49.28897,7.11870) , latLngs );
+                new CheckpointChallenge( latLngs );
 
             }
         }

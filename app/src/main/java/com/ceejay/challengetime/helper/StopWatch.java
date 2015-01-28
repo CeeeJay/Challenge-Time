@@ -17,9 +17,11 @@ public class StopWatch {
     private long currentTime;
     private static Thread thread;
     private boolean isClockRunning = false;
-    private Runnable runnable;
     private ArrayList<Ticker> tickers;
     private Vibrator vibrator;
+    private int startVibrate = 0;
+    private int pauseVibrate = 0;
+    private int stopVibrate = 0;
 
     public StopWatch() {
         tickers = new ArrayList<>();
@@ -73,29 +75,41 @@ public class StopWatch {
             startTime = System.currentTimeMillis();
         }
         startClock();
-        vibrator.vibrate(500);
+        vibrator.vibrate(startVibrate);
     }
     public void pause(){
         stopClock();
         vibrator.vibrate(500);
+        vibrator.vibrate(pauseVibrate);
+
     }
     public void stop(){
         stopClock();
         startTime = 0;
         currentTime = 0;
         tickers.clear();
+        vibrator.vibrate(stopVibrate);
+
     }
 
     public long getTime(){
         return currentTime;
     }
-
     public long getStartTime(){
         return startTime;
     }
-
     public boolean isClockRunning(){
         return isClockRunning;
+    }
+
+    public void setStartVibrate( int value ){
+        stopVibrate = value;
+    }
+    public void setStopVibrate(int stopVibrate) {
+        this.stopVibrate = stopVibrate;
+    }
+    public void setPauseVibrate(int pauseVibrate) {
+        this.pauseVibrate = pauseVibrate;
     }
 
     public void addTicker( Ticker ticker ){

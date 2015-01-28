@@ -69,7 +69,7 @@ public class MapManager {
     }
 
     public Marker addMarker( Challenge challenge ){
-        MarkerOptions markerOptions = new MarkerOptions().position(challenge.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.challenge));
+        MarkerOptions markerOptions = new MarkerOptions().position(challenge.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         Marker marker = googleMap.addMarker(markerOptions);
         markerAdapter.put(marker, challenge);
         markerOptionsMap.put(markerOptions, challenge);

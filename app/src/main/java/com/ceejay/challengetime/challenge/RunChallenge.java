@@ -3,8 +3,10 @@ package com.ceejay.challengetime.challenge;
 import android.graphics.Color;
 import android.location.Location;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.Transferor;
 import com.ceejay.challengetime.helper.LatLngConvert;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -19,6 +21,9 @@ public class RunChallenge extends Challenge {
     Location stopLocation;
     PolylineOptions track;
 
+    private Circle startArea;
+    private Circle stopArea;
+
     public RunChallenge( LatLng location , PolylineOptions track ) {
         super(location);
         this.track = track;
@@ -29,14 +34,29 @@ public class RunChallenge extends Challenge {
     @Override
     public void focus() {
         super.focus();
-        Transferor.mapManager.addArea(startLocation, sizeStartArea, Color.argb(70, 0, 255, 0));
-        Transferor.mapManager.addArea(stopLocation, sizeStopArea, Color.argb(70, 255, 0, 0));
+        startArea = Transferor.mapManager.addArea(startLocation, sizeStartArea,context.getResources().getColor(R.color.notstarted));
+        stopArea = Transferor.mapManager.addArea(stopLocation, sizeStopArea, context.getResources().getColor(R.color.notfinished));
         Transferor.mapManager.addPolyline(track);
+    }
+
+    @Override
+    public void activate() {
+        super.activate();
+        if(isActivated){
+            startArea.setFillColor(context.getResources().getColor(R.color.activated));
+        }
+    }
+
+    @Override
+    protected void start() {
+        super.start();
+        startArea.setFillColor(context.getResources().getColor(R.color.started));
     }
 
     @Override
     public void finish() {
         if( userLocation.distanceTo(stopLocation) < sizeStopArea ) {
+            stopArea.setFillColor(context.getResources().getColor(R.color.finished));
             super.finish();
         }
     }

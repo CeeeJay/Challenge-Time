@@ -2,7 +2,6 @@ package com.ceejay.challengetime.challenge;
 
 import android.content.Context;
 import android.location.Location;
-import android.os.Vibrator;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.Transferor;
@@ -23,6 +22,11 @@ public class Challenge {
     protected int sizeStartArea = 40;
     protected int sizeStopArea = 40;
     public StopWatch stopWatch;
+
+    protected static Context context;
+    public static void setContext(Context context) {
+        Challenge.context = context;
+    }
 
     protected static Location userLocation;
     public static void setUserLocation(Location userLocation) {
@@ -60,12 +64,14 @@ public class Challenge {
         this.location = location;
     }
 
-    public void userLocationChanged(){
+    protected void userLocationChanged(){
         if(isActivated && Challenge.focusedChallenge != null) {
             if (isStarted) {
                 Challenge.focusedChallenge.finish();
             } else {
-                Challenge.focusedChallenge.start();
+                if ( userLocation.distanceTo(location) > sizeStartArea ) {
+                    Challenge.focusedChallenge.start();
+                }
             }
         }
     }
@@ -88,20 +94,18 @@ public class Challenge {
         }
     }
 
-    public void start(){
-        if ( userLocation.distanceTo(location) > sizeStartArea ) {
-            Toast.makeText(Transferor.context, "Started", Toast.LENGTH_SHORT).show();
-            isStarted = true;
-            stopWatch.start();
-            userLocationChanged();
-        }
+    protected void start(){
+        Toast.makeText(Transferor.context, "Started", Toast.LENGTH_SHORT).show();
+        isStarted = true;
+        stopWatch.start();
+        userLocationChanged();
     }
 
-    public void finish(){
+    protected void finish(){
         isActivated = false;
         isStarted = false;
         stopWatch.pause();
-        Toast.makeText(Transferor.context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
+        Toast.makeText(Transferor.context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_LONG).show();
     }
 
     public void stop(){

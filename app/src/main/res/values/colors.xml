@@ -6,4 +6,17 @@
     <color name="turquoise">#ff86b9b5</color>
     <color name="slate">#ff76a9b5</color>
     <color name="transparent">#00000000</color>
+
+    <color name="focused">#99BBBBBB</color>
+    <color name="activated">#995273ff</color>
+
+    <color name="started">#9900FF00</color>
+    <color name="notstarted">#4400FF00</color>
+
+    <color name="checked">#995273ff</color>
+    <color name="notchecked">#445273ff</color>
+
+    <color name="finished">#99FF0000</color>
+    <color name="notfinished">#44FF0000</color>
+
 </resources>
