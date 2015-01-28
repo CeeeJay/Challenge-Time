@@ -3,8 +3,10 @@ package com.ceejay.challengetime;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity {
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private GoogleMap googleMap;
 

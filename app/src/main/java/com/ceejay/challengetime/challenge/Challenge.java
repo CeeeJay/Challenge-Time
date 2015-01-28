@@ -28,18 +28,12 @@ public class Challenge {
     public static void setUserLocation(Location userLocation) {
         if(userLocation != null) {
             Challenge.userLocation = userLocation;
-            if(isActivated && Challenge.focusedChallenge != null) {
-                if (isStarted) {
-                    Challenge.focusedChallenge.finish();
-                } else {
-                    Challenge.focusedChallenge.start();
-                }
+            if( Challenge.focusedChallenge != null ) {
+                Challenge.focusedChallenge.userLocationChanged();
             }
         }
     }
-    public static void setUserLocation(LatLng userLocation) {
-        setUserLocation(LatLngConvert.toLocation(userLocation, "User"));
-    }
+
     public static Location getUserPosition() {
         return userLocation;
     }
@@ -66,6 +60,15 @@ public class Challenge {
         this.location = location;
     }
 
+    public void userLocationChanged(){
+        if(isActivated && Challenge.focusedChallenge != null) {
+            if (isStarted) {
+                Challenge.focusedChallenge.finish();
+            } else {
+                Challenge.focusedChallenge.start();
+            }
+        }
+    }
 
     public void focus(){
         focusedChallenge = this;
@@ -81,6 +84,7 @@ public class Challenge {
         if( userLocation != null && userLocation.distanceTo(location) < sizeStartArea && !isActivated && !isStarted) {
             Toast.makeText(Transferor.context, "Activated", Toast.LENGTH_SHORT).show();
             isActivated = true;
+            userLocationChanged();
         }
     }
 
@@ -89,8 +93,7 @@ public class Challenge {
             Toast.makeText(Transferor.context, "Started", Toast.LENGTH_SHORT).show();
             isStarted = true;
             stopWatch.start();
-            Vibrator v = (Vibrator) Transferor.context.getSystemService(Context.VIBRATOR_SERVICE);
-            v.vibrate(500);
+            userLocationChanged();
         }
     }
 

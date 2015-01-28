@@ -1,5 +1,10 @@
 package com.ceejay.challengetime.helper;
 
+import android.content.Context;
+import android.os.Vibrator;
+
+import com.ceejay.challengetime.Transferor;
+
 import java.util.ArrayList;
 
 /**
@@ -14,9 +19,11 @@ public class StopWatch {
     private boolean isClockRunning = false;
     private Runnable runnable;
     private ArrayList<Ticker> tickers;
+    private Vibrator vibrator;
 
     public StopWatch() {
         tickers = new ArrayList<>();
+        vibrator = (Vibrator) Transferor.context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     private void startClock(){
@@ -66,9 +73,11 @@ public class StopWatch {
             startTime = System.currentTimeMillis();
         }
         startClock();
+        vibrator.vibrate(500);
     }
     public void pause(){
         stopClock();
+        vibrator.vibrate(500);
     }
     public void stop(){
         stopClock();
