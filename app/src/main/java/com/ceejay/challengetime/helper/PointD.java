@@ -1,8 +1,11 @@
 package com.ceejay.challengetime.helper;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 /**
  * Created by Development on 22.12.2014.
@@ -33,5 +36,17 @@ public class PointD extends Point{
 
     public LatLng toLatLng(){
         return new LatLng(x,y);
+    }
+
+    public static ArrayList<LatLng> getPoints(String parse){
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+        parse = parse.replace("GEOMETRYCOLLECTION(","");
+        parse = parse.replace(")", "");
+        String[] points = parse.split(",Point");//
+        Log.i("ss", points[0]);
+        for( String point : points ){
+            latLngs.add((new PointD(point)).toLatLng());
+        }
+        return latLngs;
     }
 }

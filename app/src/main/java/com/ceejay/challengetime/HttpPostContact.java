@@ -3,6 +3,8 @@ package com.ceejay.challengetime;
 import android.os.Bundle;
 import android.os.StrictMode;
 
+import com.ceejay.challengetime.challenge.Challenge;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -65,4 +67,26 @@ public class HttpPostContact {
         }
         return null;
     }
+
+    public static void reciveChallanges( ArrayList<Challenge> challenges ){
+
+        HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
+        String[] strings = new String[]{"receive_run_challenges","receive_checkpoint_challenges"};
+
+        for(String string : strings) {
+            Bundle bundle = new Bundle();
+            bundle.putString("method", string);
+            for (Challenge.Builder builder : Stream.toChallenges(contact.send(bundle))) {
+                switch (string){
+                    case "receive_run_challenges":
+                        challenges.add(builder.getRunChallenge());
+                        break;
+                    case "receive_checkpoint_challenges":
+                        challenges.add(builder.getCheckpointChallenge());
+                        break;
+                }
+            }
+        }
+    }
+
 }

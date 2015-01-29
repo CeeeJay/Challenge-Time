@@ -1,12 +1,9 @@
 package com.ceejay.challengetime.challenge;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.ceejay.challengetime.HttpPostContact;
 import com.ceejay.challengetime.MapManager;
-import com.ceejay.challengetime.Stream;
 import com.ceejay.challengetime.Transferor;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -41,18 +38,15 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
                 challenges.add(Transferor.getRunChallenge());
 
                 try {
-                    HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
+                    HttpPostContact.reciveChallanges(challenges);
+                    /*HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
                     Bundle bundle = new Bundle();
-                    bundle.putString("method","receive_new_challenges");
+                    bundle.putString("method","receive_run_challenges");
 
-                    for(RunChallenge challenge : Stream.toChallenges(contact.send(bundle))) {
+                    for(Challenge.Builder builder : Stream.toChallenges(contact.send(bundle))) {
+                        challenges.add(builder.getRunChallenge());
+                    }*/
 
-                        challenges.add(new RunChallenge(challenge.startLocation));
-                    }
-
-                    Toast.makeText(Transferor.context, "Empfangen", Toast.LENGTH_SHORT).show();
-
-                    Toast.makeText(Transferor.context, challenges.size()+"", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -10,6 +10,8 @@ import com.ceejay.challengetime.helper.StopWatch;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
+
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.
  *
@@ -131,12 +133,52 @@ public class Challenge {
         stopWatch.stop();
     }
 
-    public class Builder{
+    public static class Builder{
+        private String challengeName;
+        protected Location location;
+        protected LatLng latLng;
+        protected Marker marker;
+        protected int sizeStartArea = 40;
+        protected int sizeStopArea = 40;
+        public StopWatch stopWatch;
+        public LatLng startLocation;
+        public ArrayList<LatLng> checkpointLocations;
+        public LatLng stopLocation;
 
+        public Builder() {
+        }
 
+        public RunChallenge getRunChallenge(){
+            ArrayList<LatLng> latLngs = new ArrayList<>();
+            latLngs.add(startLocation);
+            latLngs.add(stopLocation);
+            return new RunChallenge(startLocation,latLngs);
+        }
 
+        public CheckpointChallenge getCheckpointChallenge(){
+            ArrayList<LatLng> latLngs = new ArrayList<>();
+            latLngs.add(startLocation);
+            latLngs.addAll(checkpointLocations);
+            latLngs.add(stopLocation);
+            return new CheckpointChallenge(latLngs);
+        }
 
+        public void setChallengeName( String challengeName ) {
+            this.challengeName = challengeName;
+        }
 
+        public void setStartLocation( LatLng startLocation ){
+            this.startLocation = startLocation;
+        }
+
+        public void setCheckpointLocations( ArrayList<LatLng> checkpointLocations ){
+            Toast.makeText(Transferor.context,checkpointLocations.get(0).toString(),Toast.LENGTH_SHORT).show();
+            this.checkpointLocations = checkpointLocations;
+        }
+
+        public void setStopLocation( LatLng stopLocation ){
+            this.stopLocation = stopLocation;
+        }
     }
 
 }

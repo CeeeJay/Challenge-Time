@@ -8,6 +8,8 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.
@@ -22,21 +24,19 @@ public class RunChallenge extends Challenge {
     private Circle startArea;
     private Circle stopArea;
 
-    public RunChallenge( LatLng location , PolylineOptions track ) {
+    public RunChallenge( LatLng location , ArrayList<LatLng> track ) {
         super(location);
-        this.track = track;
-        setStartLocation(track.getPoints().get(0));
-        setStopLocation(track.getPoints().get(track.getPoints().size()-1));
+        this.track.addAll(track);
+        setStartLocation(track.get(0));
+        setStopLocation(track.get(track.size() - 1));
     }
 
-    public RunChallenge( Location location ) {
+    public RunChallenge( Location location , ArrayList<LatLng> track ) {
         super(location);
-        track.add(new LatLng(location.getLatitude(),location.getLongitude()));
-        setStartLocation(new LatLng(location.getLatitude(),location.getLongitude()));
-        setStopLocation(new LatLng(location.getLatitude(),location.getLongitude()));
+        this.track.addAll(track);
+        setStartLocation(track.get(0));
+        setStopLocation(track.get(track.size() - 1));
     }
-
-    public RunChallenge(){}
 
     public void setStartLocation(LatLng startLatLng) {
         this.startLocation = LatLngConvert.toLocation(startLatLng,"Start");
@@ -63,7 +63,9 @@ public class RunChallenge extends Challenge {
         }else{
             stopArea = ChallengeAdapter.getMapManager().addArea(stopLocation, sizeStopArea, context.getResources().getColor(R.color.notfinished));
         }
-        ChallengeAdapter.getMapManager().addPolyline(track);
+        if(track.getPoints().size() > 0) {
+            ChallengeAdapter.getMapManager().addPolyline(track);
+        }
     }
 
     @Override

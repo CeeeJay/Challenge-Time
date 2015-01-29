@@ -3,15 +3,15 @@ package com.ceejay.challengetime;
 import android.util.JsonReader;
 import android.widget.Toast;
 
-import com.ceejay.challengetime.challenge.RunChallenge;
+import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.PointD;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Development on 10.01.2015.
@@ -45,10 +45,8 @@ public class Stream {
         return sb.toString();
     }
 
-
-    public static ArrayList<RunChallenge> toChallenges(InputStream is){
-        ArrayList<RunChallenge> challenges = new ArrayList<>();
-        RunChallenge challenge;
+    public static ArrayList toHashMap(InputStream is){
+        ArrayList<HashMap<String , String>> json= new ArrayList<>();
 
         if(is == null){
             return null;
@@ -56,32 +54,64 @@ public class Stream {
 
         try {
             JsonReader jsonReader = new JsonReader(new InputStreamReader(is,"UTF-8"));
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            jsonReader.setLenient(true);
+            jsonReader.beginArray();
+            while(jsonReader.hasNext()){
+                json.add(new HashMap<String, String>());
+                jsonReader.beginObject();
+                while (jsonReader.hasNext()) {
+                    json.get(json.size()-1).put(jsonReader.nextName(),jsonReader.nextName());
+                }
+                jsonReader.endObject();
+            }
+            jsonReader.endArray();
+            jsonReader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+
+    public static ArrayList<Challenge.Builder> toChallenges(InputStream is){
+        ArrayList<Challenge.Builder> challenges = new ArrayList<>();
+        Challenge.Builder builder;
+
+        if(is == null){
+            return null;
+        }
+
+        try {
+            JsonReader jsonReader = new JsonReader(new InputStreamReader(is,"UTF-8"));
             PointD location;
             jsonReader.setLenient(true);
             jsonReader.beginArray();
             while(jsonReader.hasNext()){
                 jsonReader.beginObject();
-                challenge = new RunChallenge();
+                builder = new Challenge.Builder();
                 while (jsonReader.hasNext()) {
                     switch(jsonReader.nextName()){
                         case "challenge_name":
-                            challenge.setChallengeName(jsonReader.nextString());
+                            builder.setChallengeName(jsonReader.nextString());
                             break;
                         case "start_point":
                             location = new PointD(jsonReader.nextString());
-                            challenge.setStartLocation(location.toLatLng());
+                            builder.setStartLocation(location.toLatLng());
+                            break;
+                        case "check_points":
+                            builder.setCheckpointLocations(PointD.getPoints(jsonReader.nextString()));
                             break;
                         case "finish_point":
                             location = new PointD(jsonReader.nextString());
-                            challenge.setStopLocation(location.toLatLng());
+                            builder.setStopLocation(location.toLatLng());
                             break;
                         default:
                             Toast.makeText(Transferor.context,"WTFFFFF",Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
-                challenges.add(challenge);
+                challenges.add(builder);
                 jsonReader.endObject();
             }
             jsonReader.endArray();

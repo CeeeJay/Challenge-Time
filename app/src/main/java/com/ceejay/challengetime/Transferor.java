@@ -5,7 +5,6 @@ import android.content.Context;
 import com.ceejay.challengetime.challenge.CheckpointChallenge;
 import com.ceejay.challengetime.challenge.RunChallenge;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,7 @@ public class Transferor {
     public static Context context ;
 
     public static RunChallenge  getRunChallenge(){
-        PolylineOptions track = new PolylineOptions();
+        ArrayList<LatLng> track = new ArrayList<>();
         track.add(new LatLng(49.28722,7.11929));
         track.add(new LatLng(49.28765,7.11888));
         track.add(new LatLng(49.28785,7.11932));
@@ -28,7 +27,7 @@ public class Transferor {
         track.add(new LatLng(49.28865,7.11895));
         track.add(new LatLng(49.28897,7.11870));
         track.add(new LatLng(49.28606,7.12685));
-        return new RunChallenge( new LatLng(49.28722,7.11929) , track );
+        return new RunChallenge( track.get(0) , track );
     }
 
     public static CheckpointChallenge getCheckpointChallenge(){
