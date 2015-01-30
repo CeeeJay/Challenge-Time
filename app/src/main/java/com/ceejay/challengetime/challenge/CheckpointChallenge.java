@@ -53,12 +53,12 @@ public class CheckpointChallenge extends Challenge {
     public void userLocationChanged() {
         if( isActivated && isStarted ){
             if(whichCheckpoint < checkpoints.size() - 1) {
-                if(Distance.between(userLocation, checkpoints.get(whichCheckpoint)) < sizeCheckpointArea) {
+                if( Distance.between(userLocation, checkpoints.get(whichCheckpoint)) < sizeCheckpointArea) {
                     circles.get(whichCheckpoint).setFillColor(context.getResources().getColor(R.color.checked));
                     whichCheckpoint++;
                 }
             }else if(whichCheckpoint == checkpoints.size() - 1){
-                if (Distance.between(userLocation, checkpoints.get(checkpoints.size() - 1)) < sizeCheckpointArea) {
+                if ( Distance.between(userLocation, checkpoints.get(checkpoints.size() - 1)) < sizeCheckpointArea) {
                     finish();
                 }
             }

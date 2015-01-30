@@ -1,9 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
-import android.location.Location;
-
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.helper.LatLngConvert;
+import com.ceejay.challengetime.helper.Distance;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -17,8 +15,8 @@ import java.util.ArrayList;
  */
 public class RunChallenge extends Challenge {
 
-    Location startLocation;
-    Location stopLocation;
+    LatLng startLocation;
+    LatLng stopLocation;
     PolylineOptions track = new PolylineOptions();
 
     private Circle startArea;
@@ -27,9 +25,10 @@ public class RunChallenge extends Challenge {
     public RunChallenge( ArrayList<LatLng> track ) {
         super(track.get(0));
         this.track.addAll(track);
-        this.track.add(track.get(0));
-        this.track.add(track.get(track.size() - 1));
+        startLocation = track.get(0);
+        stopLocation = track.get(track.size() - 1);
     }
+
 
     @Override
     public void focus() {
@@ -67,7 +66,7 @@ public class RunChallenge extends Challenge {
 
     @Override
     public void finish() {
-        if( userLocation.distanceTo(stopLocation) < sizeStopArea ) {
+        if( Distance.between(userLocation,stopLocation) < sizeStopArea ) {
             stopArea.setFillColor(context.getResources().getColor(R.color.finished));
             super.finish();
         }

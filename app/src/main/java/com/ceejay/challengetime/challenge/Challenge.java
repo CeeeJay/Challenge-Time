@@ -5,7 +5,7 @@ import android.location.Location;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.Transferor;
-import com.ceejay.challengetime.helper.LatLngConvert;
+import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class Challenge {
 
     private String challengeName;
-    protected Location location;
     protected LatLng latLng;
     protected Marker marker;
     protected int sizeStartArea = 40;
@@ -59,25 +58,12 @@ public class Challenge {
 
     public Challenge( LatLng latLng ) {
         this.latLng = latLng;
-        location = LatLngConvert.toLocation(latLng,"Start");
         stopWatch = new StopWatch();
         this.marker = ChallengeAdapter.getMapManager().addMarker(this);
     }
-
-    public Challenge( Location location ) {
-        latLng = new LatLng(location.getLatitude(),location.getLongitude());
-        this.location = location;
-        stopWatch = new StopWatch();
-        this.marker = ChallengeAdapter.getMapManager().addMarker(this);
-    }
-
-    public Challenge(){}
 
     public void setLatLng(LatLng latLng) {
         this.latLng = latLng;
-    }
-    public void setChallengeName(String challengeName) {
-        this.challengeName = challengeName;
     }
 
     protected void userLocationChanged(){
@@ -85,7 +71,7 @@ public class Challenge {
             if (isStarted) {
                 Challenge.focusedChallenge.finish();
             } else {
-                if ( userLocation.distanceTo(location) > sizeStartArea ) {
+                if ( Distance.between(userLocation,latLng) > sizeStartArea ) {
                     Challenge.focusedChallenge.start();
                 }
             }
@@ -98,12 +84,9 @@ public class Challenge {
     public LatLng getLatLng(){
         return latLng;
     }
-    public Location getLocation() {
-        return location;
-    }
 
     public void activate(){
-        if( userLocation != null && userLocation.distanceTo(location) < sizeStartArea && !isActivated && !isStarted) {
+        if( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea && !isActivated && !isStarted) {
             Toast.makeText(Transferor.context, "Activated", Toast.LENGTH_SHORT).show();
             isActivated = true;
             userLocationChanged();
