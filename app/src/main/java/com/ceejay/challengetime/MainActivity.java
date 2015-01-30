@@ -13,6 +13,8 @@ import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.util.ArrayList;
+
 public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -77,11 +79,6 @@ public class MainActivity extends FragmentActivity {
                 ChallengeAdapter.setMapManager(new MapManager( googleMap ));
 
             }
-            HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
-            Bundle bundle = new Bundle();
-            bundle.putString("method","receive_new_challenges");
-
-            Stream.toChallenges(contact.send(bundle));
         }
     }
 }

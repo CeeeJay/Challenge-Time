@@ -39,15 +39,6 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
 
                 try {
                     HttpPostContact.reciveChallanges(challenges);
-                    /*HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
-                    Bundle bundle = new Bundle();
-                    bundle.putString("method","receive_run_challenges");
-
-                    for(Challenge.Builder builder : Stream.toChallenges(contact.send(bundle))) {
-                        challenges.add(builder.getRunChallenge());
-                    }*/
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -157,9 +157,10 @@ public class Challenge {
 
         public CheckpointChallenge getCheckpointChallenge(){
             ArrayList<LatLng> latLngs = new ArrayList<>();
-            latLngs.add(startLocation);
+            //latLngs.add(startLocation);
             latLngs.addAll(checkpointLocations);
-            latLngs.add(stopLocation);
+            //latLngs.add(stopLocation);
+
             return new CheckpointChallenge(latLngs);
         }
 

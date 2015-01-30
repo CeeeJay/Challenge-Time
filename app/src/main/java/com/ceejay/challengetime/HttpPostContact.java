@@ -2,6 +2,7 @@ package com.ceejay.challengetime;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
 

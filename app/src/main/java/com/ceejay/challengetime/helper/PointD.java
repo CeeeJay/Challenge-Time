@@ -40,10 +40,8 @@ public class PointD extends Point{
 
     public static ArrayList<LatLng> getPoints(String parse){
         ArrayList<LatLng> latLngs = new ArrayList<>();
-        parse = parse.replace("GEOMETRYCOLLECTION(","");
-        parse = parse.replace(")", "");
-        String[] points = parse.split(",Point");//
-        Log.i("ss", points[0]);
+        parse = parse.substring(19,parse.length() - 1);
+        String[] points = parse.split(",");//
         for( String point : points ){
             latLngs.add((new PointD(point)).toLatLng());
         }

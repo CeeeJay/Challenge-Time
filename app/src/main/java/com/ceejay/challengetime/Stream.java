@@ -118,7 +118,7 @@ public class Stream {
             jsonReader.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(Transferor.context,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
 
