@@ -24,28 +24,11 @@ public class RunChallenge extends Challenge {
     private Circle startArea;
     private Circle stopArea;
 
-    public RunChallenge( LatLng location , ArrayList<LatLng> track ) {
-        super(location);
+    public RunChallenge( ArrayList<LatLng> track ) {
+        super(track.get(0));
         this.track.addAll(track);
-        setStartLocation(track.get(0));
-        setStopLocation(track.get(track.size() - 1));
-    }
-
-    public RunChallenge( Location location , ArrayList<LatLng> track ) {
-        super(location);
-        this.track.addAll(track);
-        setStartLocation(track.get(0));
-        setStopLocation(track.get(track.size() - 1));
-    }
-
-    public void setStartLocation(LatLng startLatLng) {
-        this.startLocation = LatLngConvert.toLocation(startLatLng,"Start");
-        this.track.add(startLatLng);
-    }
-
-    public void setStopLocation(LatLng stopLatLng) {
-        this.stopLocation = LatLngConvert.toLocation(stopLatLng,"Stop");
-        this.track.add(stopLatLng);
+        this.track.add(track.get(0));
+        this.track.add(track.get(track.size() - 1));
     }
 
     @Override

@@ -54,10 +54,6 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
         return mapManager;
     }
 
-    public ChallengeAdapter() {
-        super();
-
-    }
 
 }
 

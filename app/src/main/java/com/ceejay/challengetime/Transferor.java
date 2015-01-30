@@ -27,7 +27,7 @@ public class Transferor {
         track.add(new LatLng(49.28865,7.11895));
         track.add(new LatLng(49.28897,7.11870));
         track.add(new LatLng(49.28606,7.12685));
-        return new RunChallenge( track.get(0) , track );
+        return new RunChallenge( track );
     }
 
     public static CheckpointChallenge getCheckpointChallenge(){

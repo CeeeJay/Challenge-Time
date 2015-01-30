@@ -12,6 +12,8 @@ import java.util.ArrayList;
  *
  */
 public class PointD extends Point{
+    public final static String TAG = PointD.class.getSimpleName();
+
     public double x = 0;
     public double y = 0;
 
@@ -23,8 +25,7 @@ public class PointD extends Point{
     }
 
     public PointD(String parse){
-        parse = parse.replace("POINT(","");
-        parse = parse.replace(")","");
+        parse = parse.substring(6,parse.length() - 1);
         x = Double.parseDouble(parse.split(" ")[0]);
         y = Double.parseDouble(parse.split(" ")[1]);
     }

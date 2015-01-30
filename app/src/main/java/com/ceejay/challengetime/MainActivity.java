@@ -13,8 +13,6 @@ import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
-import java.util.ArrayList;
-
 public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -77,7 +75,6 @@ public class MainActivity extends FragmentActivity {
 
             if (googleMap != null) {
                 ChallengeAdapter.setMapManager(new MapManager( googleMap ));
-
             }
         }
     }

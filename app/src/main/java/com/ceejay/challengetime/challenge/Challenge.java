@@ -152,16 +152,11 @@ public class Challenge {
             ArrayList<LatLng> latLngs = new ArrayList<>();
             latLngs.add(startLocation);
             latLngs.add(stopLocation);
-            return new RunChallenge(startLocation,latLngs);
+            return new RunChallenge( latLngs );
         }
 
         public CheckpointChallenge getCheckpointChallenge(){
-            ArrayList<LatLng> latLngs = new ArrayList<>();
-            //latLngs.add(startLocation);
-            latLngs.addAll(checkpointLocations);
-            //latLngs.add(stopLocation);
-
-            return new CheckpointChallenge(latLngs);
+            return new CheckpointChallenge(checkpointLocations);
         }
 
         public void setChallengeName( String challengeName ) {

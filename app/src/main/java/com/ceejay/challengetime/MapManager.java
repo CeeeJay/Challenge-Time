@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,12 +60,7 @@ public class MapManager {
     }
 
     public Circle addArea( Location position , int radius , int color ){
-        CircleOptions circleOptions = new CircleOptions()
-                .center(new LatLng(position.getLatitude(),position.getLongitude()))
-                .radius(radius)
-                .fillColor(color)
-                .strokeWidth(0);
-        return googleMap.addCircle(circleOptions);
+        return addArea(new LatLng(position.getLatitude(), position.getLongitude()), radius, color);
     }
 
     public Marker addMarker( Challenge challenge ){
