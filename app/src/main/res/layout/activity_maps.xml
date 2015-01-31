@@ -8,22 +8,15 @@
         android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <TextView
+    <com.ceejay.challengetime.helper.HexagonalButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:layout_alignBaseline="@+id/map"
-        android:layout_alignBottom="@+id/map"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
+        android:text="Start"
         android:id="@+id/start"
-        android:layout_above="@+id/textView"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="83dp" />
+        android:width="100dp"
+        android:height="100dp"
+        android:background="#ffffff"/>
 
 </RelativeLayout>

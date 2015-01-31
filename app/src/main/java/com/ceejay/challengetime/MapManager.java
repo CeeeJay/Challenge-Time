@@ -1,6 +1,9 @@
 package com.ceejay.challengetime;
 
+import android.app.Activity;
 import android.location.Location;
+import android.view.View;
+import android.widget.TextView;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,9 +40,10 @@ public class MapManager {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                clear();
+                /*clear();
                 markerAdapter.get(marker).focus();
-                markerAdapter.clear();
+                markerAdapter.clear();*/
+                marker.showInfoWindow();
                 return true;
             }
         });
@@ -49,6 +53,27 @@ public class MapManager {
                 Challenge.setUserLocation(location);
             }
         });
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                View view = ((Activity)Transferor.context).getLayoutInflater().inflate(R.layout.info_window,null);
+                TextView name = (TextView)view.findViewById(R.id.challengeName);
+                name.setText("Test");
+                return view;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+        });
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
+            }
+        });
+
     }
 
     public void clear(){

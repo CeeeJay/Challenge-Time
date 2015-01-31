@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 /**
  * Created by CJay on 26.01.2015 for Challenge Time.
+ *
  */
 public class Polygon {
 
@@ -25,7 +26,7 @@ public class Polygon {
     public static Path polygonPath( int x , int y , int radius , int corners , double beginDeg ){
         Path path = new Path();
         path.moveTo( (float) ( x + Math.cos( beginDeg ) * radius ) , (float) ( y + Math.sin( beginDeg ) * radius ) );
-        for( int i = 1 ; i < corners ; i++ ){
+        for( int i = 1 ; i <= corners ; i++ ){
             path.lineTo( (float) ( x + Math.cos(i * 2 * Math.PI / corners + beginDeg) * radius ) , (float) ( y + Math.sin(i * 2 * Math.PI / corners + beginDeg) * radius ) );
         }
         return path;
