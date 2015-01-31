@@ -2,6 +2,7 @@ package com.ceejay.challengetime.challenge;
 
 import android.content.Context;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.Transferor;
@@ -24,6 +25,7 @@ public class Challenge {
     protected int sizeStartArea = 40;
     protected int sizeStopArea = 40;
     public StopWatch stopWatch;
+    public ArrayList<OnChallengeReadyListener> readyListeners = new ArrayList<>();
 
     protected static Context context;
     public static void setContext(Context context) {
@@ -35,9 +37,24 @@ public class Challenge {
         if(userLocation != null) {
             Challenge.userLocation = userLocation;
             if( Challenge.focusedChallenge != null ) {
-                Challenge.focusedChallenge.userLocationChanged();
+                Challenge.focusedChallenge.setUserLocation();
             }
         }
+    }
+
+    public void setUserLocation(){
+        if( readyListeners == null || readyListeners.size() > 0 ){ return;}
+        if ( Distance.between(userLocation,latLng) < sizeStartArea ) {
+            if(!isReady) {
+                for (OnChallengeReadyListener readyListener : readyListeners) {
+                    readyListener.onReady();
+                }
+            }
+            isReady = true;
+        }else{
+            isReady = false;
+        }
+
     }
 
     public static Location getUserPosition() {
@@ -52,14 +69,22 @@ public class Challenge {
         return focusedChallenge;
     }
 
-    public static boolean isActivated;
-    public static boolean isStarted;
-    public static boolean isFinished;
+    public static boolean isReady = false;
+    public static boolean isActivated = false;
+    public static boolean isStarted = false;
+    public static boolean isFinished = false;
 
     public Challenge( LatLng latLng ) {
         this.latLng = latLng;
         stopWatch = new StopWatch();
         this.marker = ChallengeAdapter.getMapManager().addMarker(this);
+        setOnChallengeReadyListener(new OnChallengeReadyListener() {
+            @Override
+            public void onReady() {
+                //ActivateButton button = (ActivateButton)((Activity) Transferor.context).findViewById(R.id.start);
+                //button
+            }
+        });
     }
 
     public void setLatLng(LatLng latLng) {
@@ -111,16 +136,29 @@ public class Challenge {
     public void stop(){
         isActivated = false;
         isStarted = false;
+        isFinished = false;
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Stopped at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
         stopWatch.stop();
     }
 
+    public void setOnChallengeReadyListener(@NonNull OnChallengeReadyListener readyListener ){
+        readyListeners.add(readyListener);
+    }
+
+    public void removeOnChallengeReadyListener(@NonNull OnChallengeReadyListener readyListener ){
+        if( readyListeners.contains(readyListener) ) {
+            readyListeners.remove(readyListener);
+        }
+    }
+
+    public interface OnChallengeReadyListener{
+        public void onReady();
+    }
+
     public static class Builder{
         private String challengeName;
-        protected Location location;
         protected LatLng latLng;
-        protected Marker marker;
         protected int sizeStartArea = 40;
         protected int sizeStopArea = 40;
         public StopWatch stopWatch;

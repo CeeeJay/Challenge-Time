@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.Button;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
@@ -25,11 +24,14 @@ public class MainActivity extends FragmentActivity {
         Challenge.setContext(this);
         setContentView(R.layout.activity_maps);
 
-        Button startButton = (Button) findViewById(R.id.start);
-        startButton.setOnClickListener(new View.OnClickListener() {
+        final ActivateButton button = (ActivateButton)findViewById(R.id.start);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Challenge.getFocus().activate();
+                if(Challenge.getFocus() != null) {
+                    Challenge.getFocus().activate();
+                }
+                button.elevator(10);
             }
         });
 

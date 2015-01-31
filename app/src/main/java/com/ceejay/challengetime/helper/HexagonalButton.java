@@ -18,7 +18,7 @@ import android.widget.Button;
 public class HexagonalButton extends Button {
     public final static String TAG = HexagonalButton.class.getSimpleName();
 
-    private int buttonColor = Color.parseColor("#7700FF00");
+    protected int buttonColor = Color.parseColor("#7700FF00");
 
     public HexagonalButton(Context context) {
         super(context);
@@ -39,7 +39,7 @@ public class HexagonalButton extends Button {
         if(event.getAction() == MotionEvent.ACTION_UP){
             buttonColor = Color.parseColor("#7700dd00");
             invalidate();
-            return true;
+            return super.onTouchEvent(event);
         }
         if(event.getAction() == MotionEvent.ACTION_DOWN ){
             float x = event.getX();
@@ -56,7 +56,7 @@ public class HexagonalButton extends Button {
             if( length > Math.sqrt(Math.pow((xCanvas-x),2)+Math.pow(yCanvas-y,2) )) {
                 buttonColor = Color.parseColor("#AA00dd00");
                 invalidate();
-                return true;
+                return super.onTouchEvent(event);
             }
         }
         return false;
