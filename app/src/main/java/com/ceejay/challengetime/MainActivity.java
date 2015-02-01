@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.helper.HexagonalButton;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -16,6 +18,7 @@ public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private GoogleMap googleMap;
+    private AnimationHolder ah;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,18 +27,27 @@ public class MainActivity extends FragmentActivity {
         Challenge.setContext(this);
         setContentView(R.layout.activity_maps);
 
-        final ActivateButton button = (ActivateButton)findViewById(R.id.start);
+        ah = new AnimationHolder(this);
+        Transferor.animHol = ah;
+
+        HexagonalButton button = (HexagonalButton)findViewById(R.id.start);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(Challenge.getFocus() != null) {
                     Challenge.getFocus().activate();
                 }
-                button.elevator(10);
+                ah.hideActivateButton(true);
             }
         });
 
         setUpMapIfNeeded();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        ah.hideActivateButton(false);
+        return super.onTouchEvent(event);
     }
 
     @Override

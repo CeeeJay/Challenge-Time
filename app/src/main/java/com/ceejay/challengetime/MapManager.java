@@ -16,7 +16,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,9 +39,7 @@ public class MapManager {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                /*clear();
-                markerAdapter.get(marker).focus();
-                markerAdapter.clear();*/
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
                 marker.showInfoWindow();
                 return true;
             }
@@ -70,7 +67,9 @@ public class MapManager {
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-
+                clear();
+                markerAdapter.get(marker).focus();
+                markerAdapter.clear();
             }
         });
 
@@ -93,7 +92,6 @@ public class MapManager {
         Marker marker = googleMap.addMarker(markerOptions);
         markerAdapter.put(marker, challenge);
         markerOptionsMap.put(markerOptions, challenge);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(challenge.getLatLng(), 15));
         return marker;
     }
 

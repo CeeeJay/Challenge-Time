@@ -39,6 +39,8 @@ public class Transferor {
         return new CheckpointChallenge( latLngs );
     }
 
+    public static AnimationHolder animHol;
+
 }
 
 

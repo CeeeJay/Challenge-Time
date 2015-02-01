@@ -65,7 +65,7 @@ public class HexagonalButton extends Button {
     @Override
     public void setBackgroundColor(int color) {
         buttonColor = color;
-        super.setBackgroundColor(color);
+        super.setBackgroundColor(Color.TRANSPARENT);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class HexagonalButton extends Button {
         paint.setColor(buttonColor);
         canvas.drawPath(path, paint);
 
-        setBackgroundColor(Color.TRANSPARENT);
+        super.setBackgroundColor(Color.TRANSPARENT);
         super.draw(canvas);
     }
 }
