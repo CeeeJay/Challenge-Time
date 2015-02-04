@@ -9,6 +9,8 @@
     <color name="slate">#ff76a9b5</color>
     <color name="transparent">#00000000</color>
 
+    <color name="challengeOrange">#FFFFBB33</color>
+
     <color name="focused">#99BBBBBB</color>
     <color name="activated">#995273ff</color>
 

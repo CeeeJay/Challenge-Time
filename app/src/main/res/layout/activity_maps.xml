@@ -8,15 +8,87 @@
         android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <com.ceejay.challengetime.helper.HexagonalButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start"
+    <SlidingDrawer
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:handle="@+id/handler"
+        android:content="@+id/content"
+        android:id="@+id/slidingDrawer"
+        android:orientation="vertical"  >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/handler">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"/>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/challengeOrange">
+                    <TextView
+                        android:id="@+id/challengeName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Brunnen Tour"
+                        android:textSize="20sp"
+                        android:padding="10dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/run_challenge"
+                        android:padding="10dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1:20"
+                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clickable="true">
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </SlidingDrawer>
+
+
+
+    <Button
         android:id="@+id/start"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/round"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:width="100dp"
-        android:height="100dp"
-        android:visibility="invisible"/>
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="50dp"/>
+
+
+
+
+
 
 </RelativeLayout>

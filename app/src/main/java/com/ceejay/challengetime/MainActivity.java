@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.SlidingDrawer;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
@@ -19,6 +22,7 @@ public class MainActivity extends FragmentActivity {
 
     private GoogleMap googleMap;
     private AnimationHolder ah;
+    public SlidingDrawer slidingDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class MainActivity extends FragmentActivity {
         ah = new AnimationHolder(this);
         Transferor.animHol = ah;
 
-        HexagonalButton button = (HexagonalButton)findViewById(R.id.start);
+        /*HexagonalButton button = (HexagonalButton)findViewById(R.id.start);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,6 +42,19 @@ public class MainActivity extends FragmentActivity {
                     Challenge.getFocus().activate();
                 }
                 ah.hideActivateButton(true);
+            }
+        });*/
+        Button button = (Button) findViewById(R.id.start);
+        slidingDrawer = (SlidingDrawer) findViewById(R.id.slidingDrawer);
+        slidingDrawer.setOnDrawerScrollListener(new SlidingDrawer.OnDrawerScrollListener() {
+            @Override
+            public void onScrollStarted() {
+
+            }
+
+            @Override
+            public void onScrollEnded() {
+
             }
         });
 
@@ -77,7 +94,9 @@ public class MainActivity extends FragmentActivity {
             alertDialog.show();
         }else{
             Challenge.setFocus(null);
-            ChallengeAdapter.getMapManager().refreshMarker();
+            if( ChallengeAdapter.getMapManager() != null ) {
+                ChallengeAdapter.getMapManager().refreshMarker();
+            }
         }
     }
 

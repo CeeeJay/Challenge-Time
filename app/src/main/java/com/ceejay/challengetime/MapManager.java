@@ -9,6 +9,7 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,7 +40,8 @@ public class MapManager {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(marker.getPosition(),10,2,4)));
+                //googleMap.animateCamera(CameraUpdateFactory.scrollBy(0, 100).newLatLngZoom(marker.getPosition(), 15));
                 marker.showInfoWindow();
                 return true;
             }

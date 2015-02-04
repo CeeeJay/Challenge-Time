@@ -1,14 +1,20 @@
 package com.ceejay.challengetime.helper;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Button;
+
+import com.ceejay.challengetime.R;
 
 
 /**
@@ -18,7 +24,7 @@ import android.widget.Button;
 public class HexagonalButton extends Button {
     public final static String TAG = HexagonalButton.class.getSimpleName();
 
-    protected int buttonColor = Color.parseColor("#7700FF00");
+    protected int buttonColor = Color.parseColor("#DFDFDF");
 
     public HexagonalButton(Context context) {
         super(context);
@@ -77,6 +83,17 @@ public class HexagonalButton extends Button {
         paint.setColor(buttonColor);
         canvas.drawPath(path, paint);
 
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.glasses);
+        float size = 0.7f;
+        int width = (int)(getWidth() * size);
+        int height = width * bitmap.getHeight() / bitmap.getWidth() ;
+        Log.i(width + "",  height + "");
+        int x = ( getWidth() - width )/2;
+        int y = ( getHeight() - height ) / 2;
+        int endX = x + width;
+        int endY = y + height;
+
+        canvas.drawBitmap(bitmap, null , new Rect( x , y , endX , endY ) , null );
         super.setBackgroundColor(Color.TRANSPARENT);
         super.draw(canvas);
     }
