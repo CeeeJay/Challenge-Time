@@ -19,7 +19,13 @@ public class CheckpointChallenge extends Challenge {
     private ArrayList<Circle> circles;
 
     public CheckpointChallenge(ArrayList<LatLng> checkpoints) {
-        super(checkpoints.get(0));
+        super(checkpoints.get(0) , "Untitled Checkpoint Challenge");
+        this.checkpoints = checkpoints;
+        circles = new ArrayList<>();
+    }
+
+    public CheckpointChallenge( ArrayList<LatLng> checkpoints , String challengeName ) {
+        super(checkpoints.get(0) , challengeName);
         this.checkpoints = checkpoints;
         circles = new ArrayList<>();
     }

@@ -23,12 +23,18 @@ public class RunChallenge extends Challenge {
     private Circle stopArea;
 
     public RunChallenge( ArrayList<LatLng> track ) {
-        super(track.get(0));
+        super(track.get(0) , "Untitled RunChallenge");
         this.track.addAll(track);
         startLocation = track.get(0);
         stopLocation = track.get(track.size() - 1);
     }
 
+    public RunChallenge( ArrayList<LatLng> track , String challengeName ) {
+        super(track.get(0) , challengeName);
+        this.track.addAll(track);
+        startLocation = track.get(0);
+        stopLocation = track.get(track.size() - 1);
+    }
 
     @Override
     public void focus() {

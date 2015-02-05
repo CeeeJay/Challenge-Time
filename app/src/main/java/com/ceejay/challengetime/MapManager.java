@@ -1,6 +1,7 @@
 package com.ceejay.challengetime;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 import android.view.View;
 import android.widget.TextView;
@@ -9,7 +10,6 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -32,16 +32,25 @@ public class MapManager {
     private HashMap<Marker,Challenge> markerAdapter;
     public HashMap<MarkerOptions,Challenge> markerOptionsMap;
 
-    public MapManager( GoogleMap gMap  ) {
+    private TextView challengeName;
+    private TextView challengeType;
+    private TextView challengeRecord;
+
+    public MapManager( Context context , GoogleMap gMap  ) {
         markerAdapter = new HashMap<>();
         markerOptionsMap = new HashMap<>();
+
+        challengeName = (TextView) ((Activity)context).findViewById(R.id.challengeName);
+        challengeType = (TextView) ((Activity)context).findViewById(R.id.challengeType);
+        challengeRecord = (TextView) ((Activity)context).findViewById(R.id.challengeRecord);
+
         googleMap = gMap;
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(marker.getPosition(),10,2,4)));
-                //googleMap.animateCamera(CameraUpdateFactory.scrollBy(0, 100).newLatLngZoom(marker.getPosition(), 15));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+                challengeName.setText(markerAdapter.get(marker).getChallengeName());
                 marker.showInfoWindow();
                 return true;
             }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,71 +9,76 @@
         android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <SlidingDrawer
+    <com.ceejay.challengetime.Slider
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:handle="@+id/handler"
         android:content="@+id/content"
         android:id="@+id/slidingDrawer"
-        android:orientation="vertical"  >
+        android:gravity="bottom"
+        android:layout_marginTop="@dimen/map_header"
+        sothree:umanoPanelHeight="@dimen/panel_size">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/handler">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="80dp"
-                    android:background="@color/challengeOrange">
-                    <TextView
-                        android:id="@+id/challengeName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Brunnen Tour"
-                        android:textSize="20sp"
-                        android:padding="10dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="@string/run_challenge"
-                        android:padding="10dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentStart="true"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1:20"
-                        android:padding="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        />
-
-                </RelativeLayout>
-
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/handler">
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:clickable="true">
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/panel_size"
+                android:background="@color/challengeOrange"
+                android:id="@+id/panel">
+                <TextView
+                    android:id="@+id/challengeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Brunnen Tour"
+                    android:textSize="20sp"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="@string/run_challenge"
+                    android:padding="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/challengeType"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1:20"
+                    android:padding="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/challengeRecord"
+                    />
+
+            </RelativeLayout>
+
             <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
         </LinearLayout>
-    </SlidingDrawer>
+
+    </com.ceejay.challengetime.Slider>
 
 
 
@@ -85,10 +91,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="50dp"/>
-
-
-
-
 
 
 </RelativeLayout>

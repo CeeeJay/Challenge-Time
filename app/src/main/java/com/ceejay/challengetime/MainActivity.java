@@ -5,15 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SlidingDrawer;
+import android.widget.RelativeLayout;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.helper.HexagonalButton;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -22,8 +20,9 @@ public class MainActivity extends FragmentActivity {
 
     private GoogleMap googleMap;
     private AnimationHolder ah;
-    public SlidingDrawer slidingDrawer;
-
+    public Slider slider;
+    public Button button;
+    public RelativeLayout rl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,40 +30,27 @@ public class MainActivity extends FragmentActivity {
         Challenge.setContext(this);
         setContentView(R.layout.activity_maps);
 
-        ah = new AnimationHolder(this);
-        Transferor.animHol = ah;
-
-        /*HexagonalButton button = (HexagonalButton)findViewById(R.id.start);
-        button.setOnClickListener(new View.OnClickListener() {
+        slider = (Slider) findViewById(R.id.slidingDrawer);
+        slider.setPanelSlideListener(new Slider.PanelSlideListener() {
+            RelativeLayout rl = (RelativeLayout)findViewById(R.id.panel);
+            Button startButton = (Button)findViewById(R.id.start);
             @Override
-            public void onClick(View v) {
-                if(Challenge.getFocus() != null) {
-                    Challenge.getFocus().activate();
-                }
-                ah.hideActivateButton(true);
+            public void onPanelSlide(View panel, float slideOffset) {
+                int newMargin = rl.getHeight() - startButton.getHeight()/2 + (int)((slider.getHeight() - rl.getHeight()) * slideOffset);
+                ((ViewGroup.MarginLayoutParams)button.getLayoutParams()).setMargins(0, 0, (int) (getResources().getDimension(R.dimen.start_margin_end)), newMargin);
+                button.requestLayout();
             }
-        });*/
-        Button button = (Button) findViewById(R.id.start);
-        slidingDrawer = (SlidingDrawer) findViewById(R.id.slidingDrawer);
-        slidingDrawer.setOnDrawerScrollListener(new SlidingDrawer.OnDrawerScrollListener() {
             @Override
-            public void onScrollStarted() {
-
-            }
-
+            public void onPanelCollapsed(View panel) {}
             @Override
-            public void onScrollEnded() {
-
-            }
+            public void onPanelExpanded(View panel) {}
+            @Override
+            public void onPanelAnchored(View panel) {}
+            @Override
+            public void onPanelHidden(View panel) {}
         });
 
         setUpMapIfNeeded();
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        ah.hideActivateButton(false);
-        return super.onTouchEvent(event);
     }
 
     @Override
@@ -107,7 +93,7 @@ public class MainActivity extends FragmentActivity {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-                ChallengeAdapter.setMapManager(new MapManager( googleMap ));
+                ChallengeAdapter.setMapManager( new MapManager( this , googleMap ));
             }
         }
     }

@@ -91,6 +91,17 @@ public class Challenge {
         this.marker = ChallengeAdapter.getMapManager().addMarker(this);
     }
 
+    public Challenge( LatLng latLng , String challengeName ) {
+        this.challengeName = challengeName;
+        this.latLng = latLng;
+        stopWatch = new StopWatch();
+        this.marker = ChallengeAdapter.getMapManager().addMarker(this);
+    }
+
+    public String getChallengeName() {
+        return challengeName;
+    }
+
     public void setUserLocation(){
         if ( Distance.between(userLocation,latLng) < sizeStartArea ) {
             if(!isReady) {
@@ -332,11 +343,11 @@ public class Challenge {
             ArrayList<LatLng> latLngs = new ArrayList<>();
             latLngs.add(startLocation);
             latLngs.add(stopLocation);
-            return new RunChallenge( latLngs );
+            return new RunChallenge( latLngs , challengeName != null ? challengeName : "Untiteld");
         }
 
         public CheckpointChallenge getCheckpointChallenge(){
-            return new CheckpointChallenge(checkpointLocations);
+            return new CheckpointChallenge(checkpointLocations, challengeName != null ? challengeName : "Untiteld");
         }
 
         public void setChallengeName( String challengeName ) {
