@@ -51,23 +51,8 @@ public class Challenge {
         }
         focusedChallenge = challenge;
 
-        if(challenge != null) {
-            challenge.setOnChallengeReadyListener(new Challenge.OnChallengeReadyListener() {
-                @Override
-                public void onReady() {
-                    Transferor.animHol.hideActivateButton(false);
-                }
-            });
-
-            challenge.setOnChallengeActivateListener(new Challenge.OnChallengeActivateListener() {
-                @Override
-                public void onActivate() {
-                    Transferor.animHol.hideActivateButton(true);
-                }
-            });
-            getFocus().setUserLocation();
-        }
     }
+
     public static Challenge getFocus(){
         return focusedChallenge;
     }
@@ -96,6 +81,10 @@ public class Challenge {
         this.latLng = latLng;
         stopWatch = new StopWatch();
         this.marker = ChallengeAdapter.getMapManager().addMarker(this);
+    }
+
+    public Marker getMarker() {
+        return marker;
     }
 
     public String getChallengeName() {

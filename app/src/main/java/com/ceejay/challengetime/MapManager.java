@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Location;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -49,7 +50,7 @@ public class MapManager {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+                zoom(marker);
                 challengeName.setText(markerAdapter.get(marker).getChallengeName());
                 marker.showInfoWindow();
                 return true;
@@ -78,12 +79,17 @@ public class MapManager {
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                clear();
-                markerAdapter.get(marker).focus();
-                markerAdapter.clear();
+            clear();
+            markerAdapter.get(marker).focus();
+            markerAdapter.clear();
+
             }
         });
 
+    }
+
+    public void zoom( Marker marker ){
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
     }
 
     public void clear(){

@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
@@ -867,7 +868,7 @@ public class Slider extends ViewGroup {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(@NonNull MotionEvent ev) {
         if (!isEnabled() || !isTouchEnabled()) {
             return super.onTouchEvent(ev);
         }
@@ -890,13 +891,23 @@ public class Slider extends ViewGroup {
     /*
      * Computes the top position of the panel based on the slide offset.
      */
+    private int maxTop = 0;
     private int computePanelTopPosition(float slideOffset) {
         int slidingViewHeight = mSlideableView != null ? mSlideableView.getMeasuredHeight() : 0;
         int slidePixelOffset = (int) (slideOffset * mSlideRange);
         // Compute the top of the panel if its collapsed
-        return mIsSlidingUp
+        int slidingPosition = mIsSlidingUp
                 ? getMeasuredHeight() - getPaddingBottom() - mPanelHeight - slidePixelOffset
                 : getPaddingTop() - slidingViewHeight + mPanelHeight + slidePixelOffset;
+        if(slidingPosition < maxTop){
+            return maxTop;
+        }else{
+            return slidingPosition;
+        }
+    }
+
+    public void setMaxTopPosition( int top ){
+        maxTop = top;
     }
 
     /*
@@ -1060,7 +1071,7 @@ public class Slider extends ViewGroup {
     }
 
     @Override
-    public void draw(Canvas c) {
+    public void draw(@NonNull Canvas c) {
         super.draw(c);
 
         // draw the shadow

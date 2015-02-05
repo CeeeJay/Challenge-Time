@@ -4,28 +4,25 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
 
     <com.ceejay.challengetime.Slider
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:handle="@+id/handler"
+        android:handle="@+id/map"
         android:content="@+id/content"
         android:id="@+id/slidingDrawer"
         android:gravity="bottom"
-        android:layout_marginTop="@dimen/map_header"
-        sothree:umanoPanelHeight="@dimen/panel_size">
+        sothree:umanoPanelHeight="@dimen/panel_size"
+        sothree:umanoParalaxOffset="250dp"
+        sothree:umanoFadeColor="#88222222"
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/handler">
-        </LinearLayout>
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
 
         <LinearLayout
             android:id="@+id/content"
@@ -33,13 +30,15 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:clickable="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="200dp">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/panel_size"
                 android:background="@color/challengeOrange"
                 android:id="@+id/panel">
+
                 <TextView
                     android:id="@+id/challengeName"
                     android:layout_width="wrap_content"

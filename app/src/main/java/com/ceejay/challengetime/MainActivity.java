@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
@@ -19,10 +21,7 @@ public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private GoogleMap googleMap;
-    private AnimationHolder ah;
     public Slider slider;
-    public Button button;
-    public RelativeLayout rl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,21 +30,28 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_maps);
 
         slider = (Slider) findViewById(R.id.slidingDrawer);
+        slider.setMaxTopPosition((int)(getResources().getDimension(R.dimen.map_header)));
         slider.setPanelSlideListener(new Slider.PanelSlideListener() {
             RelativeLayout rl = (RelativeLayout)findViewById(R.id.panel);
             Button startButton = (Button)findViewById(R.id.start);
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 int newMargin = rl.getHeight() - startButton.getHeight()/2 + (int)((slider.getHeight() - rl.getHeight()) * slideOffset);
-                ((ViewGroup.MarginLayoutParams)button.getLayoutParams()).setMargins(0, 0, (int) (getResources().getDimension(R.dimen.start_margin_end)), newMargin);
-                button.requestLayout();
+                ((ViewGroup.MarginLayoutParams)startButton.getLayoutParams()).setMargins(0, 0, (int) (getResources().getDimension(R.dimen.start_margin_end)), newMargin);
+                startButton.requestLayout();
             }
             @Override
             public void onPanelCollapsed(View panel) {}
             @Override
             public void onPanelExpanded(View panel) {}
             @Override
-            public void onPanelAnchored(View panel) {}
+            public void onPanelAnchored(View panel) {
+                if(ChallengeAdapter.getMapManager() != null) {
+                    if(Challenge.getFocus() != null) {
+                        ChallengeAdapter.getMapManager().zoom(Challenge.getFocus().getMarker());
+                    }
+                }
+            }
             @Override
             public void onPanelHidden(View panel) {}
         });
