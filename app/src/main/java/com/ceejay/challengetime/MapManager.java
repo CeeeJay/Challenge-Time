@@ -5,7 +5,6 @@ import android.content.Context;
 import android.location.Location;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -88,8 +87,19 @@ public class MapManager {
 
     }
 
-    public void zoom( Marker marker ){
+    public MapManager zoom( Marker marker ){
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+        return this;
+    }
+
+    public MapManager lock(){
+        googleMap.getUiSettings().setScrollGesturesEnabled(false);
+        return this;
+    }
+
+    public MapManager unLock(){
+        googleMap.getUiSettings().setScrollGesturesEnabled(true);
+        return this;
     }
 
     public void clear(){

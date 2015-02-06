@@ -23,6 +23,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.ceejay.challengetime.helper.ViewDragHelper;
 
+
 public class Slider extends ViewGroup {
 
     private static final String TAG = Slider.class.getSimpleName();
@@ -910,6 +911,10 @@ public class Slider extends ViewGroup {
         maxTop = top;
     }
 
+    public int getMaxTopPosition( int top ){
+        return maxTop;
+    }
+
     /*
      * Computes the slide offset based on the top position of the panel
      */
@@ -970,18 +975,27 @@ public class Slider extends ViewGroup {
         }
     }
 
-    @SuppressLint("NewApi")
-    private void onPanelDragged(int newTop) {
-        mSlideState = PanelState.DRAGGING;
-        // Recompute the slide offset based on the new top position
-        mSlideOffset = computeSlideOffset(newTop);
-        // Update the parallax based on the new slide offset
+    public void setParalax(){
         if (mParallaxOffset > 0 && mSlideOffset >= 0) {
             int mainViewOffset = getCurrentParalaxOffset();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 mMainView.setTranslationY(mainViewOffset);
             }
         }
+    }
+
+
+    public View getPanel(){
+        return mSlideableView;
+    }
+
+    @SuppressLint("NewApi")
+    private void onPanelDragged(int newTop) {
+        mSlideState = PanelState.DRAGGING;
+        // Recompute the slide offset based on the new top position
+        mSlideOffset = computeSlideOffset(newTop);
+        // Update the parallax based on the new slide offset
+        setParalax();
         // Dispatch the slide event
         dispatchOnPanelSlide(mSlideableView);
         // If the slide offset is negative, and overlay is not on, we need to increase the
