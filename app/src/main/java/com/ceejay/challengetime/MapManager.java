@@ -30,8 +30,10 @@ import java.util.List;
 public class MapManager {
 
     public GoogleMap googleMap;
-    private HashMap<Marker,Challenge> markerAdapter;
+    public HashMap<Marker,Challenge> markerAdapter;
     public HashMap<MarkerOptions,Challenge> markerOptionsMap;
+
+    public static Marker focusedMarker;
 
     private TextView challengeName;
     private TextView challengeType;
@@ -53,7 +55,14 @@ public class MapManager {
                 zoom(marker);
                 challengeName.setText(markerAdapter.get(marker).getChallengeName());
                 marker.showInfoWindow();
+                focusedMarker = marker;
                 return true;
+            }
+        });
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                focusedMarker = null;
             }
         });
         googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
@@ -79,9 +88,6 @@ public class MapManager {
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-            clear();
-            markerAdapter.get(marker).focus();
-            markerAdapter.clear();
 
             }
         });
@@ -124,6 +130,7 @@ public class MapManager {
     }
 
     public void refreshMarker(){
+        focusedMarker = null;
         clear();
         markerAdapter.clear();
         for(MarkerOptions marker : markerOptionsMap.keySet()) {

@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.ceejay.challengetime.MapManager;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
@@ -18,6 +19,10 @@ public class SliderAdapter {
     public Context context;
     public Slider slider;
     public Button button;
+
+    public enum ButtonMode{
+        WATCH,ACTIVATE
+    }
 
     public SliderAdapter( Context context , Slider slider) {
         this.context = context;
@@ -56,6 +61,41 @@ public class SliderAdapter {
 
     public void addButton( Button button ){
         this.button = button;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (buttonMode) {
+                    case WATCH:
+                        if (MapManager.focusedMarker != null) {
+                            MapManager mm = ChallengeAdapter.getMapManager();
+
+                            mm.clear();
+                            mm.markerAdapter.get(MapManager.focusedMarker).focus();
+                            mm.markerAdapter.clear();
+                            changeButtonMode(ButtonMode.ACTIVATE);
+                        }
+                        break;
+                    case ACTIVATE:
+                        if(Challenge.getFocus() != null) {
+                            Challenge.getFocus().activate();
+                        }
+                        break;
+                }
+
+            }
+        });
+    }
+    ButtonMode buttonMode = ButtonMode.WATCH;
+    public void changeButtonMode( ButtonMode buttonMode ){
+        this.buttonMode = buttonMode;
+        switch (buttonMode) {
+            case WATCH:
+                button.setBackground(context.getResources().getDrawable(R.drawable.watch_button));
+                break;
+            case ACTIVATE:
+                button.setBackground(context.getResources().getDrawable(R.drawable.activate_button));
+                break;
+        }
     }
 
     public void setUpButton( int offset ){

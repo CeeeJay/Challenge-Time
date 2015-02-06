@@ -59,6 +59,7 @@ public class MainActivity extends FragmentActivity {
                     Challenge.getFocus().stop();
                     Challenge.setFocus(null);
                     ChallengeAdapter.getMapManager().refreshMarker();
+                    sliderAdapter.changeButtonMode(SliderAdapter.ButtonMode.WATCH);
                 }
             });
             alertDialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -71,6 +72,7 @@ public class MainActivity extends FragmentActivity {
             Challenge.setFocus(null);
             if( ChallengeAdapter.getMapManager() != null ) {
                 ChallengeAdapter.getMapManager().refreshMarker();
+                sliderAdapter.changeButtonMode(SliderAdapter.ButtonMode.WATCH);
             }
         }
     }

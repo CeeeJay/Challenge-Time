@@ -82,8 +82,8 @@ public class HexagonalButton extends Button {
         Paint paint = new Paint();
         paint.setColor(buttonColor);
         canvas.drawPath(path, paint);
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.glasses);
+/*
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.eye);
         float size = 0.7f;
         int width = (int)(getWidth() * size);
         int height = width * bitmap.getHeight() / bitmap.getWidth() ;
@@ -95,7 +95,7 @@ public class HexagonalButton extends Button {
 
         canvas.drawBitmap(bitmap, null , new Rect( x , y , endX , endY ) , null );
         super.setBackgroundColor(Color.TRANSPARENT);
-        super.draw(canvas);
+        super.draw(canvas);*/
     }
 }
 
