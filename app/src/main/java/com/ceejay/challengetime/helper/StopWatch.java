@@ -3,8 +3,6 @@ package com.ceejay.challengetime.helper;
 import android.content.Context;
 import android.os.Vibrator;
 
-import com.ceejay.challengetime.Transferor;
-
 import java.util.ArrayList;
 
 /**

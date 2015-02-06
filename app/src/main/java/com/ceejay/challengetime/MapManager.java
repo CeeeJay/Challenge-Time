@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -64,7 +65,7 @@ public class MapManager {
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
-                View view = ((Activity)Transferor.context).getLayoutInflater().inflate(R.layout.info_window,null);
+                View view = ((Activity) Transferor.context).getLayoutInflater().inflate(R.layout.info_window,null);
                 TextView name = (TextView)view.findViewById(R.id.challengeName);
                 name.setText("Test");
                 return view;

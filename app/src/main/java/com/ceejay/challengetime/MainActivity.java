@@ -10,6 +10,9 @@ import android.widget.Button;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.slider.Slider;
+import com.ceejay.challengetime.slider.SliderAdapter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 

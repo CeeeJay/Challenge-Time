@@ -1,10 +1,9 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.helper;
 
 import android.util.JsonReader;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.helper.PointD;
 
 import java.io.BufferedReader;
 import java.io.IOException;

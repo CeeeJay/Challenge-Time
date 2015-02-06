@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.ceejay.challengetime.HttpPostContact;
 import com.ceejay.challengetime.MapManager;
-import com.ceejay.challengetime.Transferor;
+import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 

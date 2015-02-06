@@ -1,4 +1,4 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.slider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.ViewDragHelper;
 
 

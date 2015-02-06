@@ -5,7 +5,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.ceejay.challengetime.Transferor;
+import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
 import com.google.android.gms.maps.model.LatLng;

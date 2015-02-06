@@ -1,4 +1,4 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.helper;
 
 import android.content.Context;
 

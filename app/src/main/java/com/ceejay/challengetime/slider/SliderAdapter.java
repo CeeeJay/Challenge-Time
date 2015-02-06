@@ -1,10 +1,11 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.slider;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 

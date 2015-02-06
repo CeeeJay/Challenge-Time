@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
