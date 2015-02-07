@@ -68,12 +68,14 @@ public class MainActivity extends FragmentActivity {
                 }
             });
             alertDialog.show();
-        }else{
+        }else if(Challenge.getFocus() != null){
             Challenge.setFocus(null);
             if( ChallengeAdapter.getMapManager() != null ) {
                 ChallengeAdapter.getMapManager().refreshMarker();
                 sliderAdapter.changeButtonMode(SliderAdapter.ButtonMode.WATCH);
             }
+        }else{
+            super.onBackPressed();
         }
     }
 
@@ -85,6 +87,7 @@ public class MainActivity extends FragmentActivity {
 
             if (googleMap != null) {
                 ChallengeAdapter.setMapManager( new MapManager( this , googleMap ));
+                new LocationObserver(this);
             }
         }
     }

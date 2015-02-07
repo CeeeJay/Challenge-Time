@@ -22,11 +22,8 @@ public class LocationObserver {
     private String provider;
     private MyLocationListener mylistener;
     private Criteria criteria;
-    public PolylineOptions track;
 
     public LocationObserver(Context context) {
-        track = new PolylineOptions();
-
         // Get the location manager
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria how to select the location provider
@@ -40,14 +37,16 @@ public class LocationObserver {
         // the last known location of this provider
         Location location = locationManager.getLastKnownLocation(provider);
 
-        if (location != null) {
+        mylistener = new MyLocationListener();
+        Toast.makeText(Transferor.context,"1" , Toast.LENGTH_SHORT).show();
 
-            mylistener = new MyLocationListener();
+        if (location != null) {
+            Toast.makeText(Transferor.context,"2" , Toast.LENGTH_SHORT).show();
+
             mylistener.onLocationChanged(location);
-            locationManager.requestLocationUpdates(provider, 500, 1, mylistener);
 
         }
-
+        locationManager.requestLocationUpdates(provider, 500, 1, mylistener);
 
     }
 
@@ -55,23 +54,20 @@ public class LocationObserver {
 
         @Override
         public void onLocationChanged(Location location) {
-            Toast.makeText(Transferor.context,"Location "+ location.getLatitude() + location.getLongitude() , Toast.LENGTH_SHORT).show();
             Challenge.setUserLocation(location);
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-
-
         }
 
         @Override
         public void onProviderDisabled(String provider) {
+            Challenge.setUserLocation(null);
         }
     }
 }

@@ -19,6 +19,11 @@ import java.util.ArrayList;
  */
 public class Challenge {
 
+    /**
+     * Static Stuff
+     *
+     */
+
     private static Challenge focusedChallenge;
 
     protected static Context context;
@@ -34,8 +39,8 @@ public class Challenge {
         Challenge.context = context;
     }
     public static void setUserLocation(Location userLocation) {
+        Challenge.userLocation = userLocation;
         if(userLocation != null) {
-            Challenge.userLocation = userLocation;
             if( Challenge.focusedChallenge != null ) {
                 Challenge.focusedChallenge.setUserLocation();
             }
@@ -45,24 +50,36 @@ public class Challenge {
         return userLocation;
     }
     public static void setFocus( Challenge challenge ){
-
         if(getFocus() != null) {
             getFocus().removeAllListener();
         }
         focusedChallenge = challenge;
-
     }
 
     public static Challenge getFocus(){
         return focusedChallenge;
     }
 
+    /**
+     * Instance Stuff
+     *
+     */
+
+    public enum ChallengeState{
+        isReady,
+        isActivated,
+        isStarted,
+        isFinished,
+        isStopped;
+    }
+
     private String challengeName;
+    private StopWatch stopWatch;
+    private ChallengeState challengeState;
     protected LatLng latLng;
     protected Marker marker;
     protected int sizeStartArea = 40;
     protected int sizeStopArea = 40;
-    public StopWatch stopWatch;
     public ArrayList<OnChallengeReadyListener> readyListeners = new ArrayList<>();
     public ArrayList<OnChallengeActivateListener> activateListeners = new ArrayList<>();
     public ArrayList<OnChallengeStartListener> startListeners = new ArrayList<>();
@@ -71,28 +88,23 @@ public class Challenge {
     public ArrayList<ChallengeListener> challengeListeners = new ArrayList<>();
 
     public Challenge( LatLng latLng ) {
-        this.latLng = latLng;
-        stopWatch = new StopWatch();
-        this.marker = ChallengeAdapter.getMapManager().addMarker(this);
+        init(latLng,"Untiled");
     }
 
     public Challenge( LatLng latLng , String challengeName ) {
+        init( latLng , challengeName );
+    }
+
+    public void init( LatLng latLng , String challengeName ){
         this.challengeName = challengeName;
         this.latLng = latLng;
         stopWatch = new StopWatch();
+        setStopWatchVibrate();
         this.marker = ChallengeAdapter.getMapManager().addMarker(this);
     }
 
-    public Marker getMarker() {
-        return marker;
-    }
-
-    public String getChallengeName() {
-        return challengeName;
-    }
-
     public void setUserLocation(){
-        if ( Distance.between(userLocation,latLng) < sizeStartArea ) {
+        if ( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea ) {
             if(!isReady) {
                 ready();
             }
@@ -106,29 +118,41 @@ public class Challenge {
         this.latLng = latLng;
     }
 
-    protected void userLocationChanged(){
-        if(isActivated && Challenge.focusedChallenge != null) {
-            if (isStarted) {
-                Challenge.focusedChallenge.finish();
-            } else {
-                if ( Distance.between(userLocation,latLng) > sizeStartArea ) {
-                    Challenge.focusedChallenge.start();
-                }
-            }
-        }
+    public void setStopWatchVibrate(){
+        stopWatch.setStartVibrate(500);
+        stopWatch.setStopVibrate(500);
+    }
+
+    public void setChallengeState( ChallengeState challengeState ){
+        this.challengeState = challengeState;
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public String getChallengeName() {
+        return challengeName;
+    }
+
+    public LatLng getLatLng(){
+        return latLng;
+    }
+
+
+    public ChallengeState getChallengeState(){
+        return challengeState;
     }
 
     public void focus(){
         setFocus(this);
-    }
-    public LatLng getLatLng(){
-        return latLng;
     }
 
     public void ready(){
         for (OnChallengeReadyListener readyListener : readyListeners) {
             readyListener.onReady();
         }
+        setChallengeState(ChallengeState.isReady);
     }
 
     public void activate(){
@@ -138,8 +162,8 @@ public class Challenge {
             for (OnChallengeActivateListener activateListener : activateListeners) {
                 activateListener.onActivate();
             }
-            //userLocationChanged();
         }
+        setChallengeState(ChallengeState.isActivated);
     }
 
     protected void start(){
@@ -149,7 +173,7 @@ public class Challenge {
         for (OnChallengeStartListener startListener : startListeners) {
             startListener.onStart();
         }
-        //userLocationChanged();
+        setChallengeState(ChallengeState.isStarted);
     }
 
     protected void finish(){
@@ -161,6 +185,7 @@ public class Challenge {
         for (OnChallengeFinishListener finishListener : finishListeners) {
             finishListener.onFinish();
         }
+        setChallengeState(ChallengeState.isFinished);
     }
 
     public void stop(){
@@ -175,6 +200,7 @@ public class Challenge {
         for (OnChallengeStopListener stopListener : stopListeners) {
             stopListener.onStop();
         }
+        setChallengeState(ChallengeState.isStopped);
     }
 
     /**
