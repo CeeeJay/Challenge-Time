@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity {
         button = (Button) findViewById(R.id.start);
 
         sliderAdapter = new SliderAdapter( this , slider );
-        sliderAdapter.addButton( button );
+        sliderAdapter.attachButton(button);
 
         setUpMapIfNeeded();
     }

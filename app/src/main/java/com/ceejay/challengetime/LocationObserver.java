@@ -38,11 +38,7 @@ public class LocationObserver {
         Location location = locationManager.getLastKnownLocation(provider);
 
         mylistener = new MyLocationListener();
-        Toast.makeText(Transferor.context,"1" , Toast.LENGTH_SHORT).show();
-
         if (location != null) {
-            Toast.makeText(Transferor.context,"2" , Toast.LENGTH_SHORT).show();
-
             mylistener.onLocationChanged(location);
 
         }
