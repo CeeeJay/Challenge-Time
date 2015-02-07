@@ -3,6 +3,7 @@ package com.ceejay.challengetime;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,6 +41,8 @@ public class MapManager {
     private TextView challengeType;
     private TextView challengeRecord;
 
+    private ArrayList<OnMarkerFocusChangeListener> onMarkerFocusChangeListeners = new ArrayList<>();
+
     public MapManager( Context context , GoogleMap gMap  ) {
         markerAdapter = new HashMap<>();
         markerOptionsMap = new HashMap<>();
@@ -56,6 +60,9 @@ public class MapManager {
                 challengeName.setText(markerAdapter.get(marker).getChallengeName());
                 marker.showInfoWindow();
                 focusedMarker = marker;
+                for(OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners){
+                    onMarkerFocusChangeListener.onMarkerFocusChange(marker);
+                }
                 return true;
             }
         });
@@ -63,6 +70,9 @@ public class MapManager {
             @Override
             public void onMapClick(LatLng latLng) {
                 focusedMarker = null;
+                for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
+                    onMarkerFocusChangeListener.onMarkerFocusChange(null);
+                }
             }
         });
         googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
@@ -100,12 +110,12 @@ public class MapManager {
     }
 
     public MapManager lock(){
-        googleMap.getUiSettings().setScrollGesturesEnabled(false);
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
         return this;
     }
 
     public MapManager unLock(){
-        googleMap.getUiSettings().setScrollGesturesEnabled(true);
+        googleMap.getUiSettings().setAllGesturesEnabled(true);
         return this;
     }
 
@@ -147,6 +157,20 @@ public class MapManager {
     }
 
 
+    public interface OnMarkerFocusChangeListener{
+        public void onMarkerFocusChange( Marker marker );
+    }
+    public void addOnMarkerFocusChangeListener(@NonNull OnMarkerFocusChangeListener onMarkerFocusChangeListener ){
+        onMarkerFocusChangeListeners.add(onMarkerFocusChangeListener);
+    }
+    public void removeOnMarkerFocusChangeListener(@NonNull OnMarkerFocusChangeListener onMarkerFocusChangeListener ){
+        if( onMarkerFocusChangeListeners.contains(onMarkerFocusChangeListener) ) {
+            onMarkerFocusChangeListeners.remove(onMarkerFocusChangeListener);
+        }
+    }
+    public void removeAllOnMarkerFocusChangeListener( ) {
+        onMarkerFocusChangeListeners.clear();
+    }
 }
 
 

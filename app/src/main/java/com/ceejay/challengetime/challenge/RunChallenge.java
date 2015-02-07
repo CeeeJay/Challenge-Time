@@ -39,14 +39,14 @@ public class RunChallenge extends Challenge {
     @Override
     public void focus() {
         super.focus();
-        if(isStarted) {
+        if( challengeState.isStarted() ) {
             startArea = ChallengeAdapter.getMapManager().addArea(startLocation, sizeStartArea, context.getResources().getColor(R.color.started));
-        }else if(isActivated){
+        }else if( challengeState.isActivated() ){
             startArea = ChallengeAdapter.getMapManager().addArea(startLocation, sizeStartArea, context.getResources().getColor(R.color.activated));
         }else{
             startArea = ChallengeAdapter.getMapManager().addArea(startLocation, sizeStartArea, context.getResources().getColor(R.color.notstarted));
         }
-        if(isFinished) {
+        if( challengeState.isFinished() ) {
             stopArea = ChallengeAdapter.getMapManager().addArea(stopLocation, sizeStopArea, context.getResources().getColor(R.color.finished));
         }else{
             stopArea = ChallengeAdapter.getMapManager().addArea(stopLocation, sizeStopArea, context.getResources().getColor(R.color.notfinished));
@@ -59,7 +59,7 @@ public class RunChallenge extends Challenge {
     @Override
     public void activate() {
         super.activate();
-        if(isActivated){
+        if(challengeState.isActivated()){
             startArea.setFillColor(context.getResources().getColor(R.color.activated));
         }
     }

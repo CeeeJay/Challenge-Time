@@ -3,6 +3,7 @@ package com.ceejay.challengetime.slider;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Transferor;
+import com.google.android.gms.maps.model.Marker;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.
@@ -111,8 +113,8 @@ public class SliderAdapter {
                         mm.clear();
                         mm.markerAdapter.get(MapManager.focusedMarker).focus();
                         mm.markerAdapter.clear();
-                        changeButtonMode(ButtonMode.LOCATION);
                     }
+                    changeButtonMode(ButtonMode.LOCATION);
                     break;
                 case LOCATION:
                     break;
@@ -127,21 +129,51 @@ public class SliderAdapter {
         });
     }
 
+    public void onMarkerFocus( MapManager mapManager ){
+        mapManager.addOnMarkerFocusChangeListener(new MapManager.OnMarkerFocusChangeListener() {
+            @Override
+            public void onMarkerFocusChange(Marker marker) {
+                if( marker == null ){
+                    clearChallengeEquipment();
+                }else{
+                    initChallengeEquipment();
+                }
+            }
+        });
+    }
+
+    public void clearChallengeEquipment(){
+        changeButtonMode(ButtonMode.INVISIBLE);
+        slider.setTouchEnabled(false);
+        slider.smoothSlideTo(0,2);
+    }
+
+    public void initChallengeEquipment(){
+        changeButtonMode(ButtonMode.WATCH);
+        slider.setTouchEnabled(true);
+    }
+
     ButtonMode buttonMode = ButtonMode.WATCH;
     public void changeButtonMode( ButtonMode buttonMode ){
         this.buttonMode = buttonMode;
         button.setVisibility(View.VISIBLE);
+        button.clearAnimation();
         switch (buttonMode) {
             case INVISIBLE:
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context,R.anim.fade_out));
                 button.setVisibility(View.INVISIBLE);
                 break;
             case WATCH:
+                button.setVisibility(View.VISIBLE);
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context,R.anim.fade_in));
                 button.setBackground(context.getResources().getDrawable(R.drawable.watch_button));
                 break;
             case LOCATION:
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.rotate));
                 button.setBackground(context.getResources().getDrawable(R.drawable.location_button));
                 break;
             case ACTIVATE:
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context,R.anim.zoom_blink));
                 button.setBackground(context.getResources().getDrawable(R.drawable.activate_button));
                 break;
         }

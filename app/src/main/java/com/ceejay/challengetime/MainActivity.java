@@ -50,29 +50,31 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if(Challenge.isActivated || Challenge.isStarted) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
-            alertDialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Challenge.getFocus().stop();
-                    Challenge.setFocus(null);
+        if(Challenge.getFocus() != null) {
+            if ( !Challenge.getFocus().getChallengeState().isNotReady() && !Challenge.getFocus().getChallengeState().isReady()) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
+                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Challenge.getFocus().stop();
+                        Challenge.setFocus(null);
+                        ChallengeAdapter.getMapManager().refreshMarker();
+                        sliderAdapter.clearChallengeEquipment();
+                    }
+                });
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alertDialog.show();
+            }else{
+                Challenge.setFocus(null);
+                if (ChallengeAdapter.getMapManager() != null) {
                     ChallengeAdapter.getMapManager().refreshMarker();
-                    sliderAdapter.changeButtonMode(SliderAdapter.ButtonMode.WATCH);
+                    sliderAdapter.clearChallengeEquipment();
                 }
-            });
-            alertDialog.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            alertDialog.show();
-        }else if(Challenge.getFocus() != null){
-            Challenge.setFocus(null);
-            if( ChallengeAdapter.getMapManager() != null ) {
-                ChallengeAdapter.getMapManager().refreshMarker();
-                sliderAdapter.changeButtonMode(SliderAdapter.ButtonMode.WATCH);
             }
         }else{
             super.onBackPressed();
@@ -86,7 +88,9 @@ public class MainActivity extends FragmentActivity {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-                ChallengeAdapter.setMapManager( new MapManager( this , googleMap ));
+                MapManager mapManager = new MapManager( this , googleMap );
+                ChallengeAdapter.setMapManager( mapManager );
+                sliderAdapter.onMarkerFocus( mapManager );
                 new LocationObserver(this);
             }
         }

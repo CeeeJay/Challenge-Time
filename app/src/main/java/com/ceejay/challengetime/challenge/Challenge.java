@@ -29,11 +29,11 @@ public class Challenge {
     protected static Context context;
     protected static Location userLocation;
 
-    public static boolean isReady = false;
+    /*public static boolean isReady = false;
     public static boolean isActivated = false;
     public static boolean isStarted = false;
     public static boolean isFinished = false;
-    public static boolean isStopped = false;
+    public static boolean isStopped = false;*/
 
     private static ArrayList<OnFocusChangeListener> onFocusChangeListeners = new ArrayList<>();
 
@@ -127,8 +127,8 @@ public class Challenge {
 
     private String challengeName;
     private StopWatch stopWatch;
-    private ChallengeState challengeState;
 
+    protected ChallengeState challengeState;
     protected LatLng latLng;
     protected Marker marker;
     protected int sizeStartArea = 40;
@@ -209,7 +209,6 @@ public class Challenge {
     public void focus(){
         setFocus(this);
         challengeState = ChallengeState.isNotReady;
-        isReady = false;
     }
 
     public void ready(){
@@ -220,9 +219,8 @@ public class Challenge {
     }
 
     public void activate(){
-        if( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea && !isActivated && !isStarted) {
+        if( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea && challengeState.isReady()) {
             Toast.makeText(Transferor.context, "Activated", Toast.LENGTH_SHORT).show();
-            isActivated = true;
             for (OnChallengeActivateListener activateListener : activateListeners) {
                 activateListener.onActivate();
             }
@@ -232,7 +230,6 @@ public class Challenge {
 
     protected void start(){
         Toast.makeText(Transferor.context, "Started", Toast.LENGTH_SHORT).show();
-        isStarted = true;
         stopWatch.start();
         for (OnChallengeStartListener startListener : startListeners) {
             startListener.onStart();
@@ -241,9 +238,6 @@ public class Challenge {
     }
 
     protected void finish(){
-        isActivated = false;
-        isStarted = false;
-        isFinished = true;
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_LONG).show();
         for (OnChallengeFinishListener finishListener : finishListeners) {
@@ -253,11 +247,6 @@ public class Challenge {
     }
 
     public void stop(){
-        isReady = false;
-        isActivated = false;
-        isStarted = false;
-        isFinished = false;
-        isStopped = true;
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Stopped at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
         stopWatch.stop();
