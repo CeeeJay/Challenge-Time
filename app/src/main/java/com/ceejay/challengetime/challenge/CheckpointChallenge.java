@@ -31,8 +31,8 @@ public class CheckpointChallenge extends Challenge {
     }
 
     @Override
-    public void focus() {
-        super.focus();
+    public void show() {
+        super.show();
         circles.clear();
         for( LatLng checkpoint : checkpoints ){
             if( whichCheckpoint < checkpoints.indexOf(checkpoint)) {
@@ -75,7 +75,7 @@ public class CheckpointChallenge extends Challenge {
                     start();
                 }
                 break;
-            case isNotReady:
+            case isShown:
                 if ( Distance.between(userLocation,checkpoints.get(0)) < sizeStartArea ) {
                     ready();
                 }

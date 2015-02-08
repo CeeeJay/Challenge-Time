@@ -30,7 +30,7 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
             ChallengeAdapter.mapManager = mapManager;
         }
 
-        if(Challenge.getFocus() == null){
+        if( Challenge.getFocus() == null || Challenge.getFocus().getChallengeState().getValence() < 2 ){
             mapManager.refreshMarker();
             if(challenges.size() == 0) {
 
@@ -45,8 +45,8 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
 
 
             }
-        }else{
-            Challenge.getFocus().focus();
+        }else if( Challenge.getFocus().getChallengeState().getValence() > 1){
+            Challenge.getFocus().show();
         }
     }
 

@@ -20,12 +20,14 @@ import com.google.android.gms.maps.model.Marker;
 public class SliderAdapter {
     public final static String TAG = SliderAdapter.class.getSimpleName();
 
+    public static ButtonMode buttonMode = ButtonMode.INVISIBLE;
+
     public Context context;
     public Slider slider;
     public Button button;
 
     public enum ButtonMode{
-        INVISIBLE,WATCH,LOCATION,ACTIVATE
+        INVISIBLE,WATCH,LOCATION,ACTIVATE,STOP
     }
 
     private Challenge lastFocus;
@@ -82,14 +84,18 @@ public class SliderAdapter {
                     lastOnChallengeStateListener = new Challenge.OnChallengeStateChangeListener() {
                         @Override
                         public void onStateChange(Challenge.ChallengeState challengeState) {
-                            Toast.makeText(Transferor.context,challengeState.toString(),Toast.LENGTH_SHORT).show();
                             switch (challengeState) {
-                                case isNotReady:
+                                case isShown:
                                     changeButtonMode(ButtonMode.LOCATION);
                                     break;
                                 case isReady:
                                     changeButtonMode(ButtonMode.ACTIVATE);
                                     break;
+                                case isActivated:
+                                    changeButtonMode(ButtonMode.STOP);
+                                    break;
+                                case isStopped:
+                                    changeButtonMode(ButtonMode.ACTIVATE);
                             }
                         }
                     };
@@ -107,36 +113,42 @@ public class SliderAdapter {
             public void onClick(View v) {
             switch (buttonMode) {
                 case WATCH:
-                    if (MapManager.focusedMarker != null) {
-                        MapManager mm = ChallengeAdapter.getMapManager();
-
-                        mm.clear();
-                        mm.markerAdapter.get(MapManager.focusedMarker).focus();
-                        mm.markerAdapter.clear();
+                    if(Challenge.getFocus() != null){
+                        Challenge.getFocus().show();
+                        changeButtonMode(ButtonMode.LOCATION);
                     }
-                    changeButtonMode(ButtonMode.LOCATION);
                     break;
                 case LOCATION:
+                    ChallengeAdapter.getMapManager().zoom(Challenge.getUserLatLng());
                     break;
                 case ACTIVATE:
                     if(Challenge.getFocus() != null) {
                         Challenge.getFocus().activate();
                     }
                     break;
+                case STOP:
+                    if(Challenge.getFocus() != null) {
+                        Challenge.getFocus().stop();
+                        changeButtonMode(ButtonMode.LOCATION);
+                    }
+                    break;
             }
 
             }
         });
+        changeButtonMode(buttonMode);
     }
 
     public void onMarkerFocus( MapManager mapManager ){
         mapManager.addOnMarkerFocusChangeListener(new MapManager.OnMarkerFocusChangeListener() {
             @Override
             public void onMarkerFocusChange(Marker marker) {
-                if( marker == null ){
-                    clearChallengeEquipment();
-                }else{
-                    initChallengeEquipment();
+                if ( Challenge.getFocus() != null && Challenge.getFocus().getChallengeState().isFocused()) {
+                    if (marker == null) {
+                        clearChallengeEquipment();
+                    } else {
+                        initChallengeEquipment();
+                    }
                 }
             }
         });
@@ -153,30 +165,36 @@ public class SliderAdapter {
         slider.setTouchEnabled(true);
     }
 
-    ButtonMode buttonMode = ButtonMode.WATCH;
-    public void changeButtonMode( ButtonMode buttonMode ){
-        this.buttonMode = buttonMode;
+    public void changeButtonMode( ButtonMode bM ){
         button.setVisibility(View.VISIBLE);
         button.clearAnimation();
-        switch (buttonMode) {
+        switch (bM) {
             case INVISIBLE:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context,R.anim.fade_out));
+                if( buttonMode != ButtonMode.INVISIBLE) {
+                    button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.fade_out));
+                }
                 button.setVisibility(View.INVISIBLE);
                 break;
             case WATCH:
-                button.setVisibility(View.VISIBLE);
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context,R.anim.fade_in));
+                if(buttonMode != ButtonMode.WATCH) {
+                    button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.fade_in));
+                }
                 button.setBackground(context.getResources().getDrawable(R.drawable.watch_button));
                 break;
             case LOCATION:
                 button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.rotate));
                 button.setBackground(context.getResources().getDrawable(R.drawable.location_button));
+
                 break;
             case ACTIVATE:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context,R.anim.zoom_blink));
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.zoom_blink));
                 button.setBackground(context.getResources().getDrawable(R.drawable.activate_button));
                 break;
+            case STOP:
+                button.setBackground(context.getResources().getDrawable(R.drawable.stop_button));
+                break;
         }
+        buttonMode = bM;
     }
 
     public void setUpButton( int offset ){

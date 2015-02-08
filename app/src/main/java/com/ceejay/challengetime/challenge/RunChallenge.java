@@ -30,15 +30,25 @@ public class RunChallenge extends Challenge {
     }
 
     public RunChallenge( ArrayList<LatLng> track , String challengeName ) {
-        super(track.get(0) , challengeName);
+        super(track.get(0), challengeName);
         this.track.addAll(track);
         startLocation = track.get(0);
         stopLocation = track.get(track.size() - 1);
     }
 
     @Override
-    public void focus() {
-        super.focus();
+    public void userLocationChanged() {
+        if( challengeState.isStarted() ){
+            if( userLocation != null && Distance.between(userLocation,stopLocation) < sizeStopArea ){
+                finish();
+            }
+        }
+        super.userLocationChanged();
+    }
+
+    @Override
+    public void show() {
+        super.show();
         if( challengeState.isStarted() ) {
             startArea = ChallengeAdapter.getMapManager().addArea(startLocation, sizeStartArea, context.getResources().getColor(R.color.started));
         }else if( challengeState.isActivated() ){

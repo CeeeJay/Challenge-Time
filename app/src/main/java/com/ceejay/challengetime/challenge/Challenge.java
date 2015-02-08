@@ -29,40 +29,39 @@ public class Challenge {
     protected static Context context;
     protected static Location userLocation;
 
-    /*public static boolean isReady = false;
-    public static boolean isActivated = false;
-    public static boolean isStarted = false;
-    public static boolean isFinished = false;
-    public static boolean isStopped = false;*/
-
     private static ArrayList<OnFocusChangeListener> onFocusChangeListeners = new ArrayList<>();
+
+    public static Challenge getFocus(){
+        return focusedChallenge;
+    }
 
     public static void setContext(Context context) {
         Challenge.context = context;
     }
     public static void setUserLocation(Location userLocation) {
         Challenge.userLocation = userLocation;
-        if(userLocation != null) {
-            if( Challenge.focusedChallenge != null ) {
-                Challenge.focusedChallenge.userLocationChanged();
-            }
+        if( Challenge.focusedChallenge != null ) {
+            Challenge.focusedChallenge.userLocationChanged();
         }
     }
-    public static Location getUserPosition() {
+    public static Location getUserLoaction() {
         return userLocation;
+    }
+    public static LatLng getUserLatLng() {
+        return new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
     }
     public static void setFocus( Challenge challenge ){
         if(getFocus() != null) {
             getFocus().removeAllListener();
+            getFocus().setChallengeState(ChallengeState.isNotFocused);
         }
         focusedChallenge = challenge;
+        if( focusedChallenge != null) {
+            challenge.focus();
+        }
         for(OnFocusChangeListener onFocusChangeListener : onFocusChangeListeners){
             onFocusChangeListener.onFocusChange( focusedChallenge );
         }
-    }
-
-    public static Challenge getFocus(){
-        return focusedChallenge;
     }
 
     public static void addOnFocusChangeListener(OnFocusChangeListener onFocusChange){
@@ -76,7 +75,6 @@ public class Challenge {
     public static void clearAllOnFocusChange(){
         onFocusChangeListeners.clear();
     }
-
     public interface OnFocusChangeListener{
         public void onFocusChange( Challenge focus );
     }
@@ -87,40 +85,47 @@ public class Challenge {
      */
 
     public enum ChallengeState{
-        isNotReady (0),
-        isReady (1),
-        isActivated (2),
-        isStarted (3),
-        isFinished (4),
-        isStopped (5);
+        isNotFocused(0),
+        isFocused (1),
+        isShown (2),
+        isReady (3),
+        isActivated (4),
+        isStarted (5),
+        isFinished (6),
+        isStopped (7);
 
         private int valence = 0;
         ChallengeState( int valence ) {
             this.valence = valence;
         }
 
-        public boolean isNotReady(){
+        public int getValence() {
+            return valence;
+        }
+
+        public boolean isNotFocused(){
             return valence == 0;
         }
-
-        public boolean isReady(){
+        public boolean isFocused(){
             return valence == 1;
         }
-
-        public boolean isActivated(){
+        public boolean isShown(){
             return valence == 2;
         }
-
-        public boolean isStarted(){
+        public boolean isReady(){
             return valence == 3;
         }
-
-        public boolean isFinished(){
+        public boolean isActivated(){
             return valence == 4;
         }
-
-        public boolean isStopped(){
+        public boolean isStarted(){
             return valence == 5;
+        }
+        public boolean isFinished(){
+            return valence == 6;
+        }
+        public boolean isStopped(){
+            return valence == 7;
         }
 
     }
@@ -145,13 +150,12 @@ public class Challenge {
     public Challenge( LatLng latLng ) {
         init(latLng, "Untiled");
     }
-
     public Challenge( LatLng latLng , String challengeName ) {
         init(latLng, challengeName);
     }
 
     public void init( LatLng latLng , String challengeName ){
-        setChallengeState(ChallengeState.isNotReady);
+        setChallengeState(ChallengeState.isNotFocused);
         this.challengeName = challengeName;
         this.latLng = latLng;
         stopWatch = new StopWatch();
@@ -161,11 +165,15 @@ public class Challenge {
 
     public void userLocationChanged(){
         if ( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea ) {
-            if(challengeState.isNotReady()) {
+            if( challengeState.isShown() ) {
                 ready();
             }
-        }else{
-            setChallengeState(ChallengeState.isNotReady);
+        }else if( challengeState.isReady() ){
+            if( userLocation != null && Distance.between(userLocation,latLng) >= sizeStartArea ){
+                start();
+            }else {
+                setChallengeState(ChallengeState.isShown);
+            }
         }
     }
 
@@ -188,36 +196,32 @@ public class Challenge {
     public ChallengeState getState(){
         return challengeState;
     }
-
     public Marker getMarker() {
         return marker;
     }
-
     public String getChallengeName() {
         return challengeName;
     }
-
     public LatLng getLatLng(){
         return latLng;
     }
-
-
     public ChallengeState getChallengeState(){
         return challengeState;
     }
 
     public void focus(){
-        setFocus(this);
-        challengeState = ChallengeState.isNotReady;
+        setChallengeState(ChallengeState.isFocused);
     }
-
+    public void show(){
+        ChallengeAdapter.getMapManager().hideMarker();
+        setChallengeState(ChallengeState.isShown);
+    }
     public void ready(){
         for (OnChallengeReadyListener readyListener : readyListeners) {
             readyListener.onReady();
         }
         setChallengeState(ChallengeState.isReady);
     }
-
     public void activate(){
         if( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea && challengeState.isReady()) {
             Toast.makeText(Transferor.context, "Activated", Toast.LENGTH_SHORT).show();
@@ -227,7 +231,6 @@ public class Challenge {
             setChallengeState(ChallengeState.isActivated);
         }
     }
-
     protected void start(){
         Toast.makeText(Transferor.context, "Started", Toast.LENGTH_SHORT).show();
         stopWatch.start();
@@ -236,7 +239,6 @@ public class Challenge {
         }
         setChallengeState(ChallengeState.isStarted);
     }
-
     protected void finish(){
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_LONG).show();
@@ -245,7 +247,6 @@ public class Challenge {
         }
         setChallengeState(ChallengeState.isFinished);
     }
-
     public void stop(){
         stopWatch.pause();
         Toast.makeText(Transferor.context,"Stopped at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
@@ -254,6 +255,7 @@ public class Challenge {
             stopListener.onStop();
         }
         setChallengeState(ChallengeState.isStopped);
+        show();
     }
 
     /**
@@ -442,7 +444,6 @@ public class Challenge {
         }
 
         public void setCheckpointLocations( ArrayList<LatLng> checkpointLocations ){
-            Toast.makeText(Transferor.context,checkpointLocations.get(0).toString(),Toast.LENGTH_SHORT).show();
             this.checkpointLocations = checkpointLocations;
         }
 

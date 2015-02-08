@@ -51,7 +51,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         if(Challenge.getFocus() != null) {
-            if ( !Challenge.getFocus().getChallengeState().isNotReady() && !Challenge.getFocus().getChallengeState().isReady()) {
+            if ( Challenge.getFocus().getChallengeState().getValence() > 3) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
                 alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
                 alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

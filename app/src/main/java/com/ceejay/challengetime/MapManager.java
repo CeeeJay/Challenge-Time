@@ -58,8 +58,8 @@ public class MapManager {
             public boolean onMarkerClick(Marker marker) {
                 zoom(marker);
                 challengeName.setText(markerAdapter.get(marker).getChallengeName());
+                Challenge.setFocus(markerAdapter.get(marker));
                 marker.showInfoWindow();
-                focusedMarker = marker;
                 for(OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners){
                     onMarkerFocusChangeListener.onMarkerFocusChange(marker);
                 }
@@ -69,7 +69,6 @@ public class MapManager {
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                focusedMarker = null;
                 for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
                     onMarkerFocusChangeListener.onMarkerFocusChange(null);
                 }
@@ -109,6 +108,11 @@ public class MapManager {
         return this;
     }
 
+    public MapManager zoom( LatLng latLng ){
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        return this;
+    }
+
     public MapManager lock(){
         googleMap.getUiSettings().setAllGesturesEnabled(false);
         return this;
@@ -139,8 +143,12 @@ public class MapManager {
         return marker;
     }
 
+    public void hideMarker(){
+        clear();
+        markerAdapter.clear();
+    }
+
     public void refreshMarker(){
-        focusedMarker = null;
         clear();
         markerAdapter.clear();
         for(MarkerOptions marker : markerOptionsMap.keySet()) {
