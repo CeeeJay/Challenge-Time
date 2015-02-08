@@ -23,7 +23,6 @@ public class CheckpointChallenge extends Challenge {
         this.checkpoints = checkpoints;
         circles = new ArrayList<>();
     }
-
     public CheckpointChallenge( ArrayList<LatLng> checkpoints , String challengeName ) {
         super(checkpoints.get(0) , challengeName);
         this.checkpoints = checkpoints;
@@ -54,7 +53,6 @@ public class CheckpointChallenge extends Challenge {
             circles.get(circles.size()-1).setFillColor(context.getResources().getColor(R.color.notfinished));
         }
     }
-
     @Override
     public void userLocationChanged() {
         switch (challengeState){
@@ -82,7 +80,6 @@ public class CheckpointChallenge extends Challenge {
                 break;
         }
     }
-
     @Override
     public void activate() {
         super.activate();
@@ -90,19 +87,16 @@ public class CheckpointChallenge extends Challenge {
             circles.get(0).setFillColor(context.getResources().getColor(R.color.activated));
         }
     }
-
     @Override
     public void start() {
         circles.get(0).setFillColor(context.getResources().getColor(R.color.started));
         whichCheckpoint = 1;
     }
-
     @Override
     public void finish() {
         circles.get(whichCheckpoint).setFillColor(context.getResources().getColor(R.color.finished));
         super.finish();
     }
-
     @Override
     public void stop() {
         super.stop();

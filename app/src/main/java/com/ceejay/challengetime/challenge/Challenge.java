@@ -184,12 +184,10 @@ public class Challenge {
     public void setLatLng(LatLng latLng) {
         this.latLng = latLng;
     }
-
     public void setStopWatchVibrate(){
         stopWatch.setStartVibrate(500);
         stopWatch.setStopVibrate(500);
     }
-
     public void setChallengeState( ChallengeState challengeState ){
         this.challengeState = challengeState;
         for(OnChallengeStateChangeListener onChallengeStateChangeListener : onChallengeStateChangeListeners){

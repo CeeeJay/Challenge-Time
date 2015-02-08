@@ -28,7 +28,6 @@ public class RunChallenge extends Challenge {
         startLocation = track.get(0);
         stopLocation = track.get(track.size() - 1);
     }
-
     public RunChallenge( ArrayList<LatLng> track , String challengeName ) {
         super(track.get(0), challengeName);
         this.track.addAll(track);
@@ -67,7 +66,6 @@ public class RunChallenge extends Challenge {
             ChallengeAdapter.getMapManager().addPolyline(track);
         }
     }
-
     @Override
     public void activate() {
         super.activate();
@@ -75,13 +73,11 @@ public class RunChallenge extends Challenge {
             startArea.setFillColor(context.getResources().getColor(R.color.activated));
         }
     }
-
     @Override
     protected void start() {
         super.start();
         startArea.setFillColor(context.getResources().getColor(R.color.started));
     }
-
     @Override
     public void finish() {
         stopArea.setFillColor(context.getResources().getColor(R.color.finished));
