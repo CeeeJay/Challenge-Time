@@ -38,12 +38,14 @@ public class RunChallenge extends Challenge {
 
     @Override
     public void userLocationChanged() {
-        if( challengeState.isStarted() ){
-            if( userLocation != null && Distance.between(userLocation,stopLocation) < sizeStopArea ){
-                finish();
+        super.userLocationChanged();
+        if( userLocation != null ) {
+            if (challengeState.isStarted() ) {
+                if (Distance.between(userLocation, stopLocation) <= sizeStopArea) {
+                    finish();
+                }
             }
         }
-        super.userLocationChanged();
     }
 
     @Override

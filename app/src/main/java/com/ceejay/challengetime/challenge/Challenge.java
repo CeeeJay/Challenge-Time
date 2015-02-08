@@ -1,10 +1,13 @@
 package com.ceejay.challengetime.challenge;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
@@ -164,16 +167,20 @@ public class Challenge {
     }
 
     public void userLocationChanged(){
-        if ( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea ) {
-            if( challengeState.isShown() ) {
-                ready();
+        if( userLocation != null ) {
+            if ( Distance.between(userLocation, latLng) < sizeStartArea) {
+                if (challengeState.isShown()) {
+                    ready();
+                }
+            }else{
+                if ( challengeState.isActivated() ) {
+                    start();
+                } else if( challengeState.isReady() ){
+                    setChallengeState(ChallengeState.isShown);
+                }
             }
         }else if( challengeState.isReady() ){
-            if( userLocation != null && Distance.between(userLocation,latLng) >= sizeStartArea ){
-                start();
-            }else {
-                setChallengeState(ChallengeState.isShown);
-            }
+            setChallengeState(ChallengeState.isShown);
         }
     }
 
@@ -212,11 +219,14 @@ public class Challenge {
     public void focus(){
         setChallengeState(ChallengeState.isFocused);
     }
+    TextView button;
     public void show(){
         ChallengeAdapter.getMapManager().hideMarker();
         setChallengeState(ChallengeState.isShown);
+        button = (TextView)((Activity)Transferor.context).findViewById(R.id.challengeRecord);
     }
     public void ready(){
+        Toast.makeText(Transferor.context, "Ready", Toast.LENGTH_SHORT).show();
         for (OnChallengeReadyListener readyListener : readyListeners) {
             readyListener.onReady();
         }
