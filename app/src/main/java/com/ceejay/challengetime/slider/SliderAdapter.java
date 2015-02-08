@@ -75,31 +75,26 @@ public class SliderAdapter {
         Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
             @Override
             public void onFocusChange(Challenge focus) {
-                if(lastFocus != null && lastOnChallengeStateListener != null){
-                    lastFocus.removeOnChallengeStateChangeListener(lastOnChallengeStateListener);
-                }
-                if (focus != null) {
-                    lastFocus = focus;
-                    lastOnChallengeStateListener = new Challenge.OnChallengeStateChangeListener() {
-                        @Override
-                        public void onStateChange(Challenge.ChallengeState challengeState) {
-                            switch (challengeState) {
-                                case isShown:
-                                    changeButtonMode(ButtonMode.LOCATION);
-                                    break;
-                                case isReady:
-                                    changeButtonMode(ButtonMode.ACTIVATE);
-                                    break;
-                                case isActivated:
-                                    changeButtonMode(ButtonMode.STOP);
-                                    break;
-                                case isStopped:
-                                    changeButtonMode(ButtonMode.ACTIVATE);
-                            }
-                        }
-                    };
-                    focus.addOnChallengeStateChangeListener(lastOnChallengeStateListener);
-                }
+            if (focus != null) {
+                focus.addOnChallengeStateChangeListener(new Challenge.OnChallengeStateChangeListener() {
+                    @Override
+                    public void onStateChange(Challenge.ChallengeState challengeState) {
+                    switch (challengeState) {
+                        case isShown:
+                            changeButtonMode(ButtonMode.LOCATION);
+                            break;
+                        case isReady:
+                            changeButtonMode(ButtonMode.ACTIVATE);
+                            break;
+                        case isActivated:
+                            changeButtonMode(ButtonMode.STOP);
+                            break;
+                        case isStopped:
+                            changeButtonMode(ButtonMode.ACTIVATE);
+                    }
+                    }
+                });
+            }
             }
         });
 

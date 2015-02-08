@@ -218,7 +218,7 @@ public class Challenge {
     }
     public void show(){
         ChallengeAdapter.getMapManager().hideMarker();
-        if( challengeState.isFocused() ){
+        if( challengeState.isFocused() || challengeState.isStopped() ){
             setChallengeState(ChallengeState.isShown);
         }
     }

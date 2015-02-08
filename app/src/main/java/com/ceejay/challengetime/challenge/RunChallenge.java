@@ -84,10 +84,8 @@ public class RunChallenge extends Challenge {
 
     @Override
     public void finish() {
-        if( Distance.between(userLocation,stopLocation) < sizeStopArea ) {
-            stopArea.setFillColor(context.getResources().getColor(R.color.finished));
-            super.finish();
-        }
+        stopArea.setFillColor(context.getResources().getColor(R.color.finished));
+        super.finish();
     }
 }
 
