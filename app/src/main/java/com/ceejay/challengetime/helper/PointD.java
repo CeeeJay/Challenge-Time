@@ -1,7 +1,6 @@
 package com.ceejay.challengetime.helper;
 
 import android.graphics.Point;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 

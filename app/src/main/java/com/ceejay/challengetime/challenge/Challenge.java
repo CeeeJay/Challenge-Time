@@ -1,16 +1,13 @@
 package com.ceejay.challengetime.challenge;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
+import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -219,11 +216,11 @@ public class Challenge {
     public void focus(){
         setChallengeState(ChallengeState.isFocused);
     }
-    TextView button;
     public void show(){
         ChallengeAdapter.getMapManager().hideMarker();
-        setChallengeState(ChallengeState.isShown);
-        button = (TextView)((Activity)Transferor.context).findViewById(R.id.challengeRecord);
+        if( challengeState.isFocused() ){
+            setChallengeState(ChallengeState.isShown);
+        }
     }
     public void ready(){
         Toast.makeText(Transferor.context, "Ready", Toast.LENGTH_SHORT).show();

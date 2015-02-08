@@ -7,7 +7,6 @@ import com.ceejay.challengetime.MapManager;
 import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
