@@ -19,14 +19,14 @@ import com.google.android.gms.maps.model.Marker;
 public class SliderAdapter {
     public final static String TAG = SliderAdapter.class.getSimpleName();
 
-    public static ButtonMode buttonMode = ButtonMode.INVISIBLE;
+    public static ButtonMode buttonMode = ButtonMode.REFRESH;
 
     public Context context;
     public Slider slider;
     public Button button;
 
     public enum ButtonMode{
-        INVISIBLE,WATCH,LOCATION,ACTIVATE,STOP
+        REFRESH,WATCH,LOCATION,ACTIVATE,STOP
     }
 
     private Challenge lastFocus;
@@ -150,7 +150,7 @@ public class SliderAdapter {
     }
 
     public void clearChallengeEquipment(){
-        changeButtonMode(ButtonMode.INVISIBLE);
+        changeButtonMode(ButtonMode.REFRESH);
         slider.setTouchEnabled(false);
         slider.smoothSlideTo(0,2);
     }
@@ -161,23 +161,17 @@ public class SliderAdapter {
     }
 
     public void changeButtonMode( ButtonMode bM ){
-        button.setVisibility(View.VISIBLE);
         button.clearAnimation();
         switch (bM) {
-            case INVISIBLE:
-                if( buttonMode != ButtonMode.INVISIBLE) {
-                    button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.fade_out));
-                }
-                button.setVisibility(View.INVISIBLE);
+            case REFRESH:
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.refresh_rotate));
+                button.setBackground(context.getResources().getDrawable(R.drawable.refresh_button));
                 break;
             case WATCH:
-                if(buttonMode != ButtonMode.WATCH) {
-                    button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.fade_in));
-                }
                 button.setBackground(context.getResources().getDrawable(R.drawable.watch_button));
                 break;
             case LOCATION:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.rotate));
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.location_rotate));
                 button.setBackground(context.getResources().getDrawable(R.drawable.location_button));
                 break;
             case ACTIVATE:

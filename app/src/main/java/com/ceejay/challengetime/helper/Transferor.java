@@ -16,6 +16,7 @@ public class Transferor {
 
     //public static MapManager mapManager;
     public static Context context ;
+    public static boolean launched = false;
 
     public static RunChallenge  getRunChallenge(){
         ArrayList<LatLng> track = new ArrayList<>();

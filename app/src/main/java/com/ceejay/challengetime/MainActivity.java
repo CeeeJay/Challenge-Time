@@ -30,31 +30,22 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Transferor.context = this;
         Challenge.setContext(this);
-        setContentView(R.layout.launcher_activity);
+        if(!Transferor.launched) {
+            setContentView(R.layout.launcher_activity);
 
-        findViewById(R.id.launcherIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setContentView(R.layout.activity_maps);
+            findViewById(R.id.launcherIcon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContentView(R.layout.activity_maps);
+                    setUpMapIfNeeded();
+                    Transferor.launched = true;
+                }
+            });
+        }else{
+            setContentView(R.layout.activity_maps);
+            setUpMapIfNeeded();
+        }
 
-                slider = (Slider) findViewById(R.id.slidingDrawer);
-                button = (Button) findViewById(R.id.start);
-
-                sliderAdapter = new SliderAdapter( MainActivity.this , slider );
-                sliderAdapter.attachButton(button);
-
-                setUpMapIfNeeded();
-            }
-        });
-
-    }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //setUpMapIfNeeded();
     }
 
     @Override
@@ -91,6 +82,12 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setUpMapIfNeeded() {
+
+        slider = (Slider) findViewById(R.id.slidingDrawer);
+        button = (Button) findViewById(R.id.start);
+
+        sliderAdapter = new SliderAdapter( MainActivity.this , slider );
+        sliderAdapter.attachButton(button);
 
         if (googleMap == null) {
 
