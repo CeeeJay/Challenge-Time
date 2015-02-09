@@ -113,6 +113,7 @@ public class SliderAdapter {
                     }
                     break;
                 case LOCATION:
+                    slider.smoothSlideTo(0,2);
                     ChallengeAdapter.getMapManager().zoom(Challenge.getUserLatLng());
                     break;
                 case ACTIVATE:
@@ -137,13 +138,13 @@ public class SliderAdapter {
         mapManager.addOnMarkerFocusChangeListener(new MapManager.OnMarkerFocusChangeListener() {
             @Override
             public void onMarkerFocusChange(Marker marker) {
-                if ( Challenge.getFocus() != null && Challenge.getFocus().getChallengeState().isFocused()) {
-                    if (marker == null) {
-                        clearChallengeEquipment();
-                    } else {
-                        initChallengeEquipment();
-                    }
+            if ( Challenge.getFocus() != null && Challenge.getFocus().getChallengeState().isFocused()) {
+                if (marker == null) {
+                    clearChallengeEquipment();
+                } else {
+                    initChallengeEquipment();
                 }
+            }
             }
         });
     }
@@ -178,7 +179,6 @@ public class SliderAdapter {
             case LOCATION:
                 button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.rotate));
                 button.setBackground(context.getResources().getDrawable(R.drawable.location_button));
-
                 break;
             case ACTIVATE:
                 button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.zoom_blink));

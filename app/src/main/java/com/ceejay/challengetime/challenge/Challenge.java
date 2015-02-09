@@ -220,7 +220,7 @@ public class Challenge {
             setChallengeState(ChallengeState.isShown);
         }
     }
-    public void ready(){
+    protected void ready(){
         Toast.makeText(Transferor.context, "Ready", Toast.LENGTH_SHORT).show();
         for (OnChallengeReadyListener readyListener : readyListeners) {
             readyListener.onReady();

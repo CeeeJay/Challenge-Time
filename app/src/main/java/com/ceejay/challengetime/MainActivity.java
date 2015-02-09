@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
@@ -28,15 +30,23 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Transferor.context = this;
         Challenge.setContext(this);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.launcher_activity);
 
-        slider = (Slider) findViewById(R.id.slidingDrawer);
-        button = (Button) findViewById(R.id.start);
+        findViewById(R.id.launcherIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.activity_maps);
 
-        sliderAdapter = new SliderAdapter( this , slider );
-        sliderAdapter.attachButton(button);
+                slider = (Slider) findViewById(R.id.slidingDrawer);
+                button = (Button) findViewById(R.id.start);
 
-        setUpMapIfNeeded();
+                sliderAdapter = new SliderAdapter( MainActivity.this , slider );
+                sliderAdapter.attachButton(button);
+
+                setUpMapIfNeeded();
+            }
+        });
+
     }
 
 
@@ -44,7 +54,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
     }
 
     @Override

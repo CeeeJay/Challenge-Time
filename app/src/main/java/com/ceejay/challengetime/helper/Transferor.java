@@ -20,13 +20,7 @@ public class Transferor {
     public static RunChallenge  getRunChallenge(){
         ArrayList<LatLng> track = new ArrayList<>();
         track.add(new LatLng(49.28722,7.11929));
-        track.add(new LatLng(49.28765,7.11888));
-        track.add(new LatLng(49.28785,7.11932));
-        track.add(new LatLng(49.28845,7.11885));
-        track.add(new LatLng(49.28854,7.11897));
-        track.add(new LatLng(49.28865,7.11895));
-        track.add(new LatLng(49.28897,7.11870));
-        track.add(new LatLng(49.28606,7.12685));
+        track.add(new LatLng(49.32924,7.32152));
         return new RunChallenge( track );
     }
 
