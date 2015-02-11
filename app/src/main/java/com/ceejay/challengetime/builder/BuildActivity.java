@@ -1,11 +1,13 @@
 package com.ceejay.challengetime.builder;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Button;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,7 +30,7 @@ public class BuildActivity extends FragmentActivity{
         Transferor.context = this;
         Challenge.setContext(this);
 
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.builder_activity);
         setUpMapIfNeeded();
     }
 
@@ -38,12 +40,10 @@ public class BuildActivity extends FragmentActivity{
     }
 
     private void setUpMapIfNeeded() {
-
         slider = (Slider) findViewById(R.id.slidingDrawer);
-        button = (Button) findViewById(R.id.start);
 
         sliderAdapter = new BuilderSliderAdapter( BuildActivity.this , slider );
-        sliderAdapter.attachButton(button);
+        sliderAdapter.attachButton( new OptionButton(this) );
 
         if (googleMap == null) {
 

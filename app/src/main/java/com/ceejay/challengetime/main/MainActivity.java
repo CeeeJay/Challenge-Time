@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,7 +25,7 @@ public class MainActivity extends FragmentActivity {
     private GoogleMap googleMap;
     public Slider slider;
     public Button button;
-    public MainSliderAdapter mainSliderAdapter;
+    public MainSliderAdapter sliderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class MainActivity extends FragmentActivity {
                         Challenge.getFocus().stop();
                         Challenge.setFocus(null);
                         ChallengeAdapter.getMapManager().refreshMarker();
-                        mainSliderAdapter.clearChallengeEquipment();
+                        sliderAdapter.clearChallengeEquipment();
                     }
                 });
                 alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -79,7 +80,7 @@ public class MainActivity extends FragmentActivity {
                 Challenge.setFocus(null);
                 if (ChallengeAdapter.getMapManager() != null) {
                     ChallengeAdapter.getMapManager().refreshMarker();
-                    mainSliderAdapter.clearChallengeEquipment();
+                    sliderAdapter.clearChallengeEquipment();
                 }
             }
         }else{
@@ -90,10 +91,9 @@ public class MainActivity extends FragmentActivity {
     private void setUpMapIfNeeded() {
 
         slider = (Slider) findViewById(R.id.slidingDrawer);
-        button = (Button) findViewById(R.id.start);
 
-        mainSliderAdapter = new MainSliderAdapter( MainActivity.this , slider );
-        mainSliderAdapter.attachButton(button);
+        sliderAdapter = new MainSliderAdapter( MainActivity.this , slider );
+        sliderAdapter.attachButton( new OptionButton(this) );
 
         if (googleMap == null) {
 
@@ -102,7 +102,7 @@ public class MainActivity extends FragmentActivity {
             if (googleMap != null) {
                 MapManager mapManager = new MapManager( this , googleMap );
                 ChallengeAdapter.setMapManager( mapManager );
-                mainSliderAdapter.onMarkerFocus( mapManager );
+                sliderAdapter.onMarkerFocus( mapManager );
                 new LocationObserver(this);
             }
         }

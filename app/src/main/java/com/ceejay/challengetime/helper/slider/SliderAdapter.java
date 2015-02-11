@@ -1,9 +1,10 @@
 package com.ceejay.challengetime.helper.slider;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.ceejay.challengetime.R;
 
@@ -12,17 +13,27 @@ import java.util.ArrayList;
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.
  */
-public class SliderAdapter implements Slider.PanelSlideListener{
+public class SliderAdapter implements Slider.PanelSlideListener,View.OnClickListener{
     public final static String TAG = SliderAdapter.class.getSimpleName();
 
     public Context context;
     public Slider slider;
-    public ArrayList<Button> buttons = new ArrayList<>();
+    public ArrayList<Attacher> attachers = new ArrayList<>();
 
     public SliderAdapter(Context context, Slider slider) {
         this.context = context;
         this.slider = slider;
         slider.setPanelSlideListener(this);
+        slider.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        Log.i(TAG,"LOOOL");
+        if( slider.getPanel().getTop() < 700 ){
+            slider.setMaxTopPosition(0);
+        }
     }
 
     @Override
@@ -37,30 +48,52 @@ public class SliderAdapter implements Slider.PanelSlideListener{
     public void onPanelExpanded(View panel) {}
 
     @Override
-    public void onPanelAnchored(View panel) {}
+    public void onPanelAnchored(View panel) {
+    }
 
     @Override
     public void onPanelHidden(View panel) {}
 
-    public void attachButton(Button button){
-        if ( buttons != null && button != null ) {
-            buttons.add(button);
+    public void attachButton( OptionButton button , Point offset ){
+        if ( attachers != null && offset != null && button != null ) {
+            ((ViewGroup)slider.getParent()).addView(button);
+            attachers.add(new Attacher(button,offset));
         }
     }
-
 
     public void setUpButtons( int offset ){
-        for ( Button button : buttons ) {
-            ((ViewGroup.MarginLayoutParams) button.getLayoutParams()).setMargins(
-                    0,
-                    0,
-                    (int) (context.getResources().getDimension(R.dimen.start_margin_end)),
-                    slider.getHeight() - offset - button.getHeight() / 2
-            );
-            button.requestLayout();
-
+        for ( Attacher attacher : attachers ) {
+           attacher.getOptionButton().setPosition(attacher.getOffset().x, offset - attacher.getOffset().y);
         }
     }
+
+    protected class Attacher{
+
+        private OptionButton optionButton;
+        private Point offset;
+
+        public Attacher(OptionButton optionButton, Point offset) {
+            this.optionButton = optionButton;
+            this.offset = offset;
+        }
+
+        public OptionButton getOptionButton() {
+            return optionButton;
+        }
+
+        public void setOptionButton(OptionButton optionButton) {
+            this.optionButton = optionButton;
+        }
+
+        public Point getOffset() {
+            return offset;
+        }
+
+        public void setOffset(Point offset) {
+            this.offset = offset;
+        }
+    }
+
 }
 
 

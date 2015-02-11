@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="map_header">200dp</dimen>
     <dimen name="panel_size">80dp</dimen>
     <dimen name="start_margin_end">15dp</dimen>
+
+    <dimen name="option_button">60dp</dimen>
+    <dimen name="option_button_margin">10dp</dimen>
 </resources>

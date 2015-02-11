@@ -1,6 +1,8 @@
 package com.ceejay.challengetime.main;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -9,6 +11,7 @@ import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.ceejay.challengetime.helper.slider.SliderAdapter;
 import com.google.android.gms.maps.model.Marker;
@@ -78,8 +81,12 @@ public class MainSliderAdapter extends SliderAdapter{
         }
     }
 
-    public void attachButton(Button button){
-        super.attachButton(button);
+    public void attachButton(OptionButton button){
+        Log.i(TAG, slider.getWidth() +"");
+        super.attachButton(button,new Point(
+            1080 - (int)context.getResources().getDimension(R.dimen.option_button_margin) - (int)context.getResources().getDimension(R.dimen.option_button),
+            (int)context.getResources().getDimension(R.dimen.option_button)/2)
+        );
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,8 +146,8 @@ public class MainSliderAdapter extends SliderAdapter{
     }
 
     public void changeButtonMode( ButtonMode buttonMode ){
-        if(buttons.size() > 0) {
-            changeButtonMode(buttons.get(0), buttonMode);
+        if(attachers.size() > 0) {
+            changeButtonMode(attachers.get(0).getOptionButton(), buttonMode);
         }
     }
 
@@ -148,7 +155,7 @@ public class MainSliderAdapter extends SliderAdapter{
         button.clearAnimation();
         switch (bM) {
             case REFRESH:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.refresh_rotate));
+                //button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.refresh_rotate));
                 button.setBackground(context.getResources().getDrawable(R.drawable.refresh_button));
                 break;
             case WATCH:
