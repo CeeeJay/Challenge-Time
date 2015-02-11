@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Button;
 
+import com.ceejay.challengetime.helper.math.Polygon;
+
 
 /**
  * Created by CJay on 30.01.2015 for Challenge Time.
@@ -71,7 +73,7 @@ public class HexagonalButton extends Button {
     @Override
     public void draw(@NonNull Canvas canvas) {
 
-        Path path = Polygon.polygonPath(getWidth()/2,getHeight()/2,Math.min(getWidth(),getHeight())/2,6);
+        Path path = Polygon.polygonPath(getWidth() / 2, getHeight() / 2, Math.min(getWidth(), getHeight()) / 2, 6);
 
         Paint paint = new Paint();
         paint.setColor(buttonColor);

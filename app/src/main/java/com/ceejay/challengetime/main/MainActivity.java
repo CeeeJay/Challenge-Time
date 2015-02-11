@@ -1,19 +1,20 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.main;
 
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Transferor;
-import com.ceejay.challengetime.slider.Slider;
-import com.ceejay.challengetime.slider.SliderAdapter;
+import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -23,16 +24,21 @@ public class MainActivity extends FragmentActivity {
     private GoogleMap googleMap;
     public Slider slider;
     public Button button;
-    public SliderAdapter sliderAdapter;
+    public MainSliderAdapter mainSliderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Transferor.context = this;
         Challenge.setContext(this);
+        try {
+            startActivity(new Intent(this, Class.forName("com.ceejay.challengetime.builder.BuildActivity")));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         if(!Transferor.launched) {
             setContentView(R.layout.launcher_activity);
-
+            findViewById(R.id.launcherIcon).startAnimation(AnimationUtils.loadAnimation(this,R.anim.launch_animation));
             findViewById(R.id.launcherIcon).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -60,7 +66,7 @@ public class MainActivity extends FragmentActivity {
                         Challenge.getFocus().stop();
                         Challenge.setFocus(null);
                         ChallengeAdapter.getMapManager().refreshMarker();
-                        sliderAdapter.clearChallengeEquipment();
+                        mainSliderAdapter.clearChallengeEquipment();
                     }
                 });
                 alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -73,7 +79,7 @@ public class MainActivity extends FragmentActivity {
                 Challenge.setFocus(null);
                 if (ChallengeAdapter.getMapManager() != null) {
                     ChallengeAdapter.getMapManager().refreshMarker();
-                    sliderAdapter.clearChallengeEquipment();
+                    mainSliderAdapter.clearChallengeEquipment();
                 }
             }
         }else{
@@ -86,8 +92,8 @@ public class MainActivity extends FragmentActivity {
         slider = (Slider) findViewById(R.id.slidingDrawer);
         button = (Button) findViewById(R.id.start);
 
-        sliderAdapter = new SliderAdapter( MainActivity.this , slider );
-        sliderAdapter.attachButton(button);
+        mainSliderAdapter = new MainSliderAdapter( MainActivity.this , slider );
+        mainSliderAdapter.attachButton(button);
 
         if (googleMap == null) {
 
@@ -96,7 +102,7 @@ public class MainActivity extends FragmentActivity {
             if (googleMap != null) {
                 MapManager mapManager = new MapManager( this , googleMap );
                 ChallengeAdapter.setMapManager( mapManager );
-                sliderAdapter.onMarkerFocus( mapManager );
+                mainSliderAdapter.onMarkerFocus( mapManager );
                 new LocationObserver(this);
             }
         }

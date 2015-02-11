@@ -1,76 +1,33 @@
-package com.ceejay.challengetime.slider;
+package com.ceejay.challengetime.main;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
-import com.ceejay.challengetime.MapManager;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.helper.slider.Slider;
+import com.ceejay.challengetime.helper.slider.SliderAdapter;
 import com.google.android.gms.maps.model.Marker;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.
  */
-public class SliderAdapter {
-    public final static String TAG = SliderAdapter.class.getSimpleName();
+public class MainSliderAdapter extends SliderAdapter{
+    public final static String TAG = MainSliderAdapter.class.getSimpleName();
 
     public static ButtonMode buttonMode = ButtonMode.REFRESH;
-
-    public Context context;
-    public Slider slider;
-    public Button button;
 
     public enum ButtonMode{
         REFRESH,WATCH,LOCATION,ACTIVATE,STOP
     }
 
-    private Challenge lastFocus;
-    private Challenge.OnChallengeStateChangeListener lastOnChallengeStateListener;
-
-    public SliderAdapter( Context context , Slider slider) {
-        this.context = context;
-        this.slider = slider;
-        slider.setMaxTopPosition((int)(context.getResources().getDimension(R.dimen.map_header)));
-        slider.setPanelSlideListener(new Slider.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                if (button != null) {
-                    setUpButton(panel.getTop());
-                }
-            }
-
-            @Override
-            public void onPanelExpanded(View panel) {
-            }
-
-            @Override
-            public void onPanelCollapsed(View panel) {
-                if (ChallengeAdapter.getMapManager() != null) {
-                    ChallengeAdapter.getMapManager()
-                            .unLock();
-                }
-            }
-
-            @Override
-            public void onPanelAnchored(View panel) {
-                if (ChallengeAdapter.getMapManager() != null) {
-                    if (Challenge.getFocus() != null) {
-                        ChallengeAdapter.getMapManager()
-                                .zoom(Challenge.getFocus().getMarker())
-                                .lock();
-                    }
-                }
-            }
-
-            @Override
-            public void onPanelHidden(View panel) {
-            }
-        });
+    public MainSliderAdapter(Context context, Slider slider) {
+        super(context,slider);
+        slider.setMaxTopPosition((int) (context.getResources().getDimension(R.dimen.map_header)));
 
         Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
             @Override
@@ -100,8 +57,29 @@ public class SliderAdapter {
 
     }
 
+    @Override
+    public void onPanelCollapsed(View panel) {
+        super.onPanelCollapsed(panel);
+        if (ChallengeAdapter.getMapManager() != null) {
+            ChallengeAdapter.getMapManager()
+                    .unLock();
+        }
+    }
+
+    @Override
+    public void onPanelAnchored(View panel) {
+        super.onPanelAnchored(panel);
+        if (ChallengeAdapter.getMapManager() != null) {
+            if (Challenge.getFocus() != null) {
+                ChallengeAdapter.getMapManager()
+                        .zoom(Challenge.getFocus().getMarker())
+                        .lock();
+            }
+        }
+    }
+
     public void attachButton(Button button){
-        this.button = button;
+        super.attachButton(button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +87,7 @@ public class SliderAdapter {
                 case WATCH:
                     if(Challenge.getFocus() != null){
                         Challenge.getFocus().show();
-                        changeButtonMode(ButtonMode.LOCATION);
+                        changeButtonMode( ButtonMode.LOCATION );
                     }
                     break;
                 case LOCATION:
@@ -124,14 +102,14 @@ public class SliderAdapter {
                 case STOP:
                     if(Challenge.getFocus() != null) {
                         Challenge.getFocus().stop();
-                        changeButtonMode(ButtonMode.LOCATION);
+                        changeButtonMode( ButtonMode.LOCATION);
                     }
                     break;
             }
 
             }
         });
-        changeButtonMode(buttonMode);
+        changeButtonMode( buttonMode );
     }
 
     public void onMarkerFocus( MapManager mapManager ){
@@ -150,17 +128,23 @@ public class SliderAdapter {
     }
 
     public void clearChallengeEquipment(){
-        changeButtonMode(ButtonMode.REFRESH);
+        changeButtonMode( ButtonMode.REFRESH );
         slider.setTouchEnabled(false);
         slider.smoothSlideTo(0,2);
     }
 
     public void initChallengeEquipment(){
-        changeButtonMode(ButtonMode.WATCH);
+        changeButtonMode( ButtonMode.WATCH );
         slider.setTouchEnabled(true);
     }
 
-    public void changeButtonMode( ButtonMode bM ){
+    public void changeButtonMode( ButtonMode buttonMode ){
+        if(buttons.size() > 0) {
+            changeButtonMode(buttons.get(0), buttonMode);
+        }
+    }
+
+    public void changeButtonMode( Button button , ButtonMode bM ){
         button.clearAnimation();
         switch (bM) {
             case REFRESH:
@@ -183,16 +167,6 @@ public class SliderAdapter {
                 break;
         }
         buttonMode = bM;
-    }
-
-    public void setUpButton( int offset ){
-        ((ViewGroup.MarginLayoutParams) button.getLayoutParams()).setMargins(
-                0,
-                0,
-                (int) (context.getResources().getDimension(R.dimen.start_margin_end)),
-                slider.getHeight() - offset - button.getHeight()/2
-        );
-        button.requestLayout();
     }
 }
 

@@ -2,9 +2,9 @@ package com.ceejay.challengetime.challenge;
 
 import android.support.annotation.NonNull;
 
-import com.ceejay.challengetime.HttpPostContact;
-import com.ceejay.challengetime.MapManager;
+import com.ceejay.challengetime.helper.HttpPostContact;
 import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.main.MapManager;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;

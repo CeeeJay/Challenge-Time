@@ -4,6 +4,7 @@ import android.util.JsonReader;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.helper.math.PointD;
 
 import java.io.BufferedReader;
 import java.io.IOException;

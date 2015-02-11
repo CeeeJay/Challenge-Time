@@ -1,10 +1,9 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.helper;
 
 import android.os.Bundle;
 import android.os.StrictMode;
 
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.helper.Stream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

@@ -68,7 +68,7 @@ ADDED from AndroidManifest.xml:21:9
 		ADDED from AndroidManifest.xml:23:13
 	android:name
 		ADDED from AndroidManifest.xml:22:13
-activity#com.ceejay.challengetime.MainActivity
+activity#com.ceejay.challengetime.main.MainActivity
 ADDED from AndroidManifest.xml:25:9
 	android:label
 		ADDED from AndroidManifest.xml:27:13
@@ -84,6 +84,10 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:31:17
 	android:name
 		ADDED from AndroidManifest.xml:31:27
+activity#com.ceejay.challengetime.builder.BuildActivity
+ADDED from AndroidManifest.xml:34:9
+	android:name
+		ADDED from AndroidManifest.xml:34:19
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

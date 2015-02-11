@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.helper;
+package com.ceejay.challengetime.helper.math;
 
 import android.graphics.Path;
 import android.graphics.Point;

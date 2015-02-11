@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.slider;
+package com.ceejay.challengetime.helper.slider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -1058,7 +1058,7 @@ public class Slider extends ViewGroup {
      * @param slideOffset position to animate to
      * @param velocity initial velocity in case of fling, or 0.
      */
-    boolean smoothSlideTo(float slideOffset, int velocity) {
+    public boolean smoothSlideTo(float slideOffset, int velocity) {
         if (!isEnabled()) {
             // Nothing to do.
             return false;

@@ -1,4 +1,4 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -107,7 +108,6 @@ public class MapManager {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
         return this;
     }
-
     public MapManager zoom( LatLng latLng ){
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         return this;
@@ -117,7 +117,6 @@ public class MapManager {
         googleMap.getUiSettings().setAllGesturesEnabled(false);
         return this;
     }
-
     public MapManager unLock(){
         googleMap.getUiSettings().setAllGesturesEnabled(true);
         return this;
@@ -126,15 +125,12 @@ public class MapManager {
     public void clear(){
         googleMap.clear();
     }
-
     public Circle addArea( LatLng position , int radius , int color ){
         return googleMap.addCircle(new CircleOptions().center(position).radius(radius).fillColor(color).strokeWidth(0));
     }
-
     public Circle addArea( Location position , int radius , int color ){
         return addArea(new LatLng(position.getLatitude(), position.getLongitude()), radius, color);
     }
-
     public Marker addMarker( Challenge challenge ){
         MarkerOptions markerOptions = new MarkerOptions().position(challenge.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         Marker marker = googleMap.addMarker(markerOptions);
@@ -142,12 +138,10 @@ public class MapManager {
         markerOptionsMap.put(markerOptions, challenge);
         return marker;
     }
-
     public void hideMarker(){
         clear();
         markerAdapter.clear();
     }
-
     public void refreshMarker(){
         clear();
         markerAdapter.clear();
@@ -159,11 +153,9 @@ public class MapManager {
     public Polyline addPolyline( List<LatLng> track ){
         return googleMap.addPolyline(new PolylineOptions().addAll(track));
     }
-
     public Polyline addPolyline( PolylineOptions polylineOptions ){
         return googleMap.addPolyline(polylineOptions);
     }
-
 
     public interface OnMarkerFocusChangeListener{
         public void onMarkerFocusChange( Marker marker );

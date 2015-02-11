@@ -1,4 +1,4 @@
-package com.ceejay.challengetime;
+package com.ceejay.challengetime.main;
 
 import android.content.Context;
 import android.location.Criteria;
