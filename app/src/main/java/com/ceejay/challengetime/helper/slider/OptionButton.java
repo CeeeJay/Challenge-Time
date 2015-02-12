@@ -1,13 +1,21 @@
 package com.ceejay.challengetime.helper.slider;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -19,65 +27,69 @@ import com.ceejay.challengetime.R;
 public class OptionButton extends Button{
     public final static String TAG = OptionButton.class.getSimpleName();
 
-    public enum ButtonMode{
-        INVISIBLE (-1),
-        REFRESH (R.drawable.refresh_button),
-        WATCH (R.drawable.watch_button),
-        LOCATION (R.drawable.location_button),
-        ACTIVATE (R.drawable.activate_button),
-        STOP (R.drawable.stop_button),
-
-        STARTLOCATION (R.drawable.start_location_button),
-        STOPLOCATION (R.drawable.stop_location_button);
-
-
-        private int resource;
-        ButtonMode( int resource ) {
-            this.resource = resource;
-        }
-
-        public int getResource(){
-            return resource;
-        }
-    }
-
-    private ButtonMode buttonMode = ButtonMode.WATCH;
+    private OptionButtonMode buttonMode = OptionButtonMode.WATCH;
     private Context context;
-    private ViewDragHelper mDragHelper;
+    private Resources resources;
+    private int optionButtonSize;
+    private int optionButtonMargin;
+    private Drawable background;
 
     public OptionButton(Context context) {
         super(context);
-        setLayoutParams(new LinearLayout.LayoutParams((int) context.getResources().getDimension(R.dimen.option_button), (int) context.getResources().getDimension(R.dimen.option_button)));
-        this.context = context;
-        changeType(buttonMode);
+        init(context);
     }
 
     public OptionButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public OptionButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
     }
 
+    private void init( Context context ){
+        this.context = context;
 
-    public void changeType( ButtonMode mode ){
-        buttonMode = mode;
+        resources = context.getResources();
+        optionButtonSize = (int)context.getResources().getDimension(R.dimen.option_button);
+        optionButtonMargin = (int)context.getResources().getDimension(R.dimen.option_button_margin);
+        background = resources.getDrawable(R.drawable.option_button);
+
+        setLayoutParams(new LinearLayout.LayoutParams(optionButtonSize, optionButtonSize));
+        changeType(buttonMode);
+    }
+
+    public void changeType( OptionButtonMode buttonMode ){
+        this.buttonMode = buttonMode;
+
         if(buttonMode.getResource() >= 0) {
-            setBackground(context.getResources().getDrawable(buttonMode.getResource()));
+            Drawable drawableArray[]= new Drawable[]{
+                    background,
+                    resources.getDrawable(buttonMode.getResource())};
+
+            LayerDrawable layerDraw = new LayerDrawable(drawableArray);
+            layerDraw.setLayerInset(1, optionButtonMargin, optionButtonMargin, optionButtonMargin, optionButtonMargin);
+            setBackground(layerDraw.mutate());
+            if(buttonMode.getAnimation() != -1 ){
+                startAnimation(AnimationUtils.loadAnimation(context,buttonMode.getAnimation()));
+            }
         }else{
             setBackground(new ColorDrawable(Color.TRANSPARENT));
         }
         requestLayout();
+
     }
 
-    public void setPosition( float x , float y ){
-        setX(x);
-        setY(y);
+    public void changeBackground( Drawable drawable ){
+        background = drawable;
+        changeType( buttonMode );
     }
 
-    public static class DragHelper{
-
+    public void setPosition( int x , int y ){
+        ((ViewGroup.MarginLayoutParams) getLayoutParams()).setMargins(x,y,0,0);
+        requestLayout();
     }
 
 }

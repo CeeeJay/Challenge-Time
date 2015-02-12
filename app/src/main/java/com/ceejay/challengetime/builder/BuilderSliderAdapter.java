@@ -3,9 +3,13 @@ package com.ceejay.challengetime.builder;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.v4.widget.ViewDragHelper;
+import android.view.View;
+import android.widget.Button;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.slider.OptionButton;
+import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.ceejay.challengetime.helper.slider.SliderAdapter;
 
@@ -26,11 +30,17 @@ public class BuilderSliderAdapter extends SliderAdapter{
     }
 
     public void attachButton(OptionButton button , int test) {
-        button.changeType(OptionButton.ButtonMode.STOPLOCATION);
+        button.changeType(OptionButtonMode.STOPLOCATION);
         super.attachButton(button, new Point(
-            1080 - test*optionButtonMargin - test*optionButtonWidth,
-                optionButtonWidth/2
+                1080 - test * optionButtonMargin - test * optionButtonWidth,
+                optionButtonWidth / 2
         ));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((OptionButton)v).changeBackground(context.getResources().getDrawable(R.drawable.option_button_dashed));
+            }
+        });
     }
 
     public void attachButton(OptionButton button) {

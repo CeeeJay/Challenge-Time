@@ -3,6 +3,7 @@ package com.ceejay.challengetime.main;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.OptionButton;
+import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.ceejay.challengetime.helper.slider.SliderAdapter;
 import com.google.android.gms.maps.model.Marker;
@@ -22,11 +24,7 @@ import com.google.android.gms.maps.model.Marker;
 public class MainSliderAdapter extends SliderAdapter{
     public final static String TAG = MainSliderAdapter.class.getSimpleName();
 
-    public static ButtonMode buttonMode = ButtonMode.REFRESH;
-
-    public enum ButtonMode{
-        REFRESH,WATCH,LOCATION,ACTIVATE,STOP
-    }
+    public static OptionButtonMode buttonMode = OptionButtonMode.WATCH;
 
     public MainSliderAdapter(Context context, Slider slider) {
         super(context,slider);
@@ -41,23 +39,22 @@ public class MainSliderAdapter extends SliderAdapter{
                     public void onStateChange(Challenge.ChallengeState challengeState) {
                     switch (challengeState) {
                         case isShown:
-                            changeButtonMode(ButtonMode.LOCATION);
+                            changeButtonMode(OptionButtonMode.LOCATION);
                             break;
                         case isReady:
-                            changeButtonMode(ButtonMode.ACTIVATE);
+                            changeButtonMode(OptionButtonMode.ACTIVATE);
                             break;
                         case isActivated:
-                            changeButtonMode(ButtonMode.STOP);
+                            changeButtonMode(OptionButtonMode.STOP);
                             break;
                         case isStopped:
-                            changeButtonMode(ButtonMode.ACTIVATE);
+                            changeButtonMode(OptionButtonMode.ACTIVATE);
                     }
                     }
                 });
             }
             }
         });
-
     }
 
     @Override
@@ -94,7 +91,7 @@ public class MainSliderAdapter extends SliderAdapter{
                 case WATCH:
                     if(Challenge.getFocus() != null){
                         Challenge.getFocus().show();
-                        changeButtonMode( ButtonMode.LOCATION );
+                        changeButtonMode( OptionButtonMode.LOCATION );
                     }
                     break;
                 case LOCATION:
@@ -109,7 +106,7 @@ public class MainSliderAdapter extends SliderAdapter{
                 case STOP:
                     if(Challenge.getFocus() != null) {
                         Challenge.getFocus().stop();
-                        changeButtonMode( ButtonMode.LOCATION);
+                        changeButtonMode( OptionButtonMode.LOCATION );
                     }
                     break;
             }
@@ -135,45 +132,37 @@ public class MainSliderAdapter extends SliderAdapter{
     }
 
     public void clearChallengeEquipment(){
-        changeButtonMode( ButtonMode.REFRESH );
+        changeButtonMode( OptionButtonMode.REFRESH );
         slider.setTouchEnabled(false);
         slider.smoothSlideTo(0,2);
     }
 
     public void initChallengeEquipment(){
-        changeButtonMode( ButtonMode.WATCH );
+        changeButtonMode( OptionButtonMode.WATCH );
         slider.setTouchEnabled(true);
     }
 
-    public void changeButtonMode( ButtonMode buttonMode ){
+    public void changeButtonMode( OptionButtonMode buttonMode ){
         if(attachers.size() > 0) {
             changeButtonMode(attachers.get(0).getOptionButton(), buttonMode);
         }
     }
 
-    public void changeButtonMode( Button button , ButtonMode bM ){
+    public void changeButtonMode( OptionButton button , OptionButtonMode bM ){
         button.clearAnimation();
-        switch (bM) {
+        button.changeType(bM);
+       /* switch (bM) {
             case REFRESH:
-                //button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.refresh_rotate));
-                button.setBackground(context.getResources().getDrawable(R.drawable.refresh_button));
-                break;
-            case WATCH:
-                button.setBackground(context.getResources().getDrawable(R.drawable.watch_button));
+                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.refresh_rotate));
                 break;
             case LOCATION:
                 button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.location_rotate));
-                button.setBackground(context.getResources().getDrawable(R.drawable.location_button));
                 break;
             case ACTIVATE:
                 button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.zoom_blink));
-                button.setBackground(context.getResources().getDrawable(R.drawable.activate_button));
-                break;
-            case STOP:
-                button.setBackground(context.getResources().getDrawable(R.drawable.stop_button));
                 break;
         }
-        buttonMode = bM;
+        buttonMode = bM;*/
     }
 }
 

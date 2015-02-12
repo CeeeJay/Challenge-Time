@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.
+ *
  */
 public class SliderAdapter implements Slider.PanelSlideListener,View.OnTouchListener{
     public final static String TAG = SliderAdapter.class.getSimpleName();
