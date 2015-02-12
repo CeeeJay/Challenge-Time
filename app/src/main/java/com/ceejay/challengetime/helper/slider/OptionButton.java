@@ -3,8 +3,11 @@ package com.ceejay.challengetime.helper.slider;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -22,7 +25,11 @@ public class OptionButton extends Button{
         WATCH (R.drawable.watch_button),
         LOCATION (R.drawable.location_button),
         ACTIVATE (R.drawable.activate_button),
-        STOP (R.drawable.stop_button);
+        STOP (R.drawable.stop_button),
+
+        STARTLOCATION (R.drawable.start_location_button),
+        STOPLOCATION (R.drawable.stop_location_button);
+
 
         private int resource;
         ButtonMode( int resource ) {
@@ -34,8 +41,9 @@ public class OptionButton extends Button{
         }
     }
 
-    ButtonMode buttonMode = ButtonMode.WATCH;
-    Context context;
+    private ButtonMode buttonMode = ButtonMode.WATCH;
+    private Context context;
+    private ViewDragHelper mDragHelper;
 
     public OptionButton(Context context) {
         super(context);
@@ -52,6 +60,7 @@ public class OptionButton extends Button{
         super(context, attrs, defStyleAttr);
     }
 
+
     public void changeType( ButtonMode mode ){
         buttonMode = mode;
         if(buttonMode.getResource() >= 0) {
@@ -62,9 +71,13 @@ public class OptionButton extends Button{
         requestLayout();
     }
 
-    public void setPosition( int x , int y ){
+    public void setPosition( float x , float y ){
         setX(x);
         setY(y);
+    }
+
+    public static class DragHelper{
+
     }
 
 }

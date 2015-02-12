@@ -5,9 +5,12 @@
             <solid android:color="#DFDFDF"  />
         </shape>
     </item>
-    <item android:drawable="@drawable/refresh"
-        android:right="10dp"
+    <item android:right="10dp"
         android:left="10dp"
         android:top="10dp"
-        android:bottom="10dp"/>
+        android:bottom="10dp">
+        <shape android:shape="oval" >
+            <solid android:color="#00FF00"  />
+        </shape>
+    </item>
 </layer-list>

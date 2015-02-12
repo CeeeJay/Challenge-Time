@@ -2,6 +2,7 @@ package com.ceejay.challengetime.builder;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.v4.widget.ViewDragHelper;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.slider.OptionButton;
@@ -25,7 +26,7 @@ public class BuilderSliderAdapter extends SliderAdapter{
     }
 
     public void attachButton(OptionButton button , int test) {
-        button.changeType(OptionButton.ButtonMode.ACTIVATE);
+        button.changeType(OptionButton.ButtonMode.STOPLOCATION);
         super.attachButton(button, new Point(
             1080 - test*optionButtonMargin - test*optionButtonWidth,
                 optionButtonWidth/2

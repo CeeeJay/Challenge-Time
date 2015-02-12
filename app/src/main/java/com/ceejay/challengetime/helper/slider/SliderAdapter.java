@@ -2,18 +2,16 @@ package com.ceejay.challengetime.helper.slider;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.ceejay.challengetime.R;
 
 import java.util.ArrayList;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.
  */
-public class SliderAdapter implements Slider.PanelSlideListener,View.OnClickListener{
+public class SliderAdapter implements Slider.PanelSlideListener,View.OnTouchListener{
     public final static String TAG = SliderAdapter.class.getSimpleName();
 
     public Context context;
@@ -24,16 +22,12 @@ public class SliderAdapter implements Slider.PanelSlideListener,View.OnClickList
         this.context = context;
         this.slider = slider;
         slider.setPanelSlideListener(this);
-        slider.setOnClickListener(this);
+        slider.setOnTouchListener(this);
     }
 
     @Override
-    public void onClick(View v) {
-
-        Log.i(TAG,"LOOOL");
-        if( slider.getPanel().getTop() < 700 ){
-            slider.setMaxTopPosition(0);
-        }
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
     }
 
     @Override
