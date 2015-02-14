@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,22 +33,26 @@ import java.util.List;
  */
 
 public class MapManager {
+    public final static String TAG = MapManager.class.getSimpleName();
 
     public GoogleMap googleMap;
     public HashMap<Marker,Challenge> markerAdapter;
-    public HashMap<MarkerOptions,Challenge> markerOptionsMap;
-
-    public static Marker focusedMarker;
 
     private TextView challengeName;
     private TextView challengeType;
     private TextView challengeRecord;
 
+    public Layer markerLayer;
+    public Layer challangeLayer;
+
     private ArrayList<OnMarkerFocusChangeListener> onMarkerFocusChangeListeners = new ArrayList<>();
 
     public MapManager( Context context , GoogleMap gMap  ) {
+
+        markerLayer = new Layer( gMap );
+        challangeLayer = new Layer( gMap );
+
         markerAdapter = new HashMap<>();
-        markerOptionsMap = new HashMap<>();
 
         challengeName = (TextView) ((Activity)context).findViewById(R.id.challengeName);
         challengeType = (TextView) ((Activity)context).findViewById(R.id.challengeType);
@@ -58,7 +64,6 @@ public class MapManager {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 zoom(marker);
-                challengeName.setText(markerAdapter.get(marker).getChallengeName());
                 Challenge.setFocus(markerAdapter.get(marker));
                 marker.showInfoWindow();
                 for(OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners){
@@ -126,35 +131,34 @@ public class MapManager {
         googleMap.clear();
     }
     public Circle addArea( LatLng position , int radius , int color ){
-        return googleMap.addCircle(new CircleOptions().center(position).radius(radius).fillColor(color).strokeWidth(0));
-    }
-    public Circle addArea( Location position , int radius , int color ){
-        return addArea(new LatLng(position.getLatitude(), position.getLongitude()), radius, color);
-    }
-    public Marker addMarker( Challenge challenge ){
-        MarkerOptions markerOptions = new MarkerOptions().position(challenge.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
-        Marker marker = googleMap.addMarker(markerOptions);
-        markerAdapter.put(marker, challenge);
-        markerOptionsMap.put(markerOptions, challenge);
-        return marker;
-    }
-    public void hideMarker(){
-        clear();
-        markerAdapter.clear();
-    }
-    public void refreshMarker(){
-        clear();
-        markerAdapter.clear();
-        for(MarkerOptions marker : markerOptionsMap.keySet()) {
-            markerAdapter.put(googleMap.addMarker(marker), markerOptionsMap.get(marker));
-        }
+        return challangeLayer.addCircle(position, radius, color);
     }
 
-    public Polyline addPolyline( List<LatLng> track ){
-        return googleMap.addPolyline(new PolylineOptions().addAll(track));
+    public Marker addMarker( Challenge challenge ){
+        Log.i(TAG,"TAST2");
+        Marker marker = markerLayer.addMarker(challenge.getLatLng());
+        markerAdapter.put( marker , challenge );
+        return marker;
     }
+
+    public void hideMarker(){
+        markerLayer.hideMarkers();
+    }
+
+    public void showMarker(){
+        markerLayer.show();
+    }
+
+    public void clearMarker(){
+        markerLayer.clear();
+    }
+
+    public void clearChallengeLayer(){
+        challangeLayer.clear();
+    }
+
     public Polyline addPolyline( PolylineOptions polylineOptions ){
-        return googleMap.addPolyline(polylineOptions);
+        return challangeLayer.addPolyline( polylineOptions );
     }
 
     public interface OnMarkerFocusChangeListener{

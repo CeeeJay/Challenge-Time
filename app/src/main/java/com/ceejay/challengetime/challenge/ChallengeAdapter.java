@@ -3,6 +3,7 @@ package com.ceejay.challengetime.challenge;
 import android.support.annotation.NonNull;
 
 import com.ceejay.challengetime.helper.HttpPostContact;
+import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.main.MapManager;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -18,19 +19,19 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
 
     private static MapManager mapManager;
     private static ArrayList<Challenge> challenges = new ArrayList<>();
-    private static HashMap<MarkerOptions,Challenge> markerCache;
+    private static Layer markerCache;
 
     public static void setMapManager(@NonNull MapManager mapManager) {
         if(ChallengeAdapter.mapManager != null) {
-            markerCache = ChallengeAdapter.mapManager.markerOptionsMap;
+            /*markerCache = ChallengeAdapter.mapManager.markerLayer;
             ChallengeAdapter.mapManager = mapManager;
-            ChallengeAdapter.mapManager.markerOptionsMap = markerCache;
+            ChallengeAdapter.mapManager.markerOptionsMap = markerCache;*/
         }else{
             ChallengeAdapter.mapManager = mapManager;
         }
 
         if( Challenge.getFocus() == null || Challenge.getFocus().getChallengeState().getValence() <= 1 ){
-            mapManager.refreshMarker();
+            mapManager.showMarker();
             if(challenges.size() == 0) {
 
                 challenges.add(Transferor.getCheckpointChallenge());

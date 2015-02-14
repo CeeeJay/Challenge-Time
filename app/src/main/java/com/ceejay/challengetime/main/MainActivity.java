@@ -9,15 +9,17 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -32,11 +34,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Transferor.context = this;
         Challenge.setContext(this);
-        try {
+        /*try {
             startActivity(new Intent(this, Class.forName("com.ceejay.challengetime.builder.BuildActivity")));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
         if(!Transferor.launched) {
             setContentView(R.layout.launcher_activity);
             findViewById(R.id.launcherIcon).startAnimation(AnimationUtils.loadAnimation(this,R.anim.launch_animation));
@@ -66,7 +68,8 @@ public class MainActivity extends FragmentActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Challenge.getFocus().stop();
                         Challenge.setFocus(null);
-                        ChallengeAdapter.getMapManager().refreshMarker();
+                        ChallengeAdapter.getMapManager().showMarker();
+                        ChallengeAdapter.getMapManager().clearChallengeLayer();
                         sliderAdapter.clearChallengeEquipment();
                     }
                 });
@@ -79,7 +82,8 @@ public class MainActivity extends FragmentActivity {
             }else{
                 Challenge.setFocus(null);
                 if (ChallengeAdapter.getMapManager() != null) {
-                    ChallengeAdapter.getMapManager().refreshMarker();
+                    ChallengeAdapter.getMapManager().showMarker();
+                    ChallengeAdapter.getMapManager().clearChallengeLayer();
                     sliderAdapter.clearChallengeEquipment();
                 }
             }
@@ -100,10 +104,16 @@ public class MainActivity extends FragmentActivity {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-                MapManager mapManager = new MapManager( this , googleMap );
-                ChallengeAdapter.setMapManager( mapManager );
-                sliderAdapter.onMarkerFocus( mapManager );
-                new LocationObserver(this);
+
+                try {
+                    MapManager mapManager = new MapManager( this , googleMap );
+                    ChallengeAdapter.setMapManager( mapManager );
+                    sliderAdapter.onMarkerFocus( mapManager );
+                    new LocationObserver(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
