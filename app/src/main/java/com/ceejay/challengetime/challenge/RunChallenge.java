@@ -50,6 +50,7 @@ public class RunChallenge extends Challenge {
     @Override
     public void show() {
         super.show();
+        ChallengeAdapter.getMapManager().challangeLayer.clear();
         if( challengeState.isStarted() ) {
             startArea = ChallengeAdapter.getMapManager().addArea(startLocation, sizeStartArea, context.getResources().getColor(R.color.started));
         }else if( challengeState.isActivated() ){

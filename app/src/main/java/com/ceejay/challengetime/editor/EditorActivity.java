@@ -1,14 +1,12 @@
-package com.ceejay.challengetime.builder;
+package com.ceejay.challengetime.editor;
 
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Button;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -16,13 +14,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 /**
  * Created by CJay on 11.02.2015 for Challenge Time.
  */
-public class BuildActivity extends FragmentActivity{
-    public final static String TAG = BuildActivity.class.getSimpleName();
+public class EditorActivity extends FragmentActivity{
+    public final static String TAG = EditorActivity.class.getSimpleName();
 
     private GoogleMap googleMap;
     public Slider slider;
-    public Button button;
-    public BuilderSliderAdapter sliderAdapter;
+    public EditorSliderAdapter sliderAdapter;
+    public EditorMapManager editorMapManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +40,15 @@ public class BuildActivity extends FragmentActivity{
     private void setUpMapIfNeeded() {
         slider = (Slider) findViewById(R.id.slidingDrawer);
 
-        sliderAdapter = new BuilderSliderAdapter( BuildActivity.this , slider );
-        sliderAdapter.attachButton( new OptionButton(this) );
-
         if (googleMap == null) {
 
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-                new BuilderMapManager( this , googleMap );
+                editorMapManager = new EditorMapManager( this , googleMap );
+
+                sliderAdapter = new EditorSliderAdapter( this , editorMapManager , slider );
+                sliderAdapter.attachButton( new OptionButton(this) );
             }
         }
     }

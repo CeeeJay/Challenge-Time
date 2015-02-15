@@ -16,8 +16,8 @@ public enum OptionButtonMode{
     ACTIVATE (R.drawable.logo , R.anim.zoom_blink ),
     STOP (R.drawable.kreuz , -1 ),
 
-    STARTLOCATION (R.drawable.stop_location , -1 ),
-    STOPLOCATION (R.drawable.stop_location , R.anim.hover );
+    STARTLOCATION (R.drawable.start_location , -1 ),
+    STOPLOCATION (R.drawable.stop_location , -1 );
 
 
     private int resource;

@@ -3,15 +3,11 @@ package com.ceejay.challengetime.main;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
@@ -23,8 +19,6 @@ import com.google.android.gms.maps.model.Marker;
  */
 public class MainSliderAdapter extends SliderAdapter{
     public final static String TAG = MainSliderAdapter.class.getSimpleName();
-
-    public static OptionButtonMode buttonMode = OptionButtonMode.WATCH;
 
     public MainSliderAdapter(Context context, Slider slider) {
         super(context,slider);
@@ -78,8 +72,8 @@ public class MainSliderAdapter extends SliderAdapter{
         }
     }
 
-    public void attachButton(OptionButton button){
-        Log.i(TAG, slider.getWidth() +"");
+    public void attachButton(final OptionButton button){
+        Log.i(TAG, slider.getWidth() + "");
         super.attachButton(button,new Point(
             1080 - (int)context.getResources().getDimension(R.dimen.option_button_margin) - (int)context.getResources().getDimension(R.dimen.option_button),
             (int)context.getResources().getDimension(R.dimen.option_button)/2)
@@ -87,7 +81,7 @@ public class MainSliderAdapter extends SliderAdapter{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            switch (buttonMode) {
+            switch (button.getButtonMode()) {
                 case WATCH:
                     if(Challenge.getFocus() != null){
                         Challenge.getFocus().show();
@@ -113,7 +107,7 @@ public class MainSliderAdapter extends SliderAdapter{
 
             }
         });
-        changeButtonMode( buttonMode );
+        changeButtonMode( button.getButtonMode() );
     }
 
     public void onMarkerFocus( MapManager mapManager ){
@@ -144,25 +138,13 @@ public class MainSliderAdapter extends SliderAdapter{
 
     public void changeButtonMode( OptionButtonMode buttonMode ){
         if(attachers.size() > 0) {
-            changeButtonMode(attachers.get(0).getOptionButton(), buttonMode);
+            changeButtonMode((OptionButton)(attachers.get(0).getView()), buttonMode);
         }
     }
 
     public void changeButtonMode( OptionButton button , OptionButtonMode bM ){
         button.clearAnimation();
         button.changeType(bM);
-       /* switch (bM) {
-            case REFRESH:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.refresh_rotate));
-                break;
-            case LOCATION:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.location_rotate));
-                break;
-            case ACTIVATE:
-                button.startAnimation(AnimationUtils.loadAnimation(Transferor.context, R.anim.zoom_blink));
-                break;
-        }
-        buttonMode = bM;*/
     }
 }
 

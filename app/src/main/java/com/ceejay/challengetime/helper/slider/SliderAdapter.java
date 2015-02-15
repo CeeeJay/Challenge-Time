@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ceejay.challengetime.R;
+
 import java.util.ArrayList;
 
 /**
@@ -53,31 +55,33 @@ public class SliderAdapter implements Slider.PanelSlideListener,View.OnTouchList
         if ( attachers != null && offset != null && button != null ) {
             ((ViewGroup)slider.getParent()).addView(button);
             attachers.add(new Attacher(button,offset));
+            setUpButtons(slider.getHeight() - (int)context.getResources().getDimension(R.dimen.panel_size));
         }
     }
 
     public void setUpButtons( int offset ){
         for ( Attacher attacher : attachers ) {
-           attacher.getOptionButton().setPosition(attacher.getOffset().x, offset - attacher.getOffset().y);
+            ((ViewGroup.MarginLayoutParams) attacher.getView().getLayoutParams()).setMargins(attacher.getOffset().x,offset - attacher.getOffset().y,0,0);
+            attacher.getView().requestLayout();
         }
     }
 
     protected class Attacher{
 
-        private OptionButton optionButton;
+        private View view;
         private Point offset;
 
-        public Attacher(OptionButton optionButton, Point offset) {
-            this.optionButton = optionButton;
+        public Attacher(View view, Point offset) {
+            this.view = view;
             this.offset = offset;
         }
 
-        public OptionButton getOptionButton() {
-            return optionButton;
+        public View getView() {
+            return view;
         }
 
-        public void setOptionButton(OptionButton optionButton) {
-            this.optionButton = optionButton;
+        public void setView(OptionButton optionButton) {
+            this.view = optionButton;
         }
 
         public Point getOffset() {

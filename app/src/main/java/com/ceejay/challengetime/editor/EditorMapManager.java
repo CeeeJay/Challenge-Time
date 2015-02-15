@@ -1,13 +1,12 @@
-package com.ceejay.challengetime.builder;
+package com.ceejay.challengetime.editor;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.helper.Layer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -27,23 +26,26 @@ import java.util.List;
  *
  */
 
-public class BuilderMapManager {
+public class EditorMapManager {
 
     public GoogleMap googleMap;
+    public EditorMapManager mapManager;
 
-    private TextView challengeName;
-    private TextView challengeType;
-    private TextView challengeRecord;
+    public Layer editorLayer;
+    public Layer cacheLayer;
+
+    public Marker marker;
+    public Marker marker2;
 
     private ArrayList<OnMarkerFocusChangeListener> onMarkerFocusChangeListeners = new ArrayList<>();
 
-    public BuilderMapManager(Context context, GoogleMap gMap) {
-
-        challengeName = (TextView) ((Activity)context).findViewById(R.id.challengeName);
-        challengeType = (TextView) ((Activity)context).findViewById(R.id.challengeType);
-        challengeRecord = (TextView) ((Activity)context).findViewById(R.id.challengeRecord);
-
+    public EditorMapManager(Context context , GoogleMap gMap) {
         googleMap = gMap;
+
+        cacheLayer = new Layer( googleMap );
+        marker = cacheLayer.addMarker(new LatLng(0,0));
+        marker2 = cacheLayer.addMarker(new LatLng(0,0));
+
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -56,22 +58,29 @@ public class BuilderMapManager {
 
     }
 
-    public BuilderMapManager zoom( Marker marker ){
+    public EditorMapManager zoom( Marker marker ){
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
         return this;
     }
-    public BuilderMapManager zoom( LatLng latLng ){
+    public EditorMapManager zoom( LatLng latLng ){
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         return this;
     }
 
-    public BuilderMapManager lock(){
+    public EditorMapManager lock(){
         googleMap.getUiSettings().setAllGesturesEnabled(false);
         return this;
     }
-    public BuilderMapManager unLock(){
+    public EditorMapManager unLock(){
         googleMap.getUiSettings().setAllGesturesEnabled(true);
         return this;
+    }
+
+    public void setCircle( LatLng latLng ){
+        marker.setPosition(latLng);
+    }
+    public void setCircle2( LatLng latLng ){
+        marker2.setPosition(latLng);
     }
 
     public void clear(){

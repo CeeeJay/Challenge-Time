@@ -33,6 +33,7 @@ public class CheckpointChallenge extends Challenge {
     public void show() {
         super.show();
         circles.clear();
+        ChallengeAdapter.getMapManager().challangeLayer.clear();
         for( LatLng checkpoint : checkpoints ){
             if( whichCheckpoint < checkpoints.indexOf(checkpoint)) {
                 circles.add(ChallengeAdapter.getMapManager().addArea(checkpoint, sizeStartArea, context.getResources().getColor(R.color.focused)));

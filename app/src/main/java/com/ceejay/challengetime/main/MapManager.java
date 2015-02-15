@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,18 +13,14 @@ import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.
@@ -66,7 +61,7 @@ public class MapManager {
                 zoom(marker);
                 Challenge.setFocus(markerAdapter.get(marker));
                 marker.showInfoWindow();
-                for(OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners){
+                for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
                     onMarkerFocusChangeListener.onMarkerFocusChange(marker);
                 }
                 return true;
@@ -106,7 +101,6 @@ public class MapManager {
 
             }
         });
-
     }
 
     public MapManager zoom( Marker marker ){
@@ -128,6 +122,8 @@ public class MapManager {
     }
 
     public void clear(){
+        markerLayer.clear();
+        challangeLayer.clear();
         googleMap.clear();
     }
     public Circle addArea( LatLng position , int radius , int color ){
@@ -135,7 +131,6 @@ public class MapManager {
     }
 
     public Marker addMarker( Challenge challenge ){
-        Log.i(TAG,"TAST2");
         Marker marker = markerLayer.addMarker(challenge.getLatLng());
         markerAdapter.put( marker , challenge );
         return marker;

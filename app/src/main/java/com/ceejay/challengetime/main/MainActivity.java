@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
@@ -19,14 +17,12 @@ import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends FragmentActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private GoogleMap googleMap;
     public Slider slider;
-    public Button button;
     public MainSliderAdapter sliderAdapter;
 
     @Override
@@ -34,11 +30,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Transferor.context = this;
         Challenge.setContext(this);
-        /*try {
-            startActivity(new Intent(this, Class.forName("com.ceejay.challengetime.builder.BuildActivity")));
+        try {
+            startActivity(new Intent(this, Class.forName("com.ceejay.challengetime.editor.EditorActivity")));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }*/
+        }
         if(!Transferor.launched) {
             setContentView(R.layout.launcher_activity);
             findViewById(R.id.launcherIcon).startAnimation(AnimationUtils.loadAnimation(this,R.anim.launch_animation));
@@ -105,14 +101,11 @@ public class MainActivity extends FragmentActivity {
 
             if (googleMap != null) {
 
-                try {
-                    MapManager mapManager = new MapManager( this , googleMap );
-                    ChallengeAdapter.setMapManager( mapManager );
-                    sliderAdapter.onMarkerFocus( mapManager );
-                    new LocationObserver(this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                MapManager mapManager = new MapManager( this , googleMap );
+                ChallengeAdapter.setMapManager( mapManager );
+                sliderAdapter.onMarkerFocus( mapManager );
+                new LocationObserver(this);
+
 
             }
         }

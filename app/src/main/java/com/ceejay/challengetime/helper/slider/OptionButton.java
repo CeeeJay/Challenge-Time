@@ -2,19 +2,12 @@ package com.ceejay.challengetime.helper.slider;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -79,7 +72,10 @@ public class OptionButton extends Button{
             setBackground(new ColorDrawable(Color.TRANSPARENT));
         }
         requestLayout();
+    }
 
+    public OptionButtonMode getButtonMode(){
+        return buttonMode;
     }
 
     public void changeBackground( Drawable drawable ){

@@ -6,10 +6,8 @@ import com.ceejay.challengetime.helper.HttpPostContact;
 import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.main.MapManager;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by CJay on 28.01.2015 for Challenge Time.
