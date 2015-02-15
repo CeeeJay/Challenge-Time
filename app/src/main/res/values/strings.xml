@@ -3,12 +3,18 @@
 
     <string name="app_name">Challenge Time</string>
     <string name="action_settings">Settings</string>
-
     <string name="run_challenge">Run Challenge</string>
     <string name="checkpoint_challenge">Checkpoint Challenge</string>
     <string name="cache_challenge">Cache Challenge</string>
     <string name="remain_challenge">Remain Challenge</string>
     <string name="scary_challenge">Scary Challenge</string>
     <string name="sightseeing_challenge">Sightseeing Challenge</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
 
 </resources>

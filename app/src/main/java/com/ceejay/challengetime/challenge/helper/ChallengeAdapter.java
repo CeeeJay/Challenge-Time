@@ -41,7 +41,7 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
 
 
             for(Challenge challenge : challenges) {
-                mapManager.addMarker(challenge);
+                challenge.setMarker(mapManager.addMarker(challenge));
             }
 
         }else if( Challenge.getFocus().getChallengeState().getValence() > 1){

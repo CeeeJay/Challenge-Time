@@ -200,6 +200,9 @@ public class Challenge {
     public ChallengeState getState(){
         return challengeState;
     }
+    public void setMarker( Marker marker ) {
+        this.marker = marker;
+    }
     public Marker getMarker() {
         return marker;
     }

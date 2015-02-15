@@ -1,8 +1,10 @@
 package com.ceejay.challengetime.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 
 import com.ceejay.challengetime.R;
@@ -21,32 +23,31 @@ public class MainSliderAdapter extends SliderAdapter{
     public final static String TAG = MainSliderAdapter.class.getSimpleName();
 
     public MainSliderAdapter(Context context, Slider slider) {
-        super(context,slider);
+        super(context, slider);
         slider.setMaxTopPosition((int) (context.getResources().getDimension(R.dimen.map_header)));
-
         Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
             @Override
             public void onFocusChange(Challenge focus) {
-            if (focus != null) {
-                focus.addOnChallengeStateChangeListener(new Challenge.OnChallengeStateChangeListener() {
-                    @Override
-                    public void onStateChange(Challenge.ChallengeState challengeState) {
-                    switch (challengeState) {
-                        case isShown:
-                            changeButtonMode(OptionButtonMode.LOCATION);
-                            break;
-                        case isReady:
-                            changeButtonMode(OptionButtonMode.ACTIVATE);
-                            break;
-                        case isActivated:
-                            changeButtonMode(OptionButtonMode.STOP);
-                            break;
-                        case isStopped:
-                            changeButtonMode(OptionButtonMode.ACTIVATE);
-                    }
-                    }
-                });
-            }
+                if (focus != null) {
+                    focus.addOnChallengeStateChangeListener(new Challenge.OnChallengeStateChangeListener() {
+                        @Override
+                        public void onStateChange(Challenge.ChallengeState challengeState) {
+                            switch (challengeState) {
+                                case isShown:
+                                    changeButtonMode(OptionButtonMode.LOCATION);
+                                    break;
+                                case isReady:
+                                    changeButtonMode(OptionButtonMode.ACTIVATE);
+                                    break;
+                                case isActivated:
+                                    changeButtonMode(OptionButtonMode.STOP);
+                                    break;
+                                case isStopped:
+                                    changeButtonMode(OptionButtonMode.ACTIVATE);
+                            }
+                        }
+                    });
+                }
             }
         });
     }
@@ -73,9 +74,9 @@ public class MainSliderAdapter extends SliderAdapter{
     }
 
     public void attachButton(final OptionButton button){
-        Log.i(TAG, slider.getWidth() + "");
+        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
         super.attachButton(button,new Point(
-            1080 - (int)context.getResources().getDimension(R.dimen.option_button_margin) - (int)context.getResources().getDimension(R.dimen.option_button),
+            display.getWidth() - (int)context.getResources().getDimension(R.dimen.option_button_margin) - (int)context.getResources().getDimension(R.dimen.option_button),
             (int)context.getResources().getDimension(R.dimen.option_button)/2)
         );
         button.setOnClickListener(new View.OnClickListener() {
