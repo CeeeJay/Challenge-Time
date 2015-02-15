@@ -3,6 +3,7 @@ package com.ceejay.challengetime.helper.slider;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -24,6 +25,7 @@ public class OptionButton extends Button{
     private Context context;
     private Resources resources;
     private int optionButtonSize;
+    private int optionButtonPadding;
     private int optionButtonMargin;
     private Drawable background;
 
@@ -47,8 +49,11 @@ public class OptionButton extends Button{
 
         resources = context.getResources();
         optionButtonSize = (int)context.getResources().getDimension(R.dimen.option_button);
+        optionButtonPadding = (int)context.getResources().getDimension(R.dimen.option_button_padding);
         optionButtonMargin = (int)context.getResources().getDimension(R.dimen.option_button_margin);
         background = resources.getDrawable(R.drawable.option_button);
+
+        background.setColorFilter( 0xff000000 , PorterDuff.Mode.ADD );
 
         setLayoutParams(new LinearLayout.LayoutParams(optionButtonSize, optionButtonSize));
         changeType(buttonMode);
@@ -63,7 +68,7 @@ public class OptionButton extends Button{
                     resources.getDrawable(buttonMode.getResource())};
 
             LayerDrawable layerDraw = new LayerDrawable(drawableArray);
-            layerDraw.setLayerInset(1, optionButtonMargin, optionButtonMargin, optionButtonMargin, optionButtonMargin);
+            layerDraw.setLayerInset(1, optionButtonPadding, optionButtonPadding, optionButtonPadding, optionButtonPadding);
             setBackground(layerDraw.mutate());
             if(buttonMode.getAnimation() != -1 ){
                 startAnimation(AnimationUtils.loadAnimation(context,buttonMode.getAnimation()));

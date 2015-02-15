@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.Transferor;
-import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -20,7 +19,6 @@ public class EditorActivity extends FragmentActivity{
     private GoogleMap googleMap;
     public Slider slider;
     public EditorSliderAdapter sliderAdapter;
-    public EditorMapManager editorMapManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +43,7 @@ public class EditorActivity extends FragmentActivity{
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
-                editorMapManager = new EditorMapManager( this , googleMap );
-
-                sliderAdapter = new EditorSliderAdapter( this , editorMapManager , slider );
-                sliderAdapter.attachButton( new OptionButton(this) );
+                sliderAdapter = new EditorSliderAdapter( this , googleMap , slider );
             }
         }
     }

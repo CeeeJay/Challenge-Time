@@ -1,12 +1,19 @@
 package com.ceejay.challengetime.challenge;
 
+import android.content.Context;
+
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.Distance;
+import com.ceejay.challengetime.helper.slider.OptionButton;
+import com.ceejay.challengetime.helper.slider.OptionButtonMode;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -83,6 +90,18 @@ public class RunChallenge extends Challenge {
     public void finish() {
         stopArea.setFillColor(context.getResources().getColor(R.color.finished));
         super.finish();
+    }
+
+    public static class Editor extends ChallengeEditor {
+        private HashMap<OptionButton,Marker> optionButtons = new HashMap<>();
+        private Marker marker;
+
+        public Editor( Context context , GoogleMap gMap ) {
+            super( context , gMap );
+
+            setUpOptionButton(OptionButtonMode.STARTLOCATION);
+            setUpOptionButton(OptionButtonMode.STOPLOCATION);
+        }
     }
 }
 

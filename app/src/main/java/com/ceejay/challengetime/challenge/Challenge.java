@@ -1,13 +1,10 @@
 package com.ceejay.challengetime.challenge;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
 import com.ceejay.challengetime.helper.Transferor;
@@ -182,7 +179,7 @@ public class Challenge {
         }else if( challengeState.isReady() ){
             setChallengeState(ChallengeState.isShown);
         }
-        ((TextView)((Activity)context).findViewById(R.id.challengeRecord)).setText(stopWatch.getTime()/1000 + "");
+        //((TextView)((Activity)context).findViewById(R.id.challengeRecord)).setText(stopWatch.getTime()/1000 + "");
     }
 
     public void setLatLng(LatLng latLng) {

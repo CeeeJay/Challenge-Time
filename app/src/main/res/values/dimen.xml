@@ -7,4 +7,5 @@
 
     <dimen name="option_button">60dp</dimen>
     <dimen name="option_button_margin">5dp</dimen>
+    <dimen name="option_button_padding">10dp</dimen>
 </resources>
