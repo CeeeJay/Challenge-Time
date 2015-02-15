@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;

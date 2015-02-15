@@ -5,6 +5,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
 import com.ceejay.challengetime.helper.Transferor;
@@ -160,7 +161,7 @@ public class Challenge {
         this.latLng = latLng;
         stopWatch = new StopWatch();
         setStopWatchVibrate();
-        this.marker = ChallengeAdapter.getMapManager().addMarker(this);
+        //this.marker = ChallengeAdapter.getMapManager().addMarker(this);
     }
 
     public void userLocationChanged(){

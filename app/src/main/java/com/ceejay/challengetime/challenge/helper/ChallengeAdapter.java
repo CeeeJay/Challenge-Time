@@ -1,7 +1,8 @@
-package com.ceejay.challengetime.challenge;
+package com.ceejay.challengetime.challenge.helper;
 
 import android.support.annotation.NonNull;
 
+import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.HttpPostContact;
 import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.Transferor;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class ChallengeAdapter extends ArrayList<Challenge> {
 
     private static MapManager mapManager;
-    private static ArrayList<Challenge> challenges = new ArrayList<>();
+    public static ArrayList<Challenge> challenges = new ArrayList<>();
     private static Layer markerCache;
 
     public static void setMapManager(@NonNull MapManager mapManager) {
@@ -29,20 +30,20 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
         }
 
         if( Challenge.getFocus() == null || Challenge.getFocus().getChallengeState().getValence() <= 1 ){
-            mapManager.showMarker();
-            if(challenges.size() == 0) {
+            challenges.add(Transferor.getCheckpointChallenge());
+            challenges.add(Transferor.getRunChallenge());
 
-                challenges.add(Transferor.getCheckpointChallenge());
-                challenges.add(Transferor.getRunChallenge());
-
-                try {
-                    HttpPostContact.reciveChallanges(challenges);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
+            try {
+                HttpPostContact.reciveChallanges(challenges);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+
+            for(Challenge challenge : challenges) {
+                mapManager.addMarker(challenge);
+            }
+
         }else if( Challenge.getFocus().getChallengeState().getValence() > 1){
             Challenge.getFocus().show();
         }

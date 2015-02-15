@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.ChallengeEditor;
+import com.ceejay.challengetime.challenge.helper.ChallengeEditor;
 import com.ceejay.challengetime.challenge.RunChallenge;
 import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.slider.OptionButton;
@@ -51,7 +51,7 @@ public class EditorSliderAdapter extends SliderAdapter{
         }
 
         editor.setEditorLayer(new Layer(googleMap));
-        attachButtons(editor.getOptionButtons());
+        attachButtons(editor.getEditorButtons());
     }
 
     @Override
@@ -66,20 +66,20 @@ public class EditorSliderAdapter extends SliderAdapter{
         googleMap.getUiSettings().setAllGesturesEnabled(true);
     }
 
-    public void attachButton(OptionButton button , View.OnTouchListener listener) {
+    public void attachButton(EditorButton button , View.OnTouchListener listener) {
         if ( attachers != null && button != null ) {
             attachButton(button);
             button.setOnTouchListener(listener);
         }
     }
 
-    public void attachButtons(ArrayList<OptionButton> optionButtons){
-        for(OptionButton optionButton : optionButtons){
-            attachButton(optionButton);
+    public void attachButtons(ArrayList<EditorButton> editorButtons){
+        for(EditorButton editorButton : editorButtons){
+            attachButton(editorButton);
         }
     }
 
-    public void attachButton( OptionButton button ) {
+    public void attachButton( EditorButton button ) {
         if ( attachers != null && button != null ) {
             linearLayout.addView(button);
             ((ViewGroup.MarginLayoutParams) button.getLayoutParams()).setMargins(optionButtonMargin, 0, optionButtonMargin, 0);

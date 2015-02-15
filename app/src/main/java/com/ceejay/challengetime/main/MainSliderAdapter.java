@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
@@ -89,8 +89,10 @@ public class MainSliderAdapter extends SliderAdapter{
                     }
                     break;
                 case LOCATION:
-                    slider.smoothSlideTo(0,2);
-                    ChallengeAdapter.getMapManager().zoom(Challenge.getUserLatLng());
+                    if(Challenge.getUserLatLng() != null) {
+                        slider.smoothSlideTo(0,2);
+                        ChallengeAdapter.getMapManager().zoom(Challenge.getUserLatLng());
+                    }
                     break;
                 case ACTIVATE:
                     if(Challenge.getFocus() != null) {

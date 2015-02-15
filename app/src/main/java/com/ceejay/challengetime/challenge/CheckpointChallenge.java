@@ -1,6 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Distance;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
