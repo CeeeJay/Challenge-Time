@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.helper.ChallengeEditor;
 import com.ceejay.challengetime.challenge.RunChallenge;
+import com.ceejay.challengetime.challenge.helper.ChallengeEditor;
 import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;

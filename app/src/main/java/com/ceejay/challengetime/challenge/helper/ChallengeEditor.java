@@ -10,7 +10,6 @@ import android.view.View;
 import com.ceejay.challengetime.challenge.RunChallenge;
 import com.ceejay.challengetime.editor.EditorButton;
 import com.ceejay.challengetime.helper.Layer;
-import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;

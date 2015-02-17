@@ -3,7 +3,6 @@ package com.ceejay.challengetime.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
