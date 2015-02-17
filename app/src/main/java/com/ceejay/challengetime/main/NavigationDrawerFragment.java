@@ -56,7 +56,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
         mDrawerListView.setAdapter(new ArrayAdapter<>(
             getActivity(),
-            android.R.layout.simple_list_item_1,
+            R.layout.simple_list_item_white_1,
             android.R.id.text1,
             new String[]{
                 getString(R.string.title_section1),

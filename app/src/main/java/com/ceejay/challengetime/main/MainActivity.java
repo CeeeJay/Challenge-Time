@@ -2,7 +2,9 @@ package com.ceejay.challengetime.main;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
-import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,11 +20,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    private static Context context;
+
     private GoogleMap googleMap;
     public Slider slider;
     public MainSliderAdapter sliderAdapter;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    public static Context getAppContext(){
+        return context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +39,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        Transferor.context = this;
-        Challenge.setContext(this);
-
+        context = this;
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-
         setUpMapIfNeeded();
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        ChallengeAdapter.refreshMapManager();
     }
 
     @Override
@@ -100,7 +109,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {}
+    public void onNavigationDrawerItemSelected(int position) {
+        switch (position) {
+            case 0:
+                try {
+                    Class classe = Class.forName("com.ceejay.challengetime.editor.EditorActivity");
+                    Intent intent = new Intent(this, classe);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            break;
+        }
+
+    }
 
 
 }

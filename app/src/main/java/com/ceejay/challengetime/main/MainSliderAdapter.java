@@ -3,6 +3,7 @@ package com.ceejay.challengetime.main;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
@@ -24,14 +25,20 @@ public class MainSliderAdapter extends SliderAdapter{
     public MainSliderAdapter(Context context, Slider slider) {
         super(context, slider);
         slider.setMaxTopPosition((int) (context.getResources().getDimension(R.dimen.map_header)));
+        slider.setTouchEnabled(false);
         Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
+
             @Override
             public void onFocusChange(Challenge focus) {
-                if (focus != null) {
+                if(focus != null) {
                     focus.addOnChallengeStateChangeListener(new Challenge.OnChallengeStateChangeListener() {
                         @Override
                         public void onStateChange(Challenge.ChallengeState challengeState) {
+                            Log.i(TAG, challengeState.toString());
                             switch (challengeState) {
+                                case isFocused:
+                                    changeButtonMode(OptionButtonMode.WATCH);
+                                    break;
                                 case isShown:
                                     changeButtonMode(OptionButtonMode.LOCATION);
                                     break;
@@ -82,6 +89,12 @@ public class MainSliderAdapter extends SliderAdapter{
             @Override
             public void onClick(View v) {
             switch (button.getButtonMode()) {
+                case REFRESH:
+                    changeButtonMode( OptionButtonMode.REFRESH_LOAD );
+                    break;
+                case REFRESH_LOAD:
+                    changeButtonMode(OptionButtonMode.REFRESH);
+                    break;
                 case WATCH:
                     if(Challenge.getFocus() != null){
                         Challenge.getFocus().show();
@@ -134,13 +147,12 @@ public class MainSliderAdapter extends SliderAdapter{
     }
 
     public void initChallengeEquipment(){
-        changeButtonMode( OptionButtonMode.WATCH );
         slider.setTouchEnabled(true);
     }
 
     public void changeButtonMode( OptionButtonMode buttonMode ){
         if(attachers.size() > 0) {
-            changeButtonMode((OptionButton)(attachers.get(0).getView()), buttonMode);
+            changeButtonMode((OptionButton) (attachers.get(0).getView()), buttonMode);
         }
     }
 

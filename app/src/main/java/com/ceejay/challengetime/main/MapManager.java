@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.Layer;
-import com.ceejay.challengetime.helper.Transferor;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -37,12 +36,16 @@ public class MapManager {
     private TextView challengeType;
     private TextView challengeRecord;
 
+    private Context context;
+
     public Layer markerLayer;
     public Layer challangeLayer;
 
     private ArrayList<OnMarkerFocusChangeListener> onMarkerFocusChangeListeners = new ArrayList<>();
 
     public MapManager( Context context , GoogleMap gMap  ) {
+
+        this.context = context;
 
         markerLayer = new Layer( gMap );
         challangeLayer = new Layer( gMap );
@@ -84,7 +87,7 @@ public class MapManager {
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
-                View view = ((Activity) Transferor.context).getLayoutInflater().inflate(R.layout.info_window,null);
+                View view = ((Activity) MapManager.this.context).getLayoutInflater().inflate(R.layout.info_window,null);
                 TextView name = (TextView)view.findViewById(R.id.challengeName);
                 name.setText("Test");
                 return view;

@@ -1,7 +1,5 @@
 package com.ceejay.challengetime.helper;
 
-import android.content.Context;
-
 import com.ceejay.challengetime.challenge.CheckpointChallenge;
 import com.ceejay.challengetime.challenge.RunChallenge;
 import com.google.android.gms.maps.model.LatLng;
@@ -13,10 +11,6 @@ import java.util.ArrayList;
  *
  */
 public class Transferor {
-
-    //public static MapManager mapManager;
-    public static Context context ;
-    public static boolean launched = false;
 
     public static RunChallenge  getRunChallenge(){
         ArrayList<LatLng> track = new ArrayList<>();

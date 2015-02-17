@@ -3,12 +3,12 @@ package com.ceejay.challengetime.helper.slider;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,13 +21,15 @@ import com.ceejay.challengetime.R;
 public class OptionButton extends Button{
     public final static String TAG = OptionButton.class.getSimpleName();
 
-    private OptionButtonMode buttonMode = OptionButtonMode.WATCH;
+    private OptionButtonMode buttonMode = OptionButtonMode.REFRESH;
+    private OptionButtonMode lastButtonMode;
     private Context context;
     private Resources resources;
     private int optionButtonSize;
     private int optionButtonPadding;
     private int optionButtonMargin;
     private Drawable background;
+    private Animation animation;
 
     public OptionButton(Context context) {
         super(context);
@@ -52,8 +54,6 @@ public class OptionButton extends Button{
         optionButtonPadding = (int)context.getResources().getDimension(R.dimen.option_button_padding);
         optionButtonMargin = (int)context.getResources().getDimension(R.dimen.option_button_margin);
         background = resources.getDrawable(R.drawable.option_button);
-
-        background.setColorFilter( 0xff000000 , PorterDuff.Mode.ADD );
 
         setLayoutParams(new LinearLayout.LayoutParams(optionButtonSize, optionButtonSize));
         changeType(buttonMode);

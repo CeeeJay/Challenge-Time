@@ -3,6 +3,8 @@ package com.ceejay.challengetime.helper;
 import android.content.Context;
 import android.os.Vibrator;
 
+import com.ceejay.challengetime.main.MainActivity;
+
 import java.util.ArrayList;
 
 /**
@@ -23,7 +25,6 @@ public class StopWatch {
 
     public StopWatch() {
         tickers = new ArrayList<>();
-        vibrator = (Vibrator) Transferor.context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     private void startClock(){
@@ -73,18 +74,27 @@ public class StopWatch {
             startTime = System.currentTimeMillis();
         }
         startClock();
-        vibrator.vibrate(startVibrate);
+        vibrate(startVibrate);
     }
     public void pause(){
         stopClock();
-        vibrator.vibrate(pauseVibrate);
+        vibrate(pauseVibrate);
     }
     public void stop(){
         stopClock();
         startTime = 0;
         currentTime = 0;
         tickers.clear();
-        vibrator.vibrate(stopVibrate);
+        vibrate(stopVibrate);
+    }
+
+    public void vibrate( int time ){
+        if(vibrator== null){
+            vibrator = (Vibrator) MainActivity.getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+        }
+        if(vibrator != null){
+            vibrator.vibrate(time);
+        }
     }
 
     public long getTime(){

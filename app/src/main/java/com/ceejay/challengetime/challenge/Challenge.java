@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.StopWatch;
-import com.ceejay.challengetime.helper.Transferor;
+import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created by CJay on 25.01.2015 for Challenge Time.
  *
  */
-public class Challenge {
+public class Challenge{
 
     /**
      * Static Stuff
@@ -27,7 +27,7 @@ public class Challenge {
 
     private static Challenge focusedChallenge;
 
-    protected static Context context;
+    protected static Context context = MainActivity.getAppContext();
     protected static Location userLocation;
 
     private static ArrayList<OnFocusChangeListener> onFocusChangeListeners = new ArrayList<>();
@@ -57,11 +57,11 @@ public class Challenge {
             getFocus().setChallengeState(ChallengeState.isNotFocused);
         }
         focusedChallenge = challenge;
-        if( focusedChallenge != null) {
-            challenge.focus();
-        }
         for(OnFocusChangeListener onFocusChangeListener : onFocusChangeListeners){
             onFocusChangeListener.onFocusChange( focusedChallenge );
+        }
+        if( focusedChallenge != null) {
+            challenge.focus();
         }
     }
 
@@ -161,7 +161,6 @@ public class Challenge {
         this.latLng = latLng;
         stopWatch = new StopWatch();
         setStopWatchVibrate();
-        //this.marker = ChallengeAdapter.getMapManager().addMarker(this);
     }
 
     public void userLocationChanged(){
@@ -180,7 +179,6 @@ public class Challenge {
         }else if( challengeState.isReady() ){
             setChallengeState(ChallengeState.isShown);
         }
-        //((TextView)((Activity)context).findViewById(R.id.challengeRecord)).setText(stopWatch.getTime()/1000 + "");
     }
 
     public void setLatLng(LatLng latLng) {
@@ -226,7 +224,7 @@ public class Challenge {
         }
     }
     protected void ready(){
-        Toast.makeText(Transferor.context, "Ready", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Ready", Toast.LENGTH_SHORT).show();
         for (OnChallengeReadyListener readyListener : readyListeners) {
             readyListener.onReady();
         }
@@ -234,7 +232,7 @@ public class Challenge {
     }
     public void activate(){
         if( userLocation != null && Distance.between(userLocation,latLng) < sizeStartArea && challengeState.isReady()) {
-            Toast.makeText(Transferor.context, "Activated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Activated", Toast.LENGTH_SHORT).show();
             for (OnChallengeActivateListener activateListener : activateListeners) {
                 activateListener.onActivate();
             }
@@ -242,7 +240,7 @@ public class Challenge {
         }
     }
     protected void start(){
-        Toast.makeText(Transferor.context, "Started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Started", Toast.LENGTH_SHORT).show();
         stopWatch.start();
         for (OnChallengeStartListener startListener : startListeners) {
             startListener.onStart();
@@ -251,7 +249,7 @@ public class Challenge {
     }
     protected void finish(){
         stopWatch.pause();
-        Toast.makeText(Transferor.context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_LONG).show();
+        Toast.makeText(context,"Finished at " + stopWatch.getTime() ,Toast.LENGTH_LONG).show();
         for (OnChallengeFinishListener finishListener : finishListeners) {
             finishListener.onFinish();
         }
@@ -259,7 +257,7 @@ public class Challenge {
     }
     public void stop(){
         stopWatch.pause();
-        Toast.makeText(Transferor.context,"Stopped at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,"Stopped at " + stopWatch.getTime() ,Toast.LENGTH_SHORT).show();
         stopWatch.stop();
         for (OnChallengeStopListener stopListener : stopListeners) {
             stopListener.onStop();

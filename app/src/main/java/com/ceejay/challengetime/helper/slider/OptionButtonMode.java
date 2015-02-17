@@ -10,7 +10,8 @@ import com.ceejay.challengetime.R;
  */
 public enum OptionButtonMode{
     INVISIBLE ( -1 , -1 ),
-    REFRESH (R.drawable.refresh , R.anim.refresh_rotate ),
+    REFRESH (R.drawable.refresh , -1 ),
+    REFRESH_LOAD (R.drawable.refresh , R.anim.refresh_rotate ),
     WATCH (R.drawable.eye , -1 ),
     LOCATION (R.drawable.location , R.anim.location_rotate ),
     ACTIVATE (R.drawable.logo , R.anim.zoom_blink ),

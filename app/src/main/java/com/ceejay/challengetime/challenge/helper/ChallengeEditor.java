@@ -29,7 +29,7 @@ public class ChallengeEditor {
     protected Layer editorLayer;
     protected Context context;
 
-    public ChallengeEditor(final Context context, GoogleMap gMap) {
+    public ChallengeEditor(Context context, GoogleMap gMap) {
         this.context = context;
         googleMap = gMap;
         editorLayer = new Layer( googleMap );
@@ -46,8 +46,8 @@ public class ChallengeEditor {
                 latLngs.add(editorButtons.get(2).getMarkers().get(0).getPosition());
 
 
-                ChallengeAdapter.challenges.add(new RunChallenge(latLngs,"TestApp"));
-                ((Activity)context).finish();
+                ChallengeAdapter.challenges.add(new RunChallenge( latLngs,"TestApp"));
+                ((Activity)ChallengeEditor.this.context).finish();
             }
         });
     }

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.helper.Transferor;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -23,8 +21,6 @@ public class EditorActivity extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Transferor.context = this;
-        Challenge.setContext(this);
 
         setContentView(R.layout.builder_activity);
         setUpMapIfNeeded();

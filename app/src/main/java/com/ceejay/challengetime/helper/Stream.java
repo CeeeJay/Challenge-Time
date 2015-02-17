@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.math.PointD;
+import com.ceejay.challengetime.main.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -107,7 +108,7 @@ public class Stream {
                             builder.setStopLocation(location.toLatLng());
                             break;
                         default:
-                            Toast.makeText(Transferor.context,"WTFFFFF",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.getAppContext(),"WTFFFFF",Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -118,7 +119,7 @@ public class Stream {
             jsonReader.close();
 
         } catch (IOException e) {
-            Toast.makeText(Transferor.context,e.getMessage(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.getAppContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
 
 

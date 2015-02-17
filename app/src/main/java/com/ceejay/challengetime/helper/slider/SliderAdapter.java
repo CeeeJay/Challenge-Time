@@ -55,7 +55,7 @@ public class SliderAdapter implements Slider.PanelSlideListener,View.OnTouchList
         if ( attachers != null && offset != null && button != null ) {
             ((ViewGroup)slider.getParent()).addView(button);
             attachers.add(new Attacher(button,offset));
-            setUpButtons(slider.getHeight() - (int)context.getResources().getDimension(R.dimen.panel_size));
+            setUpButtons(1900 - (int) context.getResources().getDimension(R.dimen.panel_size));
         }
     }
 
