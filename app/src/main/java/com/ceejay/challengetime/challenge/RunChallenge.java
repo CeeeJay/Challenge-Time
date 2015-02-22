@@ -1,18 +1,13 @@
 package com.ceejay.challengetime.challenge;
 
-import android.content.Context;
-
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.helper.ChallengeEditor;
-import com.ceejay.challengetime.editor.EditorActivity;
-import com.ceejay.challengetime.editor.EditorButton;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;

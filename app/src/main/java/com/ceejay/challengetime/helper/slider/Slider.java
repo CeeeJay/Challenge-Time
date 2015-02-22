@@ -1,6 +1,7 @@
 package com.ceejay.challengetime.helper.slider;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -16,7 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1355,16 +1356,22 @@ public class Slider extends ViewGroup {
     }
 
     public ArrayList<Attacher> attachers = new ArrayList<>();
-    public Point offset = new Point(
-            1080 - (int) getResources().getDimension(R.dimen.option_button_margin) - (int) getResources().getDimension(R.dimen.option_button),
-            (int) getResources().getDimension(R.dimen.option_button) / 2);
+    public Point offset;
 
     public void attachView( View view ){
-        if ( attachers != null && offset != null && view != null ) {
+        if ( attachers != null && view != null ) {
+            if( offset == null ){
+                Display display = ((Activity)getContext()).getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                offset = new Point(
+                        size.x - (int) getResources().getDimension(R.dimen.option_button_margin) - (int) getResources().getDimension(R.dimen.option_button),
+                        (int) getResources().getDimension(R.dimen.option_button) / 2);
+            }
             ((ViewGroup)getParent()).addView(view);
             attachers.add(new Attacher(view, new Point(offset)));
             offset.x -= getResources().getDimension(R.dimen.option_button) + getResources().getDimension(R.dimen.option_button_margin);
-            setUpButtons(1900 - (int) getResources().getDimension(R.dimen.panel_size));
+            setUpButtons(getHeight() - (int) getResources().getDimension(R.dimen.panel_size));
         }
     }
 

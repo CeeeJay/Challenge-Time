@@ -18,25 +18,23 @@
         />
 
     <com.facebook.widget.LoginButton
-        android:id="@+id/authButton"
+        android:id="@+id/authFacebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
+        android:visibility="gone"
         />
 
-    <Button
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/authGoogle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Google+ Login"
-        android:background="@drawable/google_button_style"
-        android:textColor="@color/white"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:padding="10dp"
         android:shadowDx="10"
         android:shadowDy="10"
-        />
+        android:visibility="gone"/>
 
     </LinearLayout>
 

@@ -1,38 +1,27 @@
 package com.ceejay.challengetime.launcher;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.HttpPostContact;
 import com.ceejay.challengetime.main.MainActivity;
 import com.facebook.AppEventsLogger;
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.facebook.TokenCachingStrategy;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
-import com.facebook.android.Util;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by CJay on 09.02.2015 for Challenge Time.
@@ -40,10 +29,12 @@ import java.net.MalformedURLException;
 public class LauncherActivity extends FragmentActivity implements Runnable{
     public final static String TAG = LauncherActivity.class.getSimpleName();
 
-    private LauncherActivity mainFragment;
-    private LoginMethod loginMethod = LoginMethod.NONE;
+    private static Context context;
+    public static Context getAppContext(){
+        return context;
+    }
 
-    public final String API_KEY = "1550352745219115";
+    //public final String API_KEY = "1550352745219115";
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -57,17 +48,13 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launcher_activity);
 
-        loginMethod = getLoginMethod();
+        context = this;
 
-        switch (loginMethod){
-            case FACEBOOK:
-                Session.openActiveSession(this,true,new Session.StatusCallback() {
-                    @Override
-                    public void call(Session session, SessionState sessionState, Exception e) {
+        User.read();
 
-                    }
-                });
-                break;
+        if( User.id == -1 ){
+            findViewById(R.id.authFacebook).setVisibility(View.VISIBLE);
+            findViewById(R.id.authGoogle).setVisibility(View.VISIBLE);
         }
 
         uiHelper = new UiLifecycleHelper(this, callback);
@@ -84,9 +71,22 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
-            setLoginMethod(LoginMethod.FACEBOOK);
-            startMainActivity();
+            User.setLoginMethod(User.LoginMethod.FACEBOOK);
+
+            if(User.id == -1) {
+                User.addUserDataChangedListener( new User.UserDataChangedListener() {
+                    @Override
+                    public void onChange() {
+                        startMainActivity();
+                        User.removeUserDataChangedListener(this);
+                    }
+                });
+                User.fetch();
+            }else{
+                startMainActivity();
+            }
         }
+
     }
 
     @Override
@@ -123,7 +123,6 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
 
     @Override
     public void run() {
-        Challenge.setContext(this);
         try {
             HttpPostContact.reciveChallanges(ChallengeAdapter.challenges);
 
@@ -137,34 +136,29 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
         finish();
     }
 
-    enum LoginMethod{
-        NONE,EMAIL,GOOGLE,FACEBOOK;
+    private synchronized void downloadAvatar() {
+        AsyncTask<Void, Void, Bitmap> task = new AsyncTask<Void, Void, Bitmap>() {
 
-        public static LoginMethod getLoginMethod( String method ){
-            method = method.toUpperCase();
-            switch (method){
-                case "EMAIL":
-                    return LoginMethod.EMAIL;
-                case "GOOGLE":
-                    return LoginMethod.GOOGLE;
-                case "FACEBOOK":
-                    return LoginMethod.FACEBOOK;
-                default:
-                    return LoginMethod.NONE;
+            @Override
+            public Bitmap doInBackground(Void... params) {
+                URL fbAvatarUrl = null;
+                Bitmap fbAvatarBitmap = null;
+                try {
+                    fbAvatarUrl = new URL("http://graph.facebook.com/4/picture?type=large");
+                    fbAvatarBitmap = BitmapFactory.decodeStream(fbAvatarUrl.openConnection().getInputStream());
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return fbAvatarBitmap;
             }
-        }
-    }
 
-    public void setLoginMethod( LoginMethod loginMethod ){
-        SharedPreferences settings = getApplicationContext().getSharedPreferences("login_data", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("login_method", loginMethod.toString() );
-        editor.apply();
-    }
+            @Override
+            protected void onPostExecute(Bitmap result) {
+                User.picture = result;
+            }
 
-    public LoginMethod getLoginMethod(){
-        SharedPreferences settings = getApplicationContext().getSharedPreferences("login_data", 0);
-        return LoginMethod.getLoginMethod(settings.getString("login_method", "none"));
+        };
+        task.execute();
     }
 }
 

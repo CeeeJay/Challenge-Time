@@ -1,11 +1,7 @@
 package com.ceejay.challengetime.editor;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.util.AttributeSet;
 import android.view.View;
 

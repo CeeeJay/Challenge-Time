@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.slider.OptionButton;
@@ -37,6 +39,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        setUser();
+        User.addUserDataChangedListener(new User.UserDataChangedListener() {
+            @Override
+            public void onChange() {
+                setUser();
+            }
+        });
 
         context = this;
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -95,6 +105,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         }else{
             super.onBackPressed();
         }
+    }
+
+    private void setUser(){
+        ((TextView)findViewById(R.id.userName)).setText(User.name);
     }
 
     private void setUpMapIfNeeded() {

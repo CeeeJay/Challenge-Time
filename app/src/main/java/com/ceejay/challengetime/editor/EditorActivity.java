@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.RunChallenge;
-import com.ceejay.challengetime.helper.slider.OptionButton;
-import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 

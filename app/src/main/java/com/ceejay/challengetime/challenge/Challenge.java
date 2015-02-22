@@ -27,7 +27,7 @@ public class Challenge{
 
     private static Challenge focusedChallenge;
 
-    protected static Context context = MainActivity.getAppContext();
+    protected Context context;
     protected static Location userLocation;
 
     private static ArrayList<OnFocusChangeListener> onFocusChangeListeners = new ArrayList<>();
@@ -36,9 +36,6 @@ public class Challenge{
         return focusedChallenge;
     }
 
-    public static void setContext(Context context) {
-        Challenge.context = context;
-    }
     public static void setUserLocation(Location userLocation) {
         Challenge.userLocation = userLocation;
         if( Challenge.focusedChallenge != null ) {
@@ -156,6 +153,7 @@ public class Challenge{
     }
 
     public void init( LatLng latLng , String challengeName ){
+        context = MainActivity.getAppContext();
         setChallengeState(ChallengeState.isNotFocused);
         this.challengeName = challengeName;
         this.latLng = latLng;
@@ -174,6 +172,8 @@ public class Challenge{
                     start();
                 } else if( challengeState.isReady() ){
                     setChallengeState(ChallengeState.isShown);
+                }else if( challengeState.isStarted() ){
+                    ChallengeAdapter.getMapManager().zoom(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()));
                 }
             }
         }else if( challengeState.isReady() ){
