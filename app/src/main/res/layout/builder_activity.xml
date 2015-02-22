@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.ceejay.challengetime.helper.slider.Slider
+    <com.ceejay.challengetime.editor.EditorSlider
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,14 +38,15 @@
                 android:background="@color/challengeOrange"
                 android:id="@+id/panel">
 
-                <TextView
+                <EditText
                     android:id="@+id/challengeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Brunnen Tour"
+                    android:text="Pakur"
                     android:layout_alignParentBottom="true"
                     android:textSize="20sp"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    android:minWidth="100dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,13 +61,9 @@
 
             </RelativeLayout>
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
         </LinearLayout>
 
-    </com.ceejay.challengetime.helper.slider.Slider>
+    </com.ceejay.challengetime.editor.EditorSlider>
 
     <LinearLayout
         android:layout_width="fill_parent"

@@ -13,7 +13,7 @@ import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.slider.OptionButton;
-import com.ceejay.challengetime.helper.slider.Slider;
+import com.facebook.AppEventsLogger;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -21,16 +21,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private static Context context;
-
-    private GoogleMap googleMap;
-    public Slider slider;
-    public MainSliderAdapter sliderAdapter;
-
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-
     public static Context getAppContext(){
         return context;
     }
+
+    private GoogleMap googleMap;
+    public MainSlider slider;
+
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +56,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public void onBackPressed() {
         if(Challenge.getFocus() != null) {
             if ( Challenge.getFocus().getChallengeState().getValence() > 3) {
@@ -69,7 +73,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                         Challenge.setFocus(null);
                         ChallengeAdapter.getMapManager().showMarker();
                         ChallengeAdapter.getMapManager().clearChallengeLayer();
-                        sliderAdapter.clearChallengeEquipment();
+                        slider.clearChallengeEquipment();
                     }
                 });
                 alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -83,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 if (ChallengeAdapter.getMapManager() != null) {
                     ChallengeAdapter.getMapManager().showMarker();
                     ChallengeAdapter.getMapManager().clearChallengeLayer();
-                    sliderAdapter.clearChallengeEquipment();
+                    slider.clearChallengeEquipment();
                 }
             }
         }else{
@@ -93,16 +97,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     private void setUpMapIfNeeded() {
 
-        slider = (Slider) findViewById(R.id.slidingDrawer);
-
-        sliderAdapter = new MainSliderAdapter( MainActivity.this , slider );
-        sliderAdapter.attachButton( new OptionButton(this) );
+        slider = (MainSlider) findViewById(R.id.slidingDrawer);
+        slider.attachButton( new OptionButton(this) );
 
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if (googleMap != null) {
             MapManager mapManager = new MapManager( this , googleMap );
             ChallengeAdapter.setMapManager( mapManager );
-            sliderAdapter.onMarkerFocus( mapManager );
+            slider.onMarkerFocus(mapManager);
             new LocationObserver(this);
         }
 

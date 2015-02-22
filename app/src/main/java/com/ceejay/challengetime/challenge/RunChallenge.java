@@ -5,6 +5,7 @@ import android.content.Context;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.helper.ChallengeEditor;
+import com.ceejay.challengetime.editor.EditorActivity;
 import com.ceejay.challengetime.editor.EditorButton;
 import com.ceejay.challengetime.helper.Distance;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
@@ -94,11 +95,9 @@ public class RunChallenge extends Challenge {
     }
 
     public static class Editor extends ChallengeEditor {
-        private ArrayList<EditorButton> editorButtons = new ArrayList<>();
-        private Marker marker;
 
-        public Editor( Context context , GoogleMap gMap ) {
-            super( context , gMap );
+        public Editor( GoogleMap gMap ) {
+            super( gMap );
 
             setUpOptionButton(OptionButtonMode.STARTLOCATION);
             setUpOptionButton(OptionButtonMode.STOPLOCATION);

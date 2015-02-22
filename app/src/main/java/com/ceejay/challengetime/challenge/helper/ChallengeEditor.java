@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ceejay.challengetime.challenge.RunChallenge;
+import com.ceejay.challengetime.editor.EditorActivity;
 import com.ceejay.challengetime.editor.EditorButton;
 import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
@@ -29,8 +30,8 @@ public class ChallengeEditor {
     protected Layer editorLayer;
     protected Context context;
 
-    public ChallengeEditor(Context context, GoogleMap gMap) {
-        this.context = context;
+    public ChallengeEditor( GoogleMap gMap ) {
+        this.context = EditorActivity.getAppContext();
         googleMap = gMap;
         editorLayer = new Layer( googleMap );
 

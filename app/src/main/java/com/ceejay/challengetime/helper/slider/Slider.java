@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +25,8 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.helper.ViewDragHelper;
+
+import java.util.ArrayList;
 
 
 public class Slider extends ViewGroup {
@@ -508,7 +512,7 @@ public class Slider extends ViewGroup {
                         setPanelState(PanelState.COLLAPSED);
                     }
                 }
-            });;
+            });
         }
     }
 
@@ -1089,6 +1093,9 @@ public class Slider extends ViewGroup {
     public void draw(@NonNull Canvas c) {
         super.draw(c);
 
+        //Elevate buttons
+        setUpButtons( getPanel().getTop() );
+
         // draw the shadow
         if (mShadowDrawable != null) {
             final int right = mSlideableView.getRight();
@@ -1345,5 +1352,54 @@ public class Slider extends ViewGroup {
                         return new SavedState[size];
                     }
                 };
+    }
+
+    public ArrayList<Attacher> attachers = new ArrayList<>();
+    public Point offset = new Point(
+            1080 - (int) getResources().getDimension(R.dimen.option_button_margin) - (int) getResources().getDimension(R.dimen.option_button),
+            (int) getResources().getDimension(R.dimen.option_button) / 2);
+
+    public void attachView( View view ){
+        if ( attachers != null && offset != null && view != null ) {
+            ((ViewGroup)getParent()).addView(view);
+            attachers.add(new Attacher(view, new Point(offset)));
+            offset.x -= getResources().getDimension(R.dimen.option_button) + getResources().getDimension(R.dimen.option_button_margin);
+            setUpButtons(1900 - (int) getResources().getDimension(R.dimen.panel_size));
+        }
+    }
+
+    public void setUpButtons( int offset ){
+        for ( Attacher attacher : attachers ) {
+            ((ViewGroup.MarginLayoutParams) attacher.getView().getLayoutParams())
+                    .setMargins(attacher.getOffset().x, offset - attacher.getOffset().y, 0, 0);
+            attacher.getView().requestLayout();
+        }
+    }
+
+    protected class Attacher{
+
+        private View view;
+        private Point offset;
+
+        public Attacher(View view, Point offset) {
+            this.view = view;
+            this.offset = offset;
+        }
+
+        public View getView() {
+            return view;
+        }
+
+        public void setView(View view) {
+            this.view = view;
+        }
+
+        public Point getOffset() {
+            return offset;
+        }
+
+        public void setOffset(Point offset) {
+            this.offset = offset;
+        }
     }
 }
