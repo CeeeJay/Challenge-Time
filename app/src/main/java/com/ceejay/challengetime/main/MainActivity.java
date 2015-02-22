@@ -53,11 +53,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     protected void onResume() {
         super.onResume();
+        AppEventsLogger.activateApp(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        AppEventsLogger.deactivateApp(this);
     }
 
     @Override
