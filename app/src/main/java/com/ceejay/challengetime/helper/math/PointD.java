@@ -23,6 +23,16 @@ public class PointD extends Point{
         this.y = y;
     }
 
+    public PointD(Point point){
+        this.x = point.x;
+        this.y = point.y;
+    }
+
+    public PointD(PointD point){
+        this.x = point.x;
+        this.y = point.y;
+    }
+
     public PointD(String parse){
         parse = parse.substring(6,parse.length() - 1);
         x = Double.parseDouble(parse.split(" ")[0]);

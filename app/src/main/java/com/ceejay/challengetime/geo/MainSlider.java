@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.main;
+package com.ceejay.challengetime.geo;
 
 import android.content.Context;
 import android.util.AttributeSet;

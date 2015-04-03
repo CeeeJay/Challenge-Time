@@ -15,6 +15,7 @@ import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.HttpPostContact;
 import com.ceejay.challengetime.main.MainActivity;
+import com.ceejay.challengetime.news.News;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -55,18 +56,14 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
         if( User.id == -1 ){
             findViewById(R.id.authFacebook).setVisibility(View.VISIBLE);
             findViewById(R.id.authGoogle).setVisibility(View.VISIBLE);
+        }else{
+            startMainActivity();
         }
 
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
 
         findViewById(R.id.launcherIcon).startAnimation(AnimationUtils.loadAnimation(this, R.anim.launch_animation));
-        findViewById(R.id.launcherIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                findViewById(R.id.launcherIcon).startAnimation(AnimationUtils.loadAnimation(LauncherActivity.this, R.anim.spin));
-            }
-        });
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
@@ -77,16 +74,15 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
                 User.addUserDataChangedListener( new User.UserDataChangedListener() {
                     @Override
                     public void onChange() {
-                        startMainActivity();
-                        User.removeUserDataChangedListener(this);
+                        if( User.id > 0 ) {
+                            startMainActivity();
+                            User.removeUserDataChangedListener(this);
+                        }
                     }
                 });
                 User.fetch();
-            }else{
-                startMainActivity();
             }
         }
-
     }
 
     @Override
@@ -122,6 +118,12 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        uiHelper.onStop();
+    }
+
+    @Override
     public void run() {
         try {
             HttpPostContact.reciveChallanges(ChallengeAdapter.challenges);
@@ -132,7 +134,7 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
     }
 
     public void startMainActivity(){
-        startActivity(new Intent(LauncherActivity.this, MainActivity.class));
+        startActivity(new Intent(LauncherActivity.this, News.class));
         finish();
     }
 

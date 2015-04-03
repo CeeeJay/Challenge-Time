@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.Transferor;
-import com.ceejay.challengetime.main.MapManager;
+import com.ceejay.challengetime.geo.MapManager;
 
 import java.util.ArrayList;
 
