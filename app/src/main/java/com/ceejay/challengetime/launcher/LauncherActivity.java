@@ -134,7 +134,7 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
     }
 
     public void startMainActivity(){
-        startActivity(new Intent(LauncherActivity.this, News.class));
+        startActivity(new Intent(LauncherActivity.this, MainActivity.class));
         finish();
     }
 
