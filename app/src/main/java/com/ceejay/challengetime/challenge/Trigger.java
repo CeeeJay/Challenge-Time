@@ -6,18 +6,18 @@ package com.ceejay.challengetime.challenge;
 public class Trigger {
     public final static String TAG = Trigger.class.getSimpleName();
 
-    public Challenge2 context;
+    public Challenge context;
     public String trigger;
     public String effect;
 
     public Trigger(  ) {
     }
 
-    public Trigger( Challenge2 context  ) {
+    public Trigger( Challenge context  ) {
         this.context = context;
     }
 
-    public Trigger( String trigger , Challenge2 context  ) {
+    public Trigger( String trigger , Challenge context  ) {
         this.trigger = trigger;
         this.context = context;
     }

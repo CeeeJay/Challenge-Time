@@ -6,8 +6,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.RunChallenge;
-import com.ceejay.challengetime.challenge.helper.ChallengeEditor;
 import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,7 +46,7 @@ public class EditorSlider extends Slider implements Slider.PanelSlideListener {
     protected void onAttachedToWindow() {
         googleMap = ((SupportMapFragment) ((FragmentActivity)EditorActivity.getAppContext()).getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
-        ChallengeEditor editor;
+       /* ChallengeEditor editor;
         if(true){
             editor = new RunChallenge.Editor(googleMap);
         }else{
@@ -56,7 +54,7 @@ public class EditorSlider extends Slider implements Slider.PanelSlideListener {
         }
 
         editor.setEditorLayer(new Layer(googleMap));
-        attachButtons(editor.getEditorButtons());
+        attachButtons(editor.getEditorButtons());*/
 
         super.onAttachedToWindow();
     }

@@ -47,7 +47,7 @@ public class LocationObserver {
 
         @Override
         public void onLocationChanged(Location location) {
-            Challenge.setUserLocation(location);
+
         }
 
         @Override
@@ -60,7 +60,7 @@ public class LocationObserver {
 
         @Override
         public void onProviderDisabled(String provider) {
-            Challenge.setUserLocation(null);
+
         }
     }
 }

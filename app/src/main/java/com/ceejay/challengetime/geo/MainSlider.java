@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
@@ -38,7 +37,7 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
         setMaxTopPosition((int) (context.getResources().getDimension(R.dimen.map_header)));
         //slider.setTouchEnabled(false);
         setPanelSlideListener(this);
-        Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
+        /*Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(Challenge focus) {
@@ -67,26 +66,26 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
                 });
             }
             }
-        });
+        });*/
     }
 
     @Override
     public void onPanelCollapsed(View panel) {
-        if (ChallengeAdapter.getMapManager() != null) {
+        /*if (ChallengeAdapter.getMapManager() != null) {
             ChallengeAdapter.getMapManager()
                     .unLock();
-        }
+        }*/
     }
 
     @Override
     public void onPanelAnchored(View panel) {
-        if (ChallengeAdapter.getMapManager() != null) {
+       /* if (ChallengeAdapter.getMapManager() != null) {
             if (Challenge.getFocus() != null) {
                 ChallengeAdapter.getMapManager()
                         .zoom(Challenge.getFocus().getMarker())
                         .lock();
             }
-        }
+        }*/
     }
 
     @Override
@@ -99,7 +98,7 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
     public void onPanelHidden(View panel) {}
 
     public void attachButton( final OptionButton button ){
-        super.attachView(button);
+      /*  super.attachView(button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,11 +136,11 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
 
             }
         });
-        changeButtonMode( button.getButtonMode() );
+        changeButtonMode( button.getButtonMode() );*/
     }
 
     public void onMarkerFocus( MapManager mapManager ){
-        mapManager.addOnMarkerFocusChangeListener(new MapManager.OnMarkerFocusChangeListener() {
+       /* mapManager.addOnMarkerFocusChangeListener(new MapManager.OnMarkerFocusChangeListener() {
             @Override
             public void onMarkerFocusChange(Marker marker) {
             if ( Challenge.getFocus() != null && Challenge.getFocus().getChallengeState().isFocused()) {
@@ -152,7 +151,7 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
                 }
             }
             }
-        });
+        });*/
     }
 
     public void clearChallengeEquipment(){

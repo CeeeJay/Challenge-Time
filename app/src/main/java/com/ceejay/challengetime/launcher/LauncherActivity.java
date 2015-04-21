@@ -12,10 +12,8 @@ import android.view.animation.AnimationUtils;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
-import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
 import com.ceejay.challengetime.helper.HttpPostContact;
 import com.ceejay.challengetime.main.MainActivity;
-import com.ceejay.challengetime.news.News;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -126,7 +124,7 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
     @Override
     public void run() {
         try {
-            HttpPostContact.reciveChallanges(ChallengeAdapter.challenges);
+            //HttpPostContact.reciveChallanges(ChallengeAdapter.challenges);
 
         } catch (Exception e) {
             e.printStackTrace();

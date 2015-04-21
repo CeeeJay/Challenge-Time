@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Area {
     public final static String TAG = Area.class.getSimpleName();
 
-    public Challenge2 context;
+    public Challenge context;
     public String title;
     public String description;
     public String color;

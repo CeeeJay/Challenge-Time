@@ -69,7 +69,7 @@ public class HttpPostContact {
     }
 
     public static void reciveChallanges( ArrayList<Challenge> challenges ){
-
+/*
         HttpPostContact contact = new HttpPostContact("http://192.168.178.25/ChallengeTime/contact2.php");
         String[] strings = new String[]{"receive_run_challenges","receive_checkpoint_challenges"};
 
@@ -86,7 +86,7 @@ public class HttpPostContact {
                         break;
                 }
             }
-        }
+        }*/
     }
 
 }

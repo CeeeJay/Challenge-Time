@@ -1,27 +1,22 @@
 package com.ceejay.challengetime.main;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
-import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.helper.ChallengeAdapter;
-import com.ceejay.challengetime.geo.LocationObserver;
+import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.geo.MainSlider;
-import com.ceejay.challengetime.geo.MapManager;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -52,7 +47,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             }
         });
 
-        new ChallengeLoader();
+        Challenge challenge = ChallengeLoader.load();
+        Log.i(TAG,challenge.dictionary.getTranslate("Start","fr"));
+
+        slider = (MainSlider) findViewById(R.id.slidingDrawer);
+        slider.attachButton( new OptionButton(this) );
 
         context = this;
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -63,7 +62,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     protected void onRestart() {
         super.onRestart();
-        ChallengeAdapter.refreshMapManager();
     }
 
     @Override
@@ -80,37 +78,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     public void onBackPressed() {
-        if(Challenge.getFocus() != null) {
-            if ( Challenge.getFocus().getChallengeState().getValence() > 3) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-                alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
-                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Challenge.getFocus().stop();
-                        Challenge.setFocus(null);
-                        ChallengeAdapter.getMapManager().showMarker();
-                        ChallengeAdapter.getMapManager().clearChallengeLayer();
-                        slider.clearChallengeEquipment();
-                    }
-                });
-                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                alertDialog.show();
-            }else{
-                Challenge.setFocus(null);
-                if (ChallengeAdapter.getMapManager() != null) {
-                    ChallengeAdapter.getMapManager().showMarker();
-                    ChallengeAdapter.getMapManager().clearChallengeLayer();
-                    slider.clearChallengeEquipment();
-                }
-            }
-        }else{
-            super.onBackPressed();
-        }
+
     }
 
     private void setUser(){
@@ -119,16 +87,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     private void setUpMapIfNeeded() {
 
-        slider = (MainSlider) findViewById(R.id.slidingDrawer);
-        slider.attachButton( new OptionButton(this) );
+       /*
 
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if (googleMap != null) {
             MapManager mapManager = new MapManager( this , googleMap );
-            ChallengeAdapter.setMapManager( mapManager );
             slider.onMarkerFocus(mapManager);
             new LocationObserver(this);
-        }
+        }*/
 
     }
 

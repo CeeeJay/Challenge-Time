@@ -6,7 +6,7 @@ package com.ceejay.challengetime.challenge;
 public class Function {
     public final static String TAG = Function.class.getSimpleName();
 
-    public Challenge2 context;
+    public Challenge context;
     public String trigger;
     public String effect;
     public String back;
@@ -14,11 +14,11 @@ public class Function {
     public Function() {
     }
 
-    public Function(Challenge2 context) {
+    public Function(Challenge context) {
         this.context = context;
     }
 
-    public Function(String trigger, Challenge2 context) {
+    public Function(String trigger, Challenge context) {
         this.trigger = trigger;
         this.context = context;
     }

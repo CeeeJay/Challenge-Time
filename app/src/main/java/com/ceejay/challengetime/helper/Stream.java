@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ceejay.challengetime.challenge.Area;
-import com.ceejay.challengetime.challenge.Challenge2;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.Function;
 import com.ceejay.challengetime.challenge.Timer;
@@ -81,59 +80,6 @@ public class Stream {
         return json;
     }
 
-
-    public static ArrayList<Challenge.Builder> toChallenges(InputStream is) {
-        ArrayList<Challenge.Builder> challenges = new ArrayList<>();
-        Challenge.Builder builder;
-
-        if (is == null) {
-            return null;
-        }
-
-        try {
-            JsonReader jsonReader = new JsonReader(new InputStreamReader(is, "UTF-8"));
-            PointD location;
-            jsonReader.setLenient(true);
-            jsonReader.beginArray();
-            while (jsonReader.hasNext()) {
-                jsonReader.beginObject();
-                builder = new Challenge.Builder();
-                while (jsonReader.hasNext()) {
-                    switch (jsonReader.nextName()) {
-                        case "challenge_name":
-                            builder.setChallengeName(jsonReader.nextString());
-                            break;
-                        case "start_point":
-                            location = new PointD(jsonReader.nextString());
-                            builder.setStartLocation(location.toLatLng());
-                            break;
-                        case "check_points":
-                            builder.setCheckpointLocations(PointD.getPoints(jsonReader.nextString()));
-                            break;
-                        case "finish_point":
-                            location = new PointD(jsonReader.nextString());
-                            builder.setStopLocation(location.toLatLng());
-                            break;
-                        default:
-                            Toast.makeText(MainActivity.getAppContext(), "WTFFFFF", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                }
-                challenges.add(builder);
-                jsonReader.endObject();
-            }
-            jsonReader.endArray();
-            jsonReader.close();
-
-        } catch (IOException e) {
-            Toast.makeText(MainActivity.getAppContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-
-        return challenges;
-    }
-
-
     public static void next(JsonReader jsonReader) throws IOException{
         if (jsonReader.peek() == JsonToken.BEGIN_OBJECT) {
             jsonReader.beginObject();
@@ -160,11 +106,11 @@ public class Stream {
         }
     }
 
-    public static void readTimer(JsonReader jsonReader,Challenge2 challenge2) throws IOException{
+    public static void readTimer(JsonReader jsonReader,Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             Timer timer = new Timer();
-            challenge2.addTimer(jsonReader.nextName(), timer);
+            challenge.addTimer(jsonReader.nextName(), timer);
 
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
@@ -221,11 +167,11 @@ public class Stream {
         return area;
     }
 
-    public static void readFunction(JsonReader jsonReader,Challenge2 challenge2) throws IOException{
+    public static void readFunction(JsonReader jsonReader,Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             Function function = new Function();
-            challenge2.addFunction(jsonReader.nextName(), function);
+            challenge.addFunction(jsonReader.nextName(), function);
 
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
@@ -269,11 +215,11 @@ public class Stream {
         return trigger;
     }
 
-    public static void readTrigger(JsonReader jsonReader , Challenge2 challenge2) throws IOException{
+    public static void readTrigger(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginArray();
         while (jsonReader.hasNext()) {
             Trigger trigger = new Trigger();
-            challenge2.addTrigger( trigger );
+            challenge.addTrigger( trigger );
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 switch (jsonReader.nextName()) {
@@ -293,14 +239,14 @@ public class Stream {
         jsonReader.endArray();
     }
 
-    public static void readGeometry(JsonReader jsonReader , Challenge2 challenge2) throws IOException{
+    public static void readGeometry(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             switch(jsonReader.nextName()){
                 case "areas":
                     jsonReader.beginObject();
                     while (jsonReader.hasNext()) {
-                        challenge2.addArea(jsonReader.nextName(), readArea(jsonReader));
+                        challenge.addArea(jsonReader.nextName(), readArea(jsonReader));
                     }
                     jsonReader.endObject();
                     break;
@@ -312,41 +258,41 @@ public class Stream {
         jsonReader.endObject();
     }
 
-    public static Challenge2 readJson(JsonReader jsonReader) throws IOException{
-            Challenge2 challenge2 = new Challenge2();
+    public static Challenge readJson(JsonReader jsonReader) throws IOException{
+            Challenge challenge = new Challenge();
             jsonReader.beginObject();
             while (jsonReader.hasNext()){
                 switch (jsonReader.nextName()) {
-                    case "name":  challenge2.name = jsonReader.nextString(); break;
-                    case "publisher": challenge2.publisher = jsonReader.nextString();break;
-                    case "publish_time": challenge2.publish_time = jsonReader.nextInt();break;
-                    case "timer": readTimer(jsonReader,challenge2);break;
-                    case "geometry": readGeometry(jsonReader,challenge2);break;
-                    case "functions": readFunction(jsonReader,challenge2);break;
-                    case "trigger": readTrigger(jsonReader,challenge2);break;
+                    case "name":  challenge.name = jsonReader.nextString(); break;
+                    case "publisher": challenge.publisher = jsonReader.nextString();break;
+                    case "publish_time": challenge.publish_time = jsonReader.nextInt();break;
+                    case "timer": readTimer(jsonReader, challenge);break;
+                    case "geometry": readGeometry(jsonReader, challenge);break;
+                    case "functions": readFunction(jsonReader, challenge);break;
+                    case "trigger": readTrigger(jsonReader, challenge);break;
                     default: next(jsonReader);break;
                 }
             }
             jsonReader.endObject();
-            return challenge2;
+            return challenge;
     }
 
 
-    public static Challenge2 test(InputStream is) {
-        Challenge2 challenge2 = new Challenge2();
+    public static Challenge test(InputStream is) {
+        Challenge challenge = new Challenge();
         if (is == null) {
             return null;
         }
         try {
             JsonReader jsonReader = new JsonReader(new InputStreamReader(is, "UTF-8"));
             jsonReader.setLenient(true);
-            challenge2 = readJson(jsonReader);
-            Log.i(TAG, challenge2.functions.get("Start").effect+"");
+            challenge = readJson(jsonReader);
+            Log.i(TAG, challenge.functions.get("Start").effect+"");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return challenge2;
+        return challenge;
     }
 
 
