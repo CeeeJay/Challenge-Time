@@ -5,8 +5,6 @@ import android.os.Vibrator;
 
 import com.ceejay.challengetime.main.MainActivity;
 
-import java.util.ArrayList;
-
 /**
  * Created by CJay on 21.04.2015 for Challenge Time.
  */

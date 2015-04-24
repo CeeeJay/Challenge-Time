@@ -1,18 +1,21 @@
 package com.ceejay.challengetime.main;
 
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeLoader;
+import com.ceejay.challengetime.challenge.ChallengeObserver;
 import com.ceejay.challengetime.geo.MainSlider;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.facebook.AppEventsLogger;
@@ -31,6 +34,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
+    ChallengeObserver challengeObserver;
+    boolean isBound = false;
+    Challenge currentChallenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +53,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             }
         });
 
-        Challenge challenge = ChallengeLoader.load();
-        Log.i(TAG,challenge.dictionary.getTranslate("Start","fr"));
+        Intent i = new Intent(this , ChallengeObserver.class);
+        bindService(i, connection, Context.BIND_AUTO_CREATE);
+
+        currentChallenge = ChallengeLoader.load();
+        //Log.i(TAG,currentChallenge.dictionary.getTranslate("Start","fr"));
 
         slider = (MainSlider) findViewById(R.id.slidingDrawer);
         slider.attachButton( new OptionButton(this) );
@@ -113,6 +122,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         }
 
     }
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ChallengeObserver.ChallengeBinder binder = (ChallengeObserver.ChallengeBinder) service;
+            challengeObserver = binder.getService();
+            isBound = true;
+            challengeObserver.setChallenge(currentChallenge);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
 
 }

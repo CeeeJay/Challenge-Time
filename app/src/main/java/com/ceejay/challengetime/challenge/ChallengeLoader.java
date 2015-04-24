@@ -2,11 +2,8 @@ package com.ceejay.challengetime.challenge;
 
 import android.os.Bundle;
 import android.util.JsonReader;
-import android.util.JsonToken;
-import android.util.Log;
 
 import com.ceejay.challengetime.helper.HttpPostContact;
-import com.ceejay.challengetime.helper.Stream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,34 +20,10 @@ public class ChallengeLoader {
     public static Challenge load(){
         HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/brunnen.challenge");
         InputStream stream = contact.send(new Bundle());
-        return StreamToChallange(stream);
+        return StreamToChallenge(stream);
     }
 
-    public static void next(JsonReader jsonReader) throws IOException {
-        if (jsonReader.peek() == JsonToken.BEGIN_OBJECT) {
-            jsonReader.beginObject();
-            while (jsonReader.hasNext()) {
-                next(jsonReader);
-            }
-            jsonReader.endObject();
-        } else if (jsonReader.peek() == JsonToken.BEGIN_ARRAY) {
-            jsonReader.beginArray();
-            while (jsonReader.hasNext()) {
-                next(jsonReader);
-            }
-            jsonReader.endArray();
-        } else if (jsonReader.peek() == JsonToken.STRING) {
-            jsonReader.nextString();
-        } else if (jsonReader.peek() == JsonToken.NUMBER) {
-            jsonReader.nextInt();
-        } else if (jsonReader.peek() == JsonToken.NULL) {
-            jsonReader.nextNull();
-        } else if (jsonReader.peek() == JsonToken.BOOLEAN) {
-            jsonReader.nextBoolean();
-        } else if (jsonReader.peek() == JsonToken.NAME) {
-            jsonReader.nextName();
-        }
-    }
+
 
     public static void readDictionary(JsonReader jsonReader,Challenge challenge) throws IOException{
         jsonReader.beginObject();
@@ -86,7 +59,7 @@ public class ChallengeLoader {
                         timer.reverse = jsonReader.nextBoolean();
                         break;
                     default:
-                        next(jsonReader);
+                        jsonReader.skipValue();
                         break;
                 }
             }
@@ -120,7 +93,7 @@ public class ChallengeLoader {
                     jsonReader.nextString();
                     break;
                 default:
-                    next(jsonReader);
+                    jsonReader.skipValue();
                     break;
             }
         }
@@ -147,7 +120,7 @@ public class ChallengeLoader {
                         function.back = jsonReader.nextString();
                         break;
                     default:
-                        next(jsonReader);
+                        jsonReader.skipValue();
                         break;
                 }
             }
@@ -156,46 +129,34 @@ public class ChallengeLoader {
         jsonReader.endObject();
     }
 
-    public static Trigger readTrigger(JsonReader jsonReader) throws IOException{
-        Trigger trigger = new Trigger();
+    public static void readString(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
-            switch (jsonReader.nextName()) {
-                case "trigger":
-                    trigger.trigger = jsonReader.nextString();
-                    break;
-                case "effect":
-                    trigger.effect = jsonReader.nextString();
-                    break;
-                default:
-                    next(jsonReader);
-                    break;
-            }
+            challenge.addString(jsonReader.nextName(), jsonReader.nextString());
         }
         jsonReader.endObject();
-        return trigger;
     }
 
-    public static void readTrigger(JsonReader jsonReader , Challenge challenge) throws IOException{
+    public static void readInteger(JsonReader jsonReader , Challenge challenge) throws IOException{
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            challenge.addInteger(jsonReader.nextName(), jsonReader.nextInt());
+        }
+        jsonReader.endObject();
+    }
+
+    public static void readBool(JsonReader jsonReader , Challenge challenge) throws IOException{
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            challenge.addBoolean(jsonReader.nextName(), jsonReader.nextBoolean());
+        }
+        jsonReader.endObject();
+    }
+
+    public static void readLoop(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginArray();
         while (jsonReader.hasNext()) {
-            Trigger trigger = new Trigger();
-            challenge.addTrigger( trigger );
-            jsonReader.beginObject();
-            while (jsonReader.hasNext()) {
-                switch (jsonReader.nextName()) {
-                    case "trigger":
-                        trigger.trigger = jsonReader.nextString();
-                        break;
-                    case "effect":
-                        trigger.effect = jsonReader.nextString();
-                        break;
-                    default:
-                        next(jsonReader);
-                        break;
-                }
-            }
-            jsonReader.endObject();
+            challenge.addTrigger( new Trigger( jsonReader , challenge ) );
         }
         jsonReader.endArray();
     }
@@ -212,7 +173,22 @@ public class ChallengeLoader {
                     jsonReader.endObject();
                     break;
                 default:
-                    next(jsonReader);
+                    jsonReader.skipValue();
+                    break;
+            }
+        }
+        jsonReader.endObject();
+    }
+
+    public static void readVariables(JsonReader jsonReader , Challenge challenge) throws IOException{
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            switch(jsonReader.nextName()){
+                case "integer":  readInteger(jsonReader, challenge); break;
+                case "string":  readString(jsonReader, challenge); break;
+                case "bool":  readBool(jsonReader, challenge); break;
+                default:
+                    jsonReader.skipValue();
                     break;
             }
         }
@@ -225,14 +201,15 @@ public class ChallengeLoader {
         while (jsonReader.hasNext()){
             switch (jsonReader.nextName()) {
                 case "dictionary":  readDictionary(jsonReader, challenge); break;
+                case "variables":  readVariables(jsonReader, challenge); break;
                 case "name":  challenge.name = jsonReader.nextString(); break;
                 case "publisher": challenge.publisher = jsonReader.nextString();break;
                 case "publish_time": challenge.publish_time = jsonReader.nextInt();break;
                 case "timer": readTimer(jsonReader, challenge);break;
                 case "geometry": readGeometry(jsonReader, challenge);break;
                 case "functions": readFunction(jsonReader, challenge);break;
-                case "trigger": readTrigger(jsonReader, challenge);break;
-                default: next(jsonReader);break;
+                case "loop": readLoop(jsonReader, challenge);break;
+                default: jsonReader.skipValue();break;
             }
         }
         jsonReader.endObject();
@@ -240,7 +217,7 @@ public class ChallengeLoader {
     }
 
 
-    public static Challenge StreamToChallange(InputStream is) {
+    public static Challenge StreamToChallenge(InputStream is) {
         Challenge challenge = new Challenge();
         if (is == null) {
             return null;
@@ -249,7 +226,6 @@ public class ChallengeLoader {
             JsonReader jsonReader = new JsonReader(new InputStreamReader(is, "UTF-8"));
             jsonReader.setLenient(true);
             challenge = readJson(jsonReader);
-            Log.i(TAG, challenge.functions.get("Start").effect+"");
         } catch (IOException e) {
             e.printStackTrace();
         }

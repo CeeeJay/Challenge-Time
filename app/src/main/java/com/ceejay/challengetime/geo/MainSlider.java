@@ -2,15 +2,12 @@ package com.ceejay.challengetime.geo;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
-import com.google.android.gms.maps.model.Marker;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.

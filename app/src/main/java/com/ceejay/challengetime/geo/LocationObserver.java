@@ -7,8 +7,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.ceejay.challengetime.challenge.Challenge;
-
 /**
  * Created by CJay on 23.01.2015 for Challenge Time.
  *

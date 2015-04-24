@@ -1,24 +1,9 @@
 package com.ceejay.challengetime.helper;
 
-import android.util.JsonReader;
-import android.util.JsonToken;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.ceejay.challengetime.challenge.Area;
-import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.Function;
-import com.ceejay.challengetime.challenge.Timer;
-import com.ceejay.challengetime.challenge.Trigger;
-import com.ceejay.challengetime.helper.math.PointD;
-import com.ceejay.challengetime.main.MainActivity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Development on 10.01.2015.
@@ -52,7 +37,7 @@ public class Stream {
         return sb.toString();
     }
 
-    public static ArrayList toHashMap(InputStream is) {
+   /* public static ArrayList toHashMap(InputStream is) {
         ArrayList<HashMap<String, String>> json = new ArrayList<>();
 
         if (is == null) {
@@ -293,7 +278,7 @@ public class Stream {
         }
 
         return challenge;
-    }
+    }*/
 
 
 }

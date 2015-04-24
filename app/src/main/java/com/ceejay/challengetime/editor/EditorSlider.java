@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.helper.Layer;
 import com.ceejay.challengetime.helper.slider.Slider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;

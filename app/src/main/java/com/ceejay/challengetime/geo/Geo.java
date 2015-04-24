@@ -1,8 +1,6 @@
 package com.ceejay.challengetime.geo;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -11,7 +9,6 @@ import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
-import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.main.NavigationDrawerFragment;
 import com.facebook.AppEventsLogger;
