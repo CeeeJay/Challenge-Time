@@ -9,17 +9,25 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.challenge.ChallengeObserver;
+import com.ceejay.challengetime.challenge.PatternType;
+import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.geo.MainSlider;
+import com.ceejay.challengetime.geo.MapManager;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+
+import java.util.regex.Matcher;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -29,14 +37,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         return context;
     }
 
-    private GoogleMap googleMap;
-    public MainSlider slider;
+    GoogleMap googleMap;
+    MainSlider slider;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    NavigationDrawerFragment mNavigationDrawerFragment;
 
     ChallengeObserver challengeObserver;
     boolean isBound = false;
-    Challenge currentChallenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        setUpMapIfNeeded();
 
         setUser();
         User.addUserDataChangedListener(new User.UserDataChangedListener() {
@@ -56,8 +65,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         Intent i = new Intent(this , ChallengeObserver.class);
         bindService(i, connection, Context.BIND_AUTO_CREATE);
 
-        currentChallenge = ChallengeLoader.load();
-        //Log.i(TAG,currentChallenge.dictionary.getTranslate("Start","fr"));
+        ChallengeAdapter.addChallenge(ChallengeLoader.load());
 
         slider = (MainSlider) findViewById(R.id.slidingDrawer);
         slider.attachButton( new OptionButton(this) );
@@ -65,7 +73,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         context = this;
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        setUpMapIfNeeded();
     }
 
     @Override
@@ -85,26 +92,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         AppEventsLogger.deactivateApp(this);
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
-
     private void setUser(){
         ((TextView)findViewById(R.id.userName)).setText(User.name);
     }
 
     private void setUpMapIfNeeded() {
-
-       /*
-
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if (googleMap != null) {
-            MapManager mapManager = new MapManager( this , googleMap );
-            slider.onMarkerFocus(mapManager);
+            MapManager.setMap(this, googleMap);
             new LocationObserver(this);
-        }*/
-
+        }
     }
 
     @Override
@@ -129,7 +126,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             ChallengeObserver.ChallengeBinder binder = (ChallengeObserver.ChallengeBinder) service;
             challengeObserver = binder.getService();
             isBound = true;
-            challengeObserver.setChallenge(currentChallenge);
+            //challengeObserver.setChallenge(currentChallenge);
         }
 
         @Override

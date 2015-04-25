@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.Layer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,26 +31,25 @@ import java.util.HashMap;
 public class MapManager {
     public final static String TAG = MapManager.class.getSimpleName();
 
-    public GoogleMap googleMap;
-    public HashMap<Marker,Challenge> markerAdapter;
+    public static GoogleMap googleMap;
+    public static  HashMap<Marker,Challenge> markerAdapter;
 
-    private TextView challengeName;
-    private TextView challengeType;
-    private TextView challengeRecord;
+    private static TextView challengeName;
+    private static TextView challengeType;
+    private static TextView challengeRecord;
 
-    private Context context;
+    private static Context context;
 
-    public Layer markerLayer;
-    public Layer challangeLayer;
+    public static Layer markerLayer;
+    public static Layer challengeLayer;
 
-    private ArrayList<OnMarkerFocusChangeListener> onMarkerFocusChangeListeners = new ArrayList<>();
+    private static ArrayList<OnMarkerFocusChangeListener> onMarkerFocusChangeListeners = new ArrayList<>();
 
-    public MapManager( Context context , GoogleMap gMap  ) {
-
-        this.context = context;
+    public static void setMap( Context ctx , GoogleMap gMap  ) {
+        context = ctx;
 
         markerLayer = new Layer( gMap );
-        challangeLayer = new Layer( gMap );
+        challengeLayer = new Layer( gMap );
 
         markerAdapter = new HashMap<>();
 
@@ -62,7 +63,6 @@ public class MapManager {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 zoom(marker);
-                //Challenge.setFocus(markerAdapter.get(marker));
                 marker.showInfoWindow();
                 for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
                     onMarkerFocusChangeListener.onMarkerFocusChange(marker);
@@ -76,18 +76,13 @@ public class MapManager {
                 for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
                     onMarkerFocusChangeListener.onMarkerFocusChange(null);
                 }
-            }
-        });
-        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                //Challenge.setUserLocation(location);
+                ChallengeAdapter.focusChallenge(null);
             }
         });
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
-                View view = ((Activity) MapManager.this.context).getLayoutInflater().inflate(R.layout.info_window,null);
+                View view = ((Activity) MapManager.context).getLayoutInflater().inflate(R.layout.info_window,null);
                 TextView name = (TextView)view.findViewById(R.id.challengeName);
                 name.setText("Test");
                 return view;
@@ -106,75 +101,92 @@ public class MapManager {
         });
     }
 
-    public MapManager zoom( Marker marker ){
+    public static void zoom( Marker marker ){
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
-        return this;
     }
-    public MapManager zoom( LatLng latLng ){
+    public static void zoom( LatLng latLng ){
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        return this;
     }
 
-    public MapManager lock(){
+    public static void lock(){
         googleMap.getUiSettings().setAllGesturesEnabled(false);
-        return this;
     }
-    public MapManager unLock(){
+    public static void unLock(){
         googleMap.getUiSettings().setAllGesturesEnabled(true);
-        return this;
     }
 
     public void clear(){
         markerLayer.clear();
-        challangeLayer.clear();
+        challengeLayer.clear();
         googleMap.clear();
     }
-    public Circle addArea( LatLng position , int radius , int color ){
-        return challangeLayer.addCircle(position, radius, color);
+    public static Circle addArea( @NonNull LatLng position , int radius , int color ){
+        if(challengeLayer!= null) {
+            return challengeLayer.addCircle(position, radius, color);
+        }
+        return null;
     }
 
-    public Marker addMarker( Challenge challenge ){
-        Marker marker = markerLayer.addMarker(new LatLng(0,0));
-        markerAdapter.put( marker , challenge );
-        return marker;
+    public static Marker addMarker( Challenge challenge ){
+        if(challenge.position != null && markerLayer != null) {
+            Marker marker = markerLayer.addMarker(challenge.position);
+            markerAdapter.put(marker, challenge);
+            return marker;
+        }
+        return null;
     }
 
-    public void hideMarker(){
-        markerLayer.hideMarkers();
+    public static void hideMarker(){
+        if( markerLayer != null ) {
+            markerLayer.hideMarkers();
+        }
     }
 
-    public void showMarker(){
+    public static void showMarker(){
         markerLayer.show();
     }
 
-    public void clearMarker(){
+    public static void clearMarker(){
         markerLayer.clear();
     }
 
-    public void clearChallengeLayer(){
-        challangeLayer.clear();
+    public static void clearChallengeLayer(){
+        challengeLayer.clear();
     }
 
-    public Polyline addPolyline( PolylineOptions polylineOptions ){
-        return challangeLayer.addPolyline( polylineOptions );
+    public static Polyline addPolyline( PolylineOptions polylineOptions ){
+        return challengeLayer.addPolyline( polylineOptions );
     }
 
-    public interface OnMarkerFocusChangeListener{
+    public static interface OnMarkerFocusChangeListener{
         public void onMarkerFocusChange( Marker marker );
     }
-    public void addOnMarkerFocusChangeListener(@NonNull OnMarkerFocusChangeListener onMarkerFocusChangeListener ){
+    public static void addOnMarkerFocusChangeListener(@NonNull OnMarkerFocusChangeListener onMarkerFocusChangeListener ){
         onMarkerFocusChangeListeners.add(onMarkerFocusChangeListener);
     }
-    public void removeOnMarkerFocusChangeListener(@NonNull OnMarkerFocusChangeListener onMarkerFocusChangeListener ){
+    public static void removeOnMarkerFocusChangeListener(@NonNull OnMarkerFocusChangeListener onMarkerFocusChangeListener ){
         if( onMarkerFocusChangeListeners.contains(onMarkerFocusChangeListener) ) {
             onMarkerFocusChangeListeners.remove(onMarkerFocusChangeListener);
         }
     }
-    public void removeAllOnMarkerFocusChangeListener( ) {
+    public static void removeAllOnMarkerFocusChangeListener( ) {
         onMarkerFocusChangeListeners.clear();
     }
 }
 
 
-
+/*TRASH
+*
+*
+        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                //Challenge.setUserLocation(location);
+            }
+        });
+*
+*
+*
+*
+* */
 

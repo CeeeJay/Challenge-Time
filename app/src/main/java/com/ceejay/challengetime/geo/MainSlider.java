@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
@@ -76,7 +77,7 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
 
     @Override
     public void onPanelAnchored(View panel) {
-       /* if (ChallengeAdapter.getMapManager() != null) {
+        /*if (ChallengeAdapter.getMapManager() != null) {
             if (Challenge.getFocus() != null) {
                 ChallengeAdapter.getMapManager()
                         .zoom(Challenge.getFocus().getMarker())
@@ -95,10 +96,12 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
     public void onPanelHidden(View panel) {}
 
     public void attachButton( final OptionButton button ){
-      /*  super.attachView(button);
+        super.attachView(button);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            ChallengeAdapter.showChallenge();
             switch (button.getButtonMode()) {
                 case REFRESH:
                     changeButtonMode( OptionButtonMode.REFRESH_LOAD );
@@ -107,48 +110,21 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
                     changeButtonMode( OptionButtonMode.REFRESH );
                     break;
                 case WATCH:
-                    if(Challenge.getFocus() != null){
-                        Challenge.getFocus().show();
-                        changeButtonMode( OptionButtonMode.LOCATION );
-                    }
+
                     break;
                 case LOCATION:
-                    if(Challenge.getUserLatLng() != null) {
-                        smoothSlideTo(0, 2);
-                        ChallengeAdapter.getMapManager().zoom( Challenge.getUserLatLng() );
-                    }
+
                     break;
                 case ACTIVATE:
-                    if(Challenge.getFocus() != null) {
-                        Challenge.getFocus().activate();
-                    }
+
                     break;
                 case STOP:
-                    if(Challenge.getFocus() != null) {
-                        Challenge.getFocus().stop();
-                        changeButtonMode( OptionButtonMode.LOCATION );
-                    }
+
                     break;
             }
 
             }
         });
-        changeButtonMode( button.getButtonMode() );*/
-    }
-
-    public void onMarkerFocus( MapManager mapManager ){
-       /* mapManager.addOnMarkerFocusChangeListener(new MapManager.OnMarkerFocusChangeListener() {
-            @Override
-            public void onMarkerFocusChange(Marker marker) {
-            if ( Challenge.getFocus() != null && Challenge.getFocus().getChallengeState().isFocused()) {
-                if (marker == null) {
-                    clearChallengeEquipment();
-                } else {
-                    initChallengeEquipment();
-                }
-            }
-            }
-        });*/
     }
 
     public void clearChallengeEquipment(){

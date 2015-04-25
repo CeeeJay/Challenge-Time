@@ -86,8 +86,7 @@ public class Geo extends ActionBarActivity implements NavigationDrawerFragment.N
 
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if (googleMap != null) {
-            MapManager mapManager = new MapManager( this , googleMap );
-            slider.onMarkerFocus(mapManager);
+            MapManager.setMap( this , googleMap );
             new LocationObserver(this);
         }
 

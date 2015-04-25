@@ -94,6 +94,10 @@ action#android.intent.action.MAIN
 ADDED from AndroidManifest.xml:35:17
 	android:name
 		ADDED from AndroidManifest.xml:35:25
+activity#com.ceejay.challengetime.news.News
+ADDED from AndroidManifest.xml:38:9
+	android:name
+		ADDED from AndroidManifest.xml:38:19
 activity#com.ceejay.challengetime.main.MainActivity
 ADDED from AndroidManifest.xml:39:9
 	android:screenOrientation
@@ -103,13 +107,29 @@ ADDED from AndroidManifest.xml:39:9
 	android:name
 		ADDED from AndroidManifest.xml:40:13
 activity#com.ceejay.challengetime.editor.EditorActivity
+ADDED from AndroidManifest.xml:44:9
+	android:name
+		ADDED from AndroidManifest.xml:44:19
+activity#com.facebook.LoginActivity
 ADDED from AndroidManifest.xml:45:9
 	android:name
 		ADDED from AndroidManifest.xml:45:19
-activity#com.facebook.LoginActivity
+activity#com.ceejay.challengetime.generallys.Generallys
+ADDED from AndroidManifest.xml:46:9
+	android:name
+		ADDED from AndroidManifest.xml:46:19
+activity#com.ceejay.challengetime.geo.Geo
 ADDED from AndroidManifest.xml:47:9
 	android:name
 		ADDED from AndroidManifest.xml:47:19
+service#com.ceejay.challengetime.challenge.ChallengeObserver
+ADDED from AndroidManifest.xml:49:9
+	android:enabled
+		ADDED from AndroidManifest.xml:51:13
+	android:exported
+		ADDED from AndroidManifest.xml:52:13
+	android:name
+		ADDED from AndroidManifest.xml:50:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

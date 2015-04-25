@@ -1,5 +1,9 @@
 package com.ceejay.challengetime.challenge;
 
+import android.util.JsonReader;
+
+import java.io.IOException;
+
 /**
  * Created by CJay on 21.04.2015 for Challenge Time.
  */
@@ -10,25 +14,30 @@ public class Function {
     public String trigger;
     public String effect;
     public String back;
-
-    public Function() {
-    }
-
-    public Function(Challenge context) {
+    private Executor executor;
+    public Function(JsonReader jsonReader , Challenge context) {
         this.context = context;
-    }
-
-    public Function(String trigger, Challenge context) {
-        this.trigger = trigger;
-        this.context = context;
-    }
-
-    public void setTrigger( String trigger ){
-        this.trigger = trigger;
+        try {
+            jsonReader.beginObject();
+            while (jsonReader.hasNext()) {
+                switch (jsonReader.nextName()) {
+                    case "trigger": this.trigger = jsonReader.nextString(); break;
+                    case "effect": this.effect = jsonReader.nextString(); break;
+                    case "return": this.back = jsonReader.nextString(); break;
+                    default: jsonReader.skipValue(); break;
+                }
+            }
+            jsonReader.endObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        executor = new Executor(effect,context);
     }
 
     public void call(){
-
+        if(executor != null) {
+            executor.execute();
+        }
     }
 
 }
