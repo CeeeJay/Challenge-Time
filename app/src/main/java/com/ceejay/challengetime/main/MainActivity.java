@@ -1,15 +1,16 @@
 package com.ceejay.challengetime.main;
 
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
@@ -18,7 +19,7 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.challenge.ChallengeObserver;
-import com.ceejay.challengetime.challenge.PatternType;
+import com.ceejay.challengetime.challenge.Timer;
 import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.geo.MainSlider;
 import com.ceejay.challengetime.geo.MapManager;
@@ -26,8 +27,6 @@ import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-
-import java.util.regex.Matcher;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -47,6 +46,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context = this;
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -62,22 +63,31 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             }
         });
 
+        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen" ));
+        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen2" ));
+
         Intent i = new Intent(this , ChallengeObserver.class);
         bindService(i, connection, Context.BIND_AUTO_CREATE);
-
-        ChallengeAdapter.addChallenge(ChallengeLoader.load());
 
         slider = (MainSlider) findViewById(R.id.slidingDrawer);
         slider.attachButton( new OptionButton(this) );
 
-        context = this;
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
+/*
+        Timer timer = new Timer();
+        timer.start();
+        timer.addTicker(new Timer.Ticker() {
+            @Override
+            public void tick(final long time) {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView)findViewById(R.id.challengeRecord)).setText(time + "");
+                    }
+                });
+            }
+        });*/
     }
 
     @Override
@@ -105,6 +115,35 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
+    public void onBackPressed() {
+        if( ChallengeAdapter.focusedChallenge == null ) {
+            super.onBackPressed();
+            challengeObserver.onDestroy();
+            unbindService(connection);
+        }else if(ChallengeAdapter.focusedChallenge.status == Challenge.Status.STARTED){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
+            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ChallengeAdapter.getFocusedChallenge().stop();
+                    ChallengeAdapter.focusChallenge(null);
+                    MapManager.showMarkerLayer();
+                }
+            });
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            alertDialog.show();
+        }else if (ChallengeAdapter.focusedChallenge.status == Challenge.Status.SHOWN) {
+            ChallengeAdapter.focusChallenge(null);
+        }
+
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
@@ -126,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             ChallengeObserver.ChallengeBinder binder = (ChallengeObserver.ChallengeBinder) service;
             challengeObserver = binder.getService();
             isBound = true;
-            //challengeObserver.setChallenge(currentChallenge);
+            ChallengeAdapter.setChallengeObserver(challengeObserver);
         }
 
         @Override

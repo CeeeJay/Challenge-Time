@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -1000,6 +1001,8 @@ public class Slider extends ViewGroup {
         mSlideState = PanelState.DRAGGING;
         // Recompute the slide offset based on the new top position
         mSlideOffset = computeSlideOffset(newTop);
+
+        setUpButtons(newTop);
         // Update the parallax based on the new slide offset
         setParalax();
         // Dispatch the slide event
@@ -1095,7 +1098,7 @@ public class Slider extends ViewGroup {
         super.draw(c);
 
         //Elevate buttons
-        setUpButtons( getPanel().getTop() );
+        //setUpButtons( getPanel().getTop() );
 
         // draw the shadow
         if (mShadowDrawable != null) {
@@ -1265,6 +1268,7 @@ public class Slider extends ViewGroup {
             }
 
             mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), target);
+            //setUpButtons((int)yvel);
             invalidate();
         }
 
@@ -1371,7 +1375,7 @@ public class Slider extends ViewGroup {
             ((ViewGroup)getParent()).addView(view);
             attachers.add(new Attacher(view, new Point(offset)));
             offset.x -= getResources().getDimension(R.dimen.option_button) + getResources().getDimension(R.dimen.option_button_margin);
-            setUpButtons(getHeight() - (int) getResources().getDimension(R.dimen.panel_size));
+            //setUpButtons(getHeight() - (int) getResources().getDimension(R.dimen.panel_size));
         }
     }
 

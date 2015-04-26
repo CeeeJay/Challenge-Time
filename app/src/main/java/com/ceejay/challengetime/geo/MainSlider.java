@@ -1,20 +1,33 @@
 package com.ceejay.challengetime.geo;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
+import com.ceejay.challengetime.main.MainActivity;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.
  */
 public class MainSlider extends Slider implements Slider.PanelSlideListener{
     public final static String TAG = MainSlider.class.getSimpleName();
+
+    private Context context;
+
+    private TextView challengeName;
+    private TextView challengeType;
+    private TextView challengeRecord;
 
     public MainSlider( Context context ) {
         super(context);
@@ -32,58 +45,42 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
     }
 
     public void init( Context context ){
-        setMaxTopPosition((int) (context.getResources().getDimension(R.dimen.map_header)));
-        //slider.setTouchEnabled(false);
-        setPanelSlideListener(this);
-        /*Challenge.addOnFocusChangeListener(new Challenge.OnFocusChangeListener() {
+        this.context = context;
 
+        setMaxTopPosition((int) (context.getResources().getDimension(R.dimen.map_header)));
+        setPanelSlideListener(this);
+
+        ChallengeAdapter.addOnChallengeFocusChangeListener(new ChallengeAdapter.OnChallengeFocusChangeListener() {
             @Override
-            public void onFocusChange(Challenge focus) {
-            if(focus != null) {
-                focus.addOnChallengeStateChangeListener(new Challenge.OnChallengeStateChangeListener() {
-                    @Override
-                    public void onStateChange(Challenge.ChallengeState challengeState) {
-                    Log.i(TAG, challengeState.toString());
-                    switch (challengeState) {
-                        case isFocused:
-                            changeButtonMode(OptionButtonMode.WATCH);
-                            break;
-                        case isShown:
-                            changeButtonMode(OptionButtonMode.LOCATION);
-                            break;
-                        case isReady:
-                            changeButtonMode(OptionButtonMode.ACTIVATE);
-                            break;
-                        case isActivated:
-                            changeButtonMode(OptionButtonMode.STOP);
-                            break;
-                        case isStopped:
-                            changeButtonMode(OptionButtonMode.ACTIVATE);
-                    }
-                    }
-                });
+            public void onChallengeFocusChange(Challenge challenge) {
+                if(challenge != null) {
+                    changeButtonMode(OptionButtonMode.WATCH);
+                }else{
+                    changeButtonMode(OptionButtonMode.REFRESH);
+                }
             }
-            }
-        });*/
+        });
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        challengeName =     (TextView)  ((Activity)context).findViewById(R.id.challengeName);
+        challengeType =     (TextView)  ((Activity)context).findViewById(R.id.challengeType);
+        challengeRecord =   (TextView)  ((Activity)context).findViewById(R.id.challengeRecord);
     }
 
     @Override
     public void onPanelCollapsed(View panel) {
-        /*if (ChallengeAdapter.getMapManager() != null) {
-            ChallengeAdapter.getMapManager()
-                    .unLock();
-        }*/
+        MapManager.unLock();
     }
 
     @Override
     public void onPanelAnchored(View panel) {
-        /*if (ChallengeAdapter.getMapManager() != null) {
-            if (Challenge.getFocus() != null) {
-                ChallengeAdapter.getMapManager()
-                        .zoom(Challenge.getFocus().getMarker())
-                        .lock();
-            }
-        }*/
+        if (ChallengeAdapter.focusedChallenge != null) {
+            MapManager.zoom(ChallengeAdapter.focusedChallenge.position);
+            MapManager.lock();
+        }
     }
 
     @Override
@@ -101,27 +98,35 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            ChallengeAdapter.showChallenge();
-            switch (button.getButtonMode()) {
-                case REFRESH:
-                    changeButtonMode( OptionButtonMode.REFRESH_LOAD );
-                    break;
-                case REFRESH_LOAD:
-                    changeButtonMode( OptionButtonMode.REFRESH );
-                    break;
-                case WATCH:
+                switch (button.getButtonMode()) {
+                    case REFRESH:
+                        ChallengeAdapter.challenges.clear();
+                        MapManager.clearMarker();
+                        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen" ));
+                        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen2" ));
+                        //changeButtonMode(OptionButtonMode.REFRESH_LOAD);
+                        break;
+                    case REFRESH_LOAD:
+                        changeButtonMode(OptionButtonMode.REFRESH);
+                        break;
+                    case WATCH:
+                        challengeName.setText(ChallengeAdapter.focusedChallenge.name);
+                        MapManager.showChallengeLayer();
+                        changeButtonMode(OptionButtonMode.ACTIVATE);
+                        break;
+                    case LOCATION:
 
-                    break;
-                case LOCATION:
-
-                    break;
-                case ACTIVATE:
-
-                    break;
-                case STOP:
-
-                    break;
-            }
+                        break;
+                    case ACTIVATE:
+                        ChallengeAdapter.observer.start();
+                        changeButtonMode(OptionButtonMode.STOP);
+                        break;
+                    case STOP:
+                        ChallengeAdapter.observer.stop();
+                        MapManager.showMarkerLayer();
+                        changeButtonMode(OptionButtonMode.REFRESH);
+                        break;
+                }
 
             }
         });

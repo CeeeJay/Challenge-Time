@@ -1,9 +1,11 @@
 package com.ceejay.challengetime.challenge;
 
-import android.graphics.Color;
+import android.app.Activity;
 import android.util.Log;
+import android.widget.TextView;
 
-import com.ceejay.challengetime.geo.MapManager;
+import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -12,13 +14,20 @@ import java.util.HashMap;
 /**
  * Created by CJay on 18.04.2015 for Challenge Time.
  */
-public class Challenge{
+public class Challenge implements Runnable{
     public final static String TAG = Challenge.class.getSimpleName();
+
+    public enum Status{
+        HIDDEN,SHOWN,STARTED
+    }
+
+    public Status status = Status.HIDDEN;
 
     public String name ="Untitled";
     public LatLng position;
     public String publisher;
     public int publish_time;
+    public int interval = 1000;
     public Dictionary dictionary = new Dictionary();
     public ArrayList<Trigger> triggers = new ArrayList<>();
     public HashMap<String,Timer> timer = new HashMap<>();
@@ -34,23 +43,7 @@ public class Challenge{
     private long startTime = 0;
 
     public Challenge(){
-        thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (isRunning) {
-                        startTime = System.currentTimeMillis();
-                        for( Trigger trigger : Challenge.this.triggers ){
-                            trigger.execute();
-                        }
-                        Log.i(TAG, Challenge.this.getInteger("smaller") + "");
-                        Thread.sleep(startTime - System.currentTimeMillis() + 5000);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
     }
 
     public void addTranslate( String key , Translate value ){
@@ -90,6 +83,12 @@ public class Challenge{
     public String getString( String name ) {
         return strings.get( name ).getValue();
     }
+    public Timer getTimer( String name ) {
+        return timer.get( name );
+    }
+    public Area getArea( String name ) {
+        return areas.get( name );
+    }
     public Function getFunction( String name ) {
         return functions.get( name );
     }
@@ -105,15 +104,17 @@ public class Challenge{
     }
 
     public void show(){
-
         for( Area area : areas.values() ) {
-            MapManager.addArea(area.position,area.size/2, Color.parseColor(area.color));
+            area.show();
         }
+        status = Status.SHOWN;
     }
 
     public void start(){
+        thread = new Thread(this);
         isRunning = true;
         thread.start();
+        status = Status.STARTED;
     }
 
     public void stop(){
@@ -123,13 +124,31 @@ public class Challenge{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        status = Status.HIDDEN;
     }
 
-
+    @Override
+    public void run() {
+        try {
+            long sleepTime;
+            while (isRunning) {
+                startTime = System.currentTimeMillis();
+                ((Activity) MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView)((Activity) MainActivity.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("Stoppuhr1").toString());
+                    }
+                });
+                for (Trigger trigger : Challenge.this.triggers) {
+                    trigger.execute();
+                }
+                sleepTime = startTime - System.currentTimeMillis() + interval;
+                if(sleepTime > 0) {
+                    Thread.sleep(sleepTime);
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-
-
-/*public void setDictionary( Dictionary dictionary ){
-        this.dictionary = dictionary;
-    }*/

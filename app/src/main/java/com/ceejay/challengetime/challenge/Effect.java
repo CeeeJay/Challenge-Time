@@ -1,5 +1,10 @@
 package com.ceejay.challengetime.challenge;
 
+import android.app.Activity;
+import android.util.Log;
+
+import com.ceejay.challengetime.main.MainActivity;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,8 +25,6 @@ public class Effect {
     Pattern pattern = Pattern.compile("(?:(\\S+)#)(\\S+)\\s*(:=)\\s*([!])?\\s*(?:(\\S+)#)?(\\S+)");
     Pattern patternCount = Pattern.compile("(?:(\\S+)#(\\S+))\\s*(\\+\\+|\\-\\-)");
     Pattern patternCountValue = Pattern.compile("(?:(\\S+)#(\\S+))\\s*(\\+=|\\-=)\\s*(\\-?[0-9]+)");
-    Pattern patternFunction = Pattern.compile("(\\S+)\\(\\)");
-    Pattern patternNumber = Pattern.compile("^\\-?[0-9]+$");
 
     public Effect( String effect , Challenge context ) {
         this.context = context;
@@ -29,9 +32,8 @@ public class Effect {
         Matcher m = pattern.matcher(effect);
         Matcher mC = patternCount.matcher(effect);
         Matcher mCV = patternCountValue.matcher(effect);
-        Matcher mF = patternFunction.matcher(effect);
+        Matcher mF = PatternType.function.matcher(effect);
         if(m.find()){
-            //Log.i(TAG, "Hab da was gefunden " + m.group(1) + " ; " + m.group(2) + " ; " + m.group(3) + " ; " + m.group(4) + " ; " + m.group(5) + " ; " + m.group(6));
             first = m.group(2);
             second = m.group(6);
             firstType = m.group(1);
@@ -46,7 +48,7 @@ public class Effect {
                 if(first.equals("true") || first.equals("false")){
                     firstType = "boolean";
                 }else{
-                    Matcher mN = patternNumber.matcher(first);
+                    Matcher mN = PatternType.number.matcher(first);
                     if(mN.find()){
                         firstType = "number";
                     }
@@ -57,7 +59,7 @@ public class Effect {
                 if(second.equals("true") || second.equals("false")){
                     secondType = "boolean";
                 }else{
-                    Matcher mN = patternNumber.matcher(second);
+                    Matcher mN = PatternType.number.matcher(second);
                     if(mN.find()){
                         secondType = "number";
                     }
@@ -78,10 +80,8 @@ public class Effect {
             value = Integer.parseInt(mCV.group(4));
 
         }else if(mF.find()){
-
-            first = mF.group(1);
-            firstType = "function";
-
+            firstType = mF.group(1);
+            first = mF.group(2);
         }
     }
 
@@ -97,7 +97,6 @@ public class Effect {
                         }
                     }else if (secondType.equals("boolean")){
                         context.getBooleanHolder(first).setValue(Boolean.parseBoolean(second));
-
                     }
                     break;
                 case "int":
@@ -113,7 +112,38 @@ public class Effect {
                             break;
                     }
                     break;
-                case "function":
+                case "area":
+                    if( method.equals(":=") ){
+                        final Matcher m = PatternType.object.matcher(first);
+                        if( m.find() ){
+                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    switch (m.group(2)) {
+                                        case "color":
+                                            context.getArea(m.group(1)).changeColor(second);
+                                            break;
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                    break;
+                case "timer":
+                    final Matcher m = PatternType.object.matcher(first);
+                    if( m.find() ) {
+                        switch (m.group(2)){
+                            case "start":case "Start":
+                                context.getTimer(m.group(1)).start();
+                                break;
+                            case "stop":case "Stop":
+                                context.getTimer(m.group(1)).stop();
+                                break;
+                        }
+                    }
+                    break;
+                case "function":case "func":
                     context.getFunction(first).call();
                     break;
             }

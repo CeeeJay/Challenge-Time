@@ -1,52 +1,60 @@
 package com.ceejay.challengetime.challenge;
 
-import android.content.Context;
-import android.os.Vibrator;
+import android.util.Log;
 
-import com.ceejay.challengetime.main.MainActivity;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 /**
  * Created by CJay on 21.04.2015 for Challenge Time.
  */
-public class Timer {
+public class Timer implements Runnable {
     public final static String TAG = Timer.class.getSimpleName();
 
-    public double weight = 1;
     public long startTime;
     public long currentTime;
     public boolean reverse = false;
     private static Thread thread;
     private boolean isClockRunning = false;
-    private Vibrator vibrator;
-    private int startVibrate = 0;
-    private int pauseVibrate = 0;
-    private int stopVibrate = 0;
 
-    private void startClock(){
-        if( thread == null ) {
-            isClockRunning = true;
-            thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (isClockRunning) {
-                        try {
-                            Thread.sleep(1);
-                            if(reverse){
-                                currentTime -= weight;
-                            }else{
-                                currentTime += weight;
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+    private ArrayList<Ticker> tickers;
+
+    public Timer() {
+        tickers = new ArrayList<>();
+    }
+
+    @Override
+    public void run() {
+        while (isClockRunning) {
+            try {
+                currentTime = System.currentTimeMillis() - startTime;
+                for(Ticker ticker : tickers) {
+                    if (ticker != null) {
+                        ticker.tick(currentTime);
                     }
                 }
-            });
+
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setTime( long time ){
+        currentTime = time;
+    }
+
+    public void start(){
+        if( thread == null ) {
+            startTime = System.currentTimeMillis();
+            isClockRunning = true;
+            thread = new Thread(this);
             thread.start();
         }
     }
 
-    private void stopClock(){
+    public void stop(){
         if( thread != null  ) {
             try {
                 isClockRunning = false;
@@ -58,50 +66,61 @@ public class Timer {
         thread = null;
     }
 
-    public void setTime( long time ){
-        currentTime = time;
-    }
-
-    public void start(){
-        if(startTime == 0) {
-            startTime = System.currentTimeMillis();
-        }
-        startClock();
-        vibrate(startVibrate);
-    }
-    public void pause(){
-        stopClock();
-        vibrate(pauseVibrate);
-    }
-    public void stop(){
-        stopClock();
-        startTime = 0;
-        currentTime = 0;
-        vibrate(stopVibrate);
-    }
-
-    public void vibrate( int time ){
-        if(vibrator== null){
-            vibrator = (Vibrator) MainActivity.getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
-        }
-        if(vibrator != null){
-            vibrator.vibrate(time);
-        }
-    }
     public long getTime(){
         return currentTime;
     }
 
-    public void setStartVibrate( int startVibrate ){
-        this.startVibrate = startVibrate;
-    }
-    public void setStopVibrate( int stopVibrate ) {
-        this.stopVibrate = stopVibrate;
-    }
-    public void setPauseVibrate( int pauseVibrate ) {
-        this.pauseVibrate = pauseVibrate;
+
+    public void addTicker( Ticker ticker ){
+        tickers.add(ticker);
     }
 
+    public interface Ticker{
+        public void tick( long time );
+    }
+
+    @Override
+    public String toString() {
+        String returner = "";
+
+        String milliSeconds = (currentTime / 10 ) % 100 + "";
+        String seconds = ( currentTime / 1000 ) % 60 + "";
+        String minutes = ( currentTime / 60000 ) % 60 + "";
+        String hours = ( currentTime / 3600000 ) % 24 + "";
+
+        if( !hours.equals("0") ) {
+            if (hours.length() == 1) {
+                returner += "0" + hours + ":";
+            }else{
+                returner += hours + ":";
+            }
+        }
+
+        if( !(minutes.equals("0") && hours.equals("0")) ) {
+            if (minutes.length() == 1) {
+                returner += "0" + minutes + ":";
+            }else{
+                returner += minutes + ":";
+            }
+        }
+
+        if( !(seconds.equals("0") && minutes.equals("0") && hours.equals("0")) ) {
+            if (seconds.length() == 1) {
+                returner += "0" + seconds + ":";
+            }else{
+                returner += seconds + ":";
+            }
+        }
+
+        if (milliSeconds.length() == 1) {
+            returner += "0" + milliSeconds;
+        }else{
+            returner += milliSeconds;
+        }
+
+        return returner;
+
+    }
 }
 
 

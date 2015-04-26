@@ -2,6 +2,9 @@ package com.ceejay.challengetime.challenge;
 
 import android.util.Log;
 
+import com.ceejay.challengetime.geo.LocationObserver;
+import com.ceejay.challengetime.helper.Distance;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,8 +19,7 @@ public class Comparator {
     private String first , second;
     private String firstType = "undefined" , secondType = "undefined";
     private Challenge context;
-    private Pattern pattern = Pattern.compile("(?:(\\S+)#)?(\\S+)\\s*([<||>||=||>=||<=])\\s*(?:(\\S+)#)?(\\S+)");
-    //private Pattern patternNumber = Pattern.compile("^\\-?[0-9]+$");
+    private Pattern pattern = Pattern.compile("(?:(\\S+)#)?(\\S+)\\s*(<|>|=|>=|<=|->|<-])\\s*(?:(\\S+)#)?(\\S+)");
 
     public Comparator(String comparable, Challenge context) {
         this.context = context;
@@ -25,7 +27,6 @@ public class Comparator {
 
         Matcher m = pattern.matcher(comparable);
         if(m.find()){
-            //Log.i( m.group(0) + " ; " + m.group(1) + " ; " + m.group(3) + " ; " + m.group(4) + " ; " + m.group(5) )
             this.first = m.group(2);
             this.second = m.group(5);
             this.firstType = m.group(1);
@@ -54,17 +55,20 @@ public class Comparator {
             }
 
             switch(m.group(3)){
+                case "->": this.comparator = 3; break;
                 case ">=": this.comparator = 2; break;
                 case ">": this.comparator = 1; break;
                 case "=": this.comparator = 0; break;
                 case "<": this.comparator = -1; break;
                 case "<=": this.comparator = -2; break;
+                case "<-": this.comparator = -3; break;
             }
         }
     }
 
     public boolean compare(){
         if( firstType != null && secondType != null ) {
+
             int result = 10;
             if (firstType.equals("number") && secondType.equals("number")) {
                 result =  Integer.valueOf(first).compareTo(Integer.valueOf(second));
@@ -76,9 +80,30 @@ public class Comparator {
                 result = context.getInteger(first).compareTo(context.getInteger(second));
             } else if (firstType.equals("bool") && secondType.equals("boolean")) {
                 result = context.getBooleanHolder(first).getValue().compareTo(Boolean.parseBoolean(second));
-            } else if (comparable.equals("true")) {
-                return true;
+            } else if (firstType.equals("area") && secondType.equals("user")) {
+                if(LocationObserver.location == null){
+                    return false;
+                }
+                if( this.comparator == 3 ){
+                    return Distance.between( LocationObserver.location , context.getArea(second).position ) >= context.getArea(second).radius;
+                }else if( this.comparator == -3 ){
+                    return Distance.between( LocationObserver.location , context.getArea(second).position ) < context.getArea(second).radius;
+                }
+            } else if (firstType.equals("user") && secondType.equals("area")) {
+                if(LocationObserver.location == null){
+                    return false;
+                }
+                if( this.comparator == 3 ){
+                    return Distance.between( LocationObserver.location , context.getArea(second).position ) < context.getArea(second).radius;
+                }else if( this.comparator == -3 ){
+                    return Distance.between( LocationObserver.location , context.getArea(second).position ) >= context.getArea(second).radius;
+                }
+            } else if (firstType.equals("timer") && secondType.equals("number")){
+                result = Long.valueOf(context.getTimer(first).getTime()).compareTo(Long.parseLong(second));
+            } else {
+                return comparable.equals("true");
             }
+
             return comparator == result || ( comparator == 2 && ( result == 1 || result == 0 ) ) || ( comparator == -2 && ( result == -1 || result == 0 ));
 
         }else{

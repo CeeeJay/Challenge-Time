@@ -15,6 +15,7 @@ import com.ceejay.challengetime.helper.Layer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.
@@ -57,8 +59,10 @@ public class MapManager {
         challengeType = (TextView) ((Activity)context).findViewById(R.id.challengeType);
         challengeRecord = (TextView) ((Activity)context).findViewById(R.id.challengeRecord);
 
+
+
         googleMap = gMap;
-        googleMap.setMyLocationEnabled(true);
+        //googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -67,6 +71,7 @@ public class MapManager {
                 for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
                     onMarkerFocusChangeListener.onMarkerFocusChange(marker);
                 }
+                ChallengeAdapter.focusChallenge(markerAdapter.get(marker));
                 return true;
             }
         });
@@ -76,7 +81,9 @@ public class MapManager {
                 for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {
                     onMarkerFocusChangeListener.onMarkerFocusChange(null);
                 }
-                ChallengeAdapter.focusChallenge(null);
+                if(ChallengeAdapter.focusedChallenge != null && ChallengeAdapter.focusedChallenge.status == Challenge.Status.HIDDEN) {
+                    ChallengeAdapter.focusChallenge(null);
+                }
             }
         });
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -126,6 +133,12 @@ public class MapManager {
         }
         return null;
     }
+    public static Circle addArea( @NonNull CircleOptions options){
+        if(challengeLayer!= null) {
+            return challengeLayer.addCircle(options);
+        }
+        return null;
+    }
 
     public static Marker addMarker( Challenge challenge ){
         if(challenge.position != null && markerLayer != null) {
@@ -136,14 +149,18 @@ public class MapManager {
         return null;
     }
 
-    public static void hideMarker(){
-        if( markerLayer != null ) {
-            markerLayer.hideMarkers();
+    public static void showMarkerLayer(){
+        if( markerLayer != null && challengeLayer != null) {
+            challengeLayer.clear();
+            markerLayer.show();
         }
     }
 
-    public static void showMarker(){
-        markerLayer.show();
+    public static void showChallengeLayer(){
+        if( markerLayer != null && ChallengeAdapter.focusedChallenge != null) {
+            markerLayer.hideMarkers();
+            ChallengeAdapter.focusedChallenge.show();
+        }
     }
 
     public static void clearMarker(){
@@ -151,7 +168,7 @@ public class MapManager {
     }
 
     public static void clearChallengeLayer(){
-        challengeLayer.clear();
+        ;
     }
 
     public static Polyline addPolyline( PolylineOptions polylineOptions ){

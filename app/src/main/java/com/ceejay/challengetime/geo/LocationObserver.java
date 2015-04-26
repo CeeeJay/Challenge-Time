@@ -6,6 +6,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.ceejay.challengetime.main.MainActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by CJay on 23.01.2015 for Challenge Time.
@@ -17,6 +21,8 @@ public class LocationObserver {
     private String provider;
     private MyLocationListener mylistener;
     private Criteria criteria;
+
+    public static Location location;
 
     public LocationObserver(Context context) {
         // Get the location manager
@@ -44,8 +50,8 @@ public class LocationObserver {
     private class MyLocationListener implements LocationListener {
 
         @Override
-        public void onLocationChanged(Location location) {
-
+        public void onLocationChanged(Location pos) {
+            location = pos;
         }
 
         @Override
@@ -58,7 +64,7 @@ public class LocationObserver {
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            location = null;
         }
     }
 }

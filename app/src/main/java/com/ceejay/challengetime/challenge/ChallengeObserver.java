@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.ceejay.challengetime.main.MainActivity;
 
 public class ChallengeObserver extends Service {
     public final static String TAG = ChallengeObserver.class.getSimpleName();
@@ -35,12 +38,18 @@ public class ChallengeObserver extends Service {
     }
 
     public void setChallenge( Challenge challenge ){
+        this.challenge = challenge;
+    }
+
+    public void start(){
+        if(challenge != null){
+            challenge.start();
+        }
+    }
+
+    public void stop(){
         if(challenge != null){
             challenge.stop();
-        }
-        this.challenge = challenge;
-        if(challenge != null) {
-            challenge.start();
         }
     }
 

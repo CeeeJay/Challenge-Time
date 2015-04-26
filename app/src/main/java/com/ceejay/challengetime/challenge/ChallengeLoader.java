@@ -19,8 +19,8 @@ public class ChallengeLoader {
 
     public ChallengeLoader() {}
 
-    public static Challenge load(){
-        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/brunnen.challenge");
+    public static Challenge load( String name ){
+        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
         InputStream stream = contact.send(new Bundle());
         return StreamToChallenge(stream);
     }
@@ -49,9 +49,6 @@ public class ChallengeLoader {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 switch (jsonReader.nextName()) {
-                    case "weight":
-                        timer.weight = jsonReader.nextDouble();
-                        break;
                     case "startTime":
                         timer.startTime = jsonReader.nextInt();
                         break;
@@ -86,13 +83,13 @@ public class ChallengeLoader {
                     case "color":
                         area.color = jsonReader.nextString();
                         switch (area.color){
-                            case "start":area.color="#7700FF00";break;
-                            case "point":area.color="#77777777";break;
-                            case "finish":area.color="#77FF0000";break;
+                            case "start":   area.color="#7700FF00";break;
+                            case "point":   area.color="#77777777";break;
+                            case "finish":  area.color="#77FF0000";break;
                         }
                         break;
-                    case "size":
-                        area.size = jsonReader.nextInt();
+                    case "radius":
+                        area.radius = jsonReader.nextInt();
                         break;
                     case "focus":
                         area.focus = jsonReader.nextBoolean();
@@ -190,11 +187,12 @@ public class ChallengeLoader {
         while (jsonReader.hasNext()){
             switch (jsonReader.nextName()) {
                 case "dictionary":      readDictionary(jsonReader, challenge); break;
-                case "variables":       readVariables(jsonReader, challenge); break;
                 case "name":            challenge.name = jsonReader.nextString(); break;
                 case "position":        challenge.position = readPosition(jsonReader); break;
                 case "publisher":       challenge.publisher = jsonReader.nextString();break;
                 case "publish_time":    challenge.publish_time = jsonReader.nextInt();break;
+                case "interval":        challenge.interval = jsonReader.nextInt();break;
+                case "variables":       readVariables(jsonReader, challenge); break;
                 case "timer":           readTimer(jsonReader, challenge);break;
                 case "geometry":        readGeometry(jsonReader, challenge);break;
                 case "functions":       readFunction(jsonReader, challenge);break;
