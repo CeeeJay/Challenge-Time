@@ -1,7 +1,6 @@
 package com.ceejay.challengetime.challenge;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.ceejay.challengetime.main.MainActivity;
 

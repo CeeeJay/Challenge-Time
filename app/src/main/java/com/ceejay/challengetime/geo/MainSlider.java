@@ -2,9 +2,7 @@ package com.ceejay.challengetime.geo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +13,6 @@ import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.helper.slider.OptionButtonMode;
 import com.ceejay.challengetime.helper.slider.Slider;
-import com.ceejay.challengetime.main.MainActivity;
 
 /**
  * Created by CJay on 06.02.2015 for Challenge Time.

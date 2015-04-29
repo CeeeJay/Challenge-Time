@@ -2,9 +2,7 @@ package com.ceejay.challengetime.geo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,12 +16,13 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by CJay on 25.01.2015 for Challenge Time.
@@ -35,10 +34,6 @@ public class MapManager {
 
     public static GoogleMap googleMap;
     public static  HashMap<Marker,Challenge> markerAdapter;
-
-    private static TextView challengeName;
-    private static TextView challengeType;
-    private static TextView challengeRecord;
 
     private static Context context;
 
@@ -55,14 +50,8 @@ public class MapManager {
 
         markerAdapter = new HashMap<>();
 
-        challengeName = (TextView) ((Activity)context).findViewById(R.id.challengeName);
-        challengeType = (TextView) ((Activity)context).findViewById(R.id.challengeType);
-        challengeRecord = (TextView) ((Activity)context).findViewById(R.id.challengeRecord);
-
-
-
         googleMap = gMap;
-        //googleMap.setMyLocationEnabled(true);
+        googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -127,12 +116,28 @@ public class MapManager {
         challengeLayer.clear();
         googleMap.clear();
     }
+
     public static Circle addArea( @NonNull LatLng position , int radius , int color ){
         if(challengeLayer!= null) {
             return challengeLayer.addCircle(position, radius, color);
         }
         return null;
     }
+
+    public static Polygon addPolygon( @NonNull  ArrayList<LatLng> points , int color ){
+        if(challengeLayer!= null) {
+            return challengeLayer.addPolygon(points, color);
+        }
+        return null;
+    }
+
+    public static Polygon addPolygon( PolygonOptions options ){
+        if(challengeLayer!= null) {
+            return challengeLayer.addPolygon(options);
+        }
+        return null;
+    }
+
     public static Circle addArea( @NonNull CircleOptions options){
         if(challengeLayer!= null) {
             return challengeLayer.addCircle(options);
@@ -141,7 +146,7 @@ public class MapManager {
     }
 
     public static Marker addMarker( Challenge challenge ){
-        if(challenge.position != null && markerLayer != null) {
+        if( challenge != null && challenge.position != null && markerLayer != null ) {
             Marker marker = markerLayer.addMarker(challenge.position);
             markerAdapter.put(marker, challenge);
             return marker;
@@ -165,6 +170,7 @@ public class MapManager {
 
     public static void clearMarker(){
         markerLayer.clear();
+        markerAdapter.clear();
     }
 
     public static void clearChallengeLayer(){

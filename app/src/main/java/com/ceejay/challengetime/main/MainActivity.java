@@ -19,7 +19,6 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.challenge.ChallengeObserver;
-import com.ceejay.challengetime.challenge.Timer;
 import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.geo.MainSlider;
 import com.ceejay.challengetime.geo.MapManager;
@@ -74,20 +73,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-/*
-        Timer timer = new Timer();
-        timer.start();
-        timer.addTicker(new Timer.Ticker() {
-            @Override
-            public void tick(final long time) {
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((TextView)findViewById(R.id.challengeRecord)).setText(time + "");
-                    }
-                });
-            }
-        });*/
+
+        //Log.i(TAG, COMP.eval(" ( 2 + 3 = 5 ) && true") );
     }
 
     @Override
@@ -117,9 +104,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     public void onBackPressed() {
         if( ChallengeAdapter.focusedChallenge == null ) {
-            super.onBackPressed();
-            challengeObserver.onDestroy();
             unbindService(connection);
+            super.onBackPressed();
         }else if(ChallengeAdapter.focusedChallenge.status == Challenge.Status.STARTED){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setMessage("Möchtest du die Challenge abbrechen?");

@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.helper;
+package com.ceejay.challengetime.Trash;
 
 import android.content.Context;
 import android.graphics.Canvas;

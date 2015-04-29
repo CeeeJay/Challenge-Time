@@ -3,7 +3,6 @@ package com.ceejay.challengetime.challenge;
 import android.support.annotation.NonNull;
 
 import com.ceejay.challengetime.geo.MapManager;
-import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 
@@ -23,10 +22,11 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
         observer = o;
     }
 
-    public static void addChallenge(@NonNull Challenge challenge){
-        challenges.add(challenge);
-        //challenge.position = new LatLng(49.29055,7.12955);
-        MapManager.addMarker(challenge);
+    public static void addChallenge(Challenge challenge){
+        if(challenge != null) {
+            challenges.add(challenge);
+            MapManager.addMarker(challenge);
+        }
     }
 
     public static void focusChallenge( Challenge challenge ){

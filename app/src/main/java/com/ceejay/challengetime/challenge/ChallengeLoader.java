@@ -1,5 +1,6 @@
 package com.ceejay.challengetime.challenge;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.JsonReader;
 
@@ -49,9 +50,9 @@ public class ChallengeLoader {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 switch (jsonReader.nextName()) {
-                    case "startTime":
+                    /*case "startTime":
                         timer.startTime = jsonReader.nextInt();
-                        break;
+                        break;*/
                     case "reverse":
                         timer.reverse = jsonReader.nextBoolean();
                         break;
@@ -147,11 +148,53 @@ public class ChallengeLoader {
         jsonReader.endArray();
     }
 
+    public static void readPolygon( JsonReader jsonReader , Challenge challenge) throws IOException{
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            Polygon polygon = new Polygon();
+            challenge.addPolygon(jsonReader.nextName(), polygon);
+
+            jsonReader.beginObject();
+            while (jsonReader.hasNext()) {
+                switch (jsonReader.nextName()) {
+                    case "title":
+                        polygon.title = jsonReader.nextString();
+                        break;
+                    case "description":
+                        polygon.description = jsonReader.nextString();
+                        break;
+                    case "strokeColor":
+                        polygon.strokeColor = Color.parseColor(jsonReader.nextString());
+                        break;
+                    case "strokeWidth":
+                        polygon.strokeWidth = jsonReader.nextInt();
+                        break;
+                    case "fillColor":
+                        polygon.fillColor = Color.parseColor(jsonReader.nextString());
+                        break;
+                    case "points":
+                        jsonReader.beginArray();
+                        while (jsonReader.hasNext()){
+                            polygon.points.add(readPosition(jsonReader));
+                        }
+                        jsonReader.endArray();
+                        break;
+                    default:
+                        jsonReader.skipValue();
+                        break;
+                }
+            }
+            jsonReader.endObject();
+        }
+        jsonReader.endObject();
+    }
+
     public static void readGeometry(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             switch(jsonReader.nextName()){
-                case "areas": readArea(jsonReader ,challenge); break;
+                case "areas":   readArea(jsonReader ,challenge); break;
+                case "polygons": readPolygon(jsonReader, challenge); break;
                 default: jsonReader.skipValue(); break;
             }
         }
@@ -186,12 +229,12 @@ public class ChallengeLoader {
         jsonReader.beginObject();
         while (jsonReader.hasNext()){
             switch (jsonReader.nextName()) {
-                case "dictionary":      readDictionary(jsonReader, challenge); break;
                 case "name":            challenge.name = jsonReader.nextString(); break;
                 case "position":        challenge.position = readPosition(jsonReader); break;
                 case "publisher":       challenge.publisher = jsonReader.nextString();break;
                 case "publish_time":    challenge.publish_time = jsonReader.nextInt();break;
                 case "interval":        challenge.interval = jsonReader.nextInt();break;
+                case "dictionary":      readDictionary(jsonReader, challenge); break;
                 case "variables":       readVariables(jsonReader, challenge); break;
                 case "timer":           readTimer(jsonReader, challenge);break;
                 case "geometry":        readGeometry(jsonReader, challenge);break;

@@ -6,10 +6,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import com.ceejay.challengetime.main.MainActivity;
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by CJay on 23.01.2015 for Challenge Time.

@@ -30,8 +30,9 @@ public class Challenge implements Runnable{
     public int interval = 1000;
     public Dictionary dictionary = new Dictionary();
     public ArrayList<Trigger> triggers = new ArrayList<>();
-    public HashMap<String,Timer> timer = new HashMap<>();
+    public HashMap<String,Timer> timers = new HashMap<>();
     public HashMap<String,Area> areas = new HashMap<>();
+    public HashMap<String,Polygon> polygons = new HashMap<>();
     public HashMap<String,Function> functions = new HashMap<>();
     public HashMap<String,Holder<Integer>> integers = new HashMap<>();
     public HashMap<String,Holder<String>> strings = new HashMap<>();
@@ -50,7 +51,7 @@ public class Challenge implements Runnable{
         dictionary.addTranslate(key, value);
     }
     public void addTimer( String key , Timer value ){
-        timer.put( key , value );
+        timers.put( key , value );
     }
     public void addInteger( String key , Integer integer ){
         this.integers.put(key, new Holder<>(integer) );
@@ -63,6 +64,9 @@ public class Challenge implements Runnable{
     }
     public void addArea( String key , Area value ){
         areas.put( key , value );
+    }
+    public void addPolygon( String key , Polygon value ){
+        polygons.put( key , value );
     }
     public void addFunction( String key , Function value ){
         functions.put( key , value );
@@ -84,10 +88,13 @@ public class Challenge implements Runnable{
         return strings.get( name ).getValue();
     }
     public Timer getTimer( String name ) {
-        return timer.get( name );
+        return timers.get( name );
     }
     public Area getArea( String name ) {
         return areas.get( name );
+    }
+    public Polygon getPolygon( String name ) {
+        return polygons.get( name );
     }
     public Function getFunction( String name ) {
         return functions.get( name );
@@ -107,6 +114,13 @@ public class Challenge implements Runnable{
         for( Area area : areas.values() ) {
             area.show();
         }
+        for( Polygon polygon : polygons.values() ) {
+            polygon.show();
+            Log.i(TAG,"JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3");
+
+        }
+        Log.i(TAG,polygons.size() + "");
+
         status = Status.SHOWN;
     }
 
@@ -119,6 +133,9 @@ public class Challenge implements Runnable{
 
     public void stop(){
         isRunning = false;
+        for( Timer timer : timers.values() ){
+            timer.stop();
+        }
         try {
             thread.join();
         } catch (InterruptedException e) {

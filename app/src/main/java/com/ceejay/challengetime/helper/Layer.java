@@ -1,10 +1,6 @@
 package com.ceejay.challengetime.helper;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
@@ -12,6 +8,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -25,6 +23,7 @@ public class Layer {
 
     public ArrayList<Marker> markers;
     public ArrayList<Polyline> polylines;
+    public ArrayList<Polygon> polygons;
     public ArrayList<Circle> circles;
 
     public GoogleMap googleMap;
@@ -33,6 +32,7 @@ public class Layer {
         markers = new ArrayList<>();
         polylines = new ArrayList<>();
         circles = new ArrayList<>();
+        polygons = new ArrayList<>();
         this.googleMap = googleMap;
     }
 
@@ -154,22 +154,63 @@ public class Layer {
         polylines.clear();
     }
 
+    //#########################Polyline
+
+    public Polygon addPolygon( ArrayList<LatLng> points , int color ){
+        PolygonOptions polygonOptions = new PolygonOptions().addAll( points ).fillColor(color);
+        return addPolygon(polygonOptions);
+    }
+    public Polygon addPolygon(PolygonOptions polygonOptions){
+        return addPolygon(googleMap.addPolygon(polygonOptions));
+    }
+    public Polygon addPolygon( Polygon polygon ){
+        polygons.add( polygon );
+        return polygons.get(polygons.size() - 1);
+    }
+    public Polygon getPolygone( int index ){
+        return polygons.get(index);
+    }
+
+    public void showPolygons(){
+        for( Polygon polygon : polygons ){
+            polygon.setVisible(true);
+        }
+    }
+    public void hidePolygons(){
+        for( Polygon polygon : polygons ){
+            polygon.setVisible(false);
+        }
+    }
+    public void removePolygon( Polygon polygon ){
+        polygon.remove();
+        polygons.remove( polygon );
+    }
+    public void clearPolygons(){
+        for( Polygon polygon : polygons ){
+            polygon.remove();
+        }
+        polygons.clear();
+    }
+
     //All Handlder
 
     public void show(){
         showMarkers();
         showCircles();
         showPolylines();
+        showPolygons();
     }
     public void hide(){
         hideMarkers();
         hideCircles();
         hidePolylines();
+        hidePolygons();
     }
     public void clear(){
         clearMarker();
         clearCircle();
         clearPolyline();
+        clearPolygons();
     }
 
 }

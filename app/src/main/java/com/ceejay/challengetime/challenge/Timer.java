@@ -1,9 +1,6 @@
 package com.ceejay.challengetime.challenge;
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 
 /**
  * Created by CJay on 21.04.2015 for Challenge Time.
@@ -11,8 +8,10 @@ import java.util.regex.Matcher;
 public class Timer implements Runnable {
     public final static String TAG = Timer.class.getSimpleName();
 
-    public long startTime;
-    public long currentTime;
+    public long currentTime = 0;
+    public long lastTime;
+    public long sleepTime = 10;
+    public long circleTime = 10;
     public boolean reverse = false;
     private static Thread thread;
     private boolean isClockRunning = false;
@@ -25,16 +24,19 @@ public class Timer implements Runnable {
 
     @Override
     public void run() {
+        lastTime = System.currentTimeMillis();
         while (isClockRunning) {
             try {
-                currentTime = System.currentTimeMillis() - startTime;
+                circleTime = System.currentTimeMillis() - lastTime;
+                currentTime += circleTime;
+                lastTime = System.currentTimeMillis();
+                Thread.sleep(Math.max(2 * sleepTime - circleTime,0));
+
                 for(Ticker ticker : tickers) {
                     if (ticker != null) {
                         ticker.tick(currentTime);
                     }
                 }
-
-                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -47,7 +49,7 @@ public class Timer implements Runnable {
 
     public void start(){
         if( thread == null ) {
-            startTime = System.currentTimeMillis();
+            currentTime = 0;
             isClockRunning = true;
             thread = new Thread(this);
             thread.start();
@@ -59,17 +61,16 @@ public class Timer implements Runnable {
             try {
                 isClockRunning = false;
                 thread.join();
+                thread = null;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        thread = null;
     }
 
     public long getTime(){
         return currentTime;
     }
-
 
     public void addTicker( Ticker ticker ){
         tickers.add(ticker);
@@ -106,9 +107,9 @@ public class Timer implements Runnable {
 
         if( !(seconds.equals("0") && minutes.equals("0") && hours.equals("0")) ) {
             if (seconds.length() == 1) {
-                returner += "0" + seconds + ":";
+                returner += "0" + seconds + ".";
             }else{
-                returner += seconds + ":";
+                returner += seconds + ".";
             }
         }
 
