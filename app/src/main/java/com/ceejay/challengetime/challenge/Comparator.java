@@ -80,23 +80,23 @@ public class Comparator {
                 result = context.getInteger(first).compareTo(context.getInteger(second));
             } else if (firstType.equals("bool") && secondType.equals("boolean")) {
                 result = context.getBooleanHolder(first).getValue().compareTo(Boolean.parseBoolean(second));
-            } else if (firstType.equals("area") && secondType.equals("user")) {
-                if(LocationObserver.location == null){
+            } else if (firstType.equals("area") && secondType.equals("user") && context.getArea(second).visible) {
+                if(LocationObserver.position == null){
                     return false;
                 }
                 if( this.comparator == 3 ){
-                    return Distance.between( LocationObserver.location , context.getArea(second).position ) >= context.getArea(second).radius;
+                    return Distance.between( LocationObserver.position , context.getArea(second).position ) >= context.getArea(second).radius;
                 }else if( this.comparator == -3 ){
-                    return Distance.between( LocationObserver.location , context.getArea(second).position ) < context.getArea(second).radius;
+                    return Distance.between( LocationObserver.position , context.getArea(second).position ) < context.getArea(second).radius;
                 }
-            } else if (firstType.equals("user") && secondType.equals("area")) {
-                if(LocationObserver.location == null){
+            } else if (firstType.equals("user") && secondType.equals("area") && context.getArea(second).visible) {
+                if(LocationObserver.position == null){
                     return false;
                 }
                 if( this.comparator == 3 ){
-                    return Distance.between( LocationObserver.location , context.getArea(second).position ) < context.getArea(second).radius;
+                    return Distance.between( LocationObserver.position , context.getArea(second).position ) < context.getArea(second).radius;
                 }else if( this.comparator == -3 ){
-                    return Distance.between( LocationObserver.location , context.getArea(second).position ) >= context.getArea(second).radius;
+                    return Distance.between( LocationObserver.position , context.getArea(second).position ) >= context.getArea(second).radius;
                 }
             } else if (firstType.equals("timer") && secondType.equals("number")){
                 result = Long.valueOf(context.getTimer(first).getTime()).compareTo(Long.parseLong(second));

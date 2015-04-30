@@ -22,52 +22,66 @@ public class Area {
     public String title;
     public String description;
     public int radius;
-    public boolean focus;
+    public boolean focus = false;
     public LatLng position;
     public int fillColor = Color.TRANSPARENT;
     public int strokeColor = Color.BLACK;
     public int strokeWidth = 0;
-
+    public boolean visible = true;
     public Circle circle, animateCircle;
 
-    public Area() {
+    private ValueAnimator animator;
 
-    }
+    public Area() {}
 
     public void show(){
-        CircleOptions options = new CircleOptions().center( position ).radius( radius ).strokeWidth( strokeWidth ).strokeColor( strokeColor ).fillColor( fillColor );
+        CircleOptions options = new CircleOptions().center( position ).radius( radius ).visible( visible ).strokeWidth(strokeWidth).strokeColor( strokeColor ).fillColor( fillColor );
         circle = MapManager.addArea( options );
+        if(focus) {
+            startAnimation();
+        }
+    }
 
+    private void startAnimation(){
+        stopAnimation();
 
-        if(false) {
-            animateCircle = MapManager.addArea( position , radius , Color.argb(0, 0, 0, 0));
-            animateCircle.setStrokeColor(Color.parseColor("#000000"));
-            animateCircle.setStrokeWidth(5);
+        animateCircle = MapManager.addArea( position , radius , Color.argb(0, 0, 0, 0));
+        animateCircle.setStrokeColor(fillColor);
+        animateCircle.setStrokeWidth(5);
 
-            ValueAnimator vAnimator = new ValueAnimator();
-            vAnimator.setRepeatCount(ValueAnimator.INFINITE);
-            vAnimator.setRepeatMode(ValueAnimator.RESTART);
-            vAnimator.setIntValues(0, 100);
-            vAnimator.setDuration(1000);
-            vAnimator.setEvaluator(new IntEvaluator());
-            vAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            vAnimator.setInterpolator(new TimeInterpolator() {
-                @Override
-                public float getInterpolation(float input) {
-                    //return (float)( 1 - Math.cos(input % 1 * Math.PI));
-                    return (float)Math.sin(input/2 * Math.PI);
-                }
-            });
-            vAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float animatedFraction = valueAnimator.getAnimatedFraction();
-                    animateCircle.setRadius((int) (50 + animatedFraction * 10));
-                    int strokeColor = animateCircle.getStrokeColor();
-                    animateCircle.setStrokeColor(Color.argb((int) (255 - animatedFraction * 255), Color.red(strokeColor), Color.green(strokeColor), Color.blue(strokeColor)));
-                }
-            });
-            vAnimator.start();
+        animator = new ValueAnimator();
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.RESTART);
+        animator.setIntValues(0, 100);
+        animator.setDuration(2000);
+        animator.setEvaluator(new IntEvaluator());
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setInterpolator(new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float input) {
+                //return (float)( 1 - Math.cos(input % 1 * Math.PI));
+                return (float) Math.sin(input / 2 * Math.PI);
+            }
+        });
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float animatedFraction = valueAnimator.getAnimatedFraction();
+                animateCircle.setRadius((int) (radius + animatedFraction * 20));
+                animateCircle.setStrokeWidth(5 + animatedFraction * 2);
+
+                int strokeColor = animateCircle.getStrokeColor();
+                animateCircle.setStrokeColor(Color.argb((int) (255 - animatedFraction * 255), Color.red(strokeColor), Color.green(strokeColor), Color.blue(strokeColor)));
+            }
+        });
+        animator.start();
+    }
+
+    public void stopAnimation(){
+        if( animator != null ){
+            animator.cancel();
+            animator = null;
+            animateCircle.remove();
         }
     }
 
@@ -101,6 +115,25 @@ public class Area {
         }
     }
 
+    public void changeVisible( boolean visible ){
+        if( circle != null ){
+            circle.setVisible(visible);
+        }
+    }
+
+    public void changeFocus(boolean state){
+        if( state && animator == null ) {
+            startAnimation();
+        }else if(!state){
+            stopAnimation();
+        }
+    }
+
+    public void close(){
+        stopAnimation();
+        circle = null;
+        animateCircle = null;
+    }
 
 }
 

@@ -2,7 +2,9 @@ package com.ceejay.challengetime.geo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -52,6 +55,23 @@ public class MapManager {
 
         googleMap = gMap;
         googleMap.setMyLocationEnabled(true);
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(49.28722, 7.11829)).draggable(true));
+        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {}
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                LocationObserver.position = marker.getPosition();
+            }
+            @Override
+            public void onMarkerDragEnd(Marker marker) {}
+        });
+        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                LocationObserver.location = location;
+            }
+        });
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {

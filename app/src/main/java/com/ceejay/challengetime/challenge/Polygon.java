@@ -20,6 +20,7 @@ public class Polygon {
     public int fillColor = Color.TRANSPARENT;
     public int strokeColor = Color.BLACK;
     public int strokeWidth = 0;
+    public boolean visible = true;
 
     public ArrayList<LatLng> points;
 
@@ -30,7 +31,7 @@ public class Polygon {
     }
 
     public void show() {
-        PolygonOptions options = new PolygonOptions().addAll( points ).strokeWidth( strokeWidth ).strokeColor( strokeColor ).fillColor( fillColor );
+        PolygonOptions options = new PolygonOptions().visible( visible ).addAll( points ).strokeWidth( strokeWidth ).strokeColor( strokeColor ).fillColor( fillColor );
         polygon = MapManager.addPolygon(options);
     }
 
@@ -49,6 +50,12 @@ public class Polygon {
     public void changeStrokeWidth( int width ){
         if( polygon != null ){
             polygon.setStrokeWidth( width );
+        }
+    }
+
+    public void changeVisible( boolean visible ){
+        if( polygon != null ){
+            polygon.setVisible(visible);
         }
     }
 

@@ -99,8 +99,8 @@ public class MainSlider extends Slider implements Slider.PanelSlideListener{
                     case REFRESH:
                         ChallengeAdapter.challenges.clear();
                         MapManager.clearMarker();
-                        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen" ));
-                        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen2" ));
+                        ChallengeAdapter.addChallenge(ChallengeLoader.load( context , "brunnen" ));
+                        ChallengeAdapter.addChallenge(ChallengeLoader.load( context , "brunnen2" ));
                         //changeButtonMode(OptionButtonMode.REFRESH_LOAD);
                         break;
                     case REFRESH_LOAD:

@@ -119,26 +119,31 @@ public class Effect {
                             ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    switch (m.group(2)) {
-                                        case "position":
-                                            context.getArea(m.group(1)).changePosition(readPosition(second));
-                                            break;
-                                        case "radius":
-                                            context.getArea(m.group(1)).changeRadius(Integer.parseInt(second));
-                                            break;
-                                        case "fillColor":
-                                            context.getArea(m.group(1)).changeFillColor(second);
-                                            break;
-                                        case "strokeColor":
-                                            context.getArea(m.group(1)).changeStrokeColor(second);
-                                            break;
-                                        case "strokeWidth":
-                                            context.getArea(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
-                                            break;
-                                    }
+                                switch (m.group(2)) {
+                                    case "position":
+                                        context.getArea(m.group(1)).changePosition(readPosition(second));
+                                        break;
+                                    case "radius":
+                                        context.getArea(m.group(1)).changeRadius(Integer.parseInt(second));
+                                        break;
+                                    case "fillColor":
+                                        context.getArea(m.group(1)).changeFillColor(second);
+                                        break;
+                                    case "strokeColor":
+                                        context.getArea(m.group(1)).changeStrokeColor(second);
+                                        break;
+                                    case "strokeWidth":
+                                        context.getArea(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
+                                        break;
+                                    case "focus":
+                                        context.getArea(m.group(1)).changeFocus(Boolean.parseBoolean(second));
+                                        break;
+                                    case "visible":
+                                        context.getArea(m.group(1)).changeVisible(Boolean.parseBoolean(second));
+                                        break;
+                                }
                                 }
                             });
-
                         }
                     }
                     break;
@@ -159,10 +164,12 @@ public class Effect {
                                     case "strokeWidth":
                                         context.getPolygon(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
                                         break;
+                                    case "visible":
+                                        context.getPolygon(m.group(1)).changeVisible(Boolean.parseBoolean(second));
+                                        break;
                                 }
                                 }
                             });
-
                         }
                     }
                     break;
@@ -179,6 +186,9 @@ public class Effect {
                                         break;
                                     case "width":
                                         context.getPolyline(m.group(1)).changeColor(second);
+                                        break;
+                                    case "visible":
+                                        context.getPolyline(m.group(1)).changeVisible(Boolean.parseBoolean(second));
                                         break;
                                 }
                                 }

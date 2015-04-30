@@ -131,6 +131,12 @@ public class Challenge implements Runnable{
         status = Status.SHOWN;
     }
 
+    public void close(){
+        for( Area area : areas.values() ) {
+            area.close();
+        }
+    }
+
     public void start(){
         thread = new Thread(this);
         isRunning = true;

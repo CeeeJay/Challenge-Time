@@ -30,9 +30,12 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
     }
 
     public static void focusChallenge( Challenge challenge ){
-        if(focusedChallenge != null && focusedChallenge.status == Challenge.Status.SHOWN){
-            focusedChallenge.status = Challenge.Status.HIDDEN;
-            MapManager.showMarkerLayer();
+        if(focusedChallenge != null ){
+            if(focusedChallenge.status == Challenge.Status.SHOWN) {
+                focusedChallenge.close();
+                MapManager.showMarkerLayer();
+                focusedChallenge.status = Challenge.Status.HIDDEN;
+            }
         }
 
         if( observer != null){

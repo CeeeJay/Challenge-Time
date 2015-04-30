@@ -1,6 +1,9 @@
 package com.ceejay.challengetime.challenge;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.JsonReader;
 
@@ -20,7 +23,19 @@ public class ChallengeLoader {
 
     public ChallengeLoader() {}
 
-    public static Challenge load( String name ){
+    public static Challenge load( Context context , String name ){
+        /*ConnectivityManager conMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED
+                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING ) {
+
+
+
+        }
+        else if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED
+                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED) {
+
+        }*/
         HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
         InputStream stream = contact.send(new Bundle());
         return StreamToChallenge(stream);
@@ -93,11 +108,14 @@ public class ChallengeLoader {
                     case "radius":
                         area.radius = jsonReader.nextInt();
                         break;
+                    case "position":
+                        area.position = readPosition(jsonReader);
+                        break;
                     case "focus":
                         area.focus = jsonReader.nextBoolean();
                         break;
-                    case "position":
-                        area.position = readPosition(jsonReader);
+                    case "visible":
+                        area.visible = jsonReader.nextBoolean();
                         break;
                     default:
                         jsonReader.skipValue();
@@ -180,6 +198,9 @@ public class ChallengeLoader {
                         }
                         jsonReader.endArray();
                         break;
+                    case "visible":
+                        polygon.visible = jsonReader.nextBoolean();
+                        break;
                     default:
                         jsonReader.skipValue();
                         break;
@@ -217,6 +238,9 @@ public class ChallengeLoader {
                             polyline.points.add(readPosition(jsonReader));
                         }
                         jsonReader.endArray();
+                        break;
+                    case "visible":
+                        polyline.visible = jsonReader.nextBoolean();
                         break;
                     default:
                         jsonReader.skipValue();

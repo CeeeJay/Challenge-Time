@@ -46,6 +46,7 @@ public class ChallengeObserver extends Service {
 
     public void stop(){
         if(challenge != null){
+            challenge.close();
             challenge.stop();
         }
     }

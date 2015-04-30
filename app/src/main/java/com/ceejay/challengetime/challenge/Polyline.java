@@ -21,6 +21,7 @@ public class Polyline {
     public String description;
     public int color = Color.BLACK;
     public int width = 5;
+    public boolean visible = true;
 
     public ArrayList<LatLng> points;
 
@@ -31,7 +32,7 @@ public class Polyline {
     }
 
     public void show() {
-        PolylineOptions options = new PolylineOptions().addAll(points).color(color).width(width);
+        PolylineOptions options = new PolylineOptions().addAll(points).visible( visible ).color(color).width(width);
         polyline = MapManager.addPolyline(options);
     }
 
@@ -44,6 +45,12 @@ public class Polyline {
     public void changeWidth( int width ){
         if( polyline != null ){
             polyline.setWidth(width);
+        }
+    }
+
+    public void changeVisible( boolean visible ){
+        if( polyline != null ){
+            polyline.setVisible(visible);
         }
     }
 

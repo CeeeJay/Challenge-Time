@@ -62,8 +62,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             }
         });
 
-        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen" ));
-        ChallengeAdapter.addChallenge(ChallengeLoader.load( "brunnen2" ));
+        ChallengeAdapter.addChallenge(ChallengeLoader.load( this , "brunnen" ));
+        ChallengeAdapter.addChallenge(ChallengeLoader.load( this , "brunnen2" ));
 
         Intent i = new Intent(this , ChallengeObserver.class);
         bindService(i, connection, Context.BIND_AUTO_CREATE);

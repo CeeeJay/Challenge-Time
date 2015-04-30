@@ -7,6 +7,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by CJay on 23.01.2015 for Challenge Time.
  *
@@ -18,9 +20,13 @@ public class LocationObserver {
     private MyLocationListener mylistener;
     private Criteria criteria;
 
-    public static Location location;
+    public static Location location = new Location("test");
+    public static LatLng position = new LatLng(49.28722,7.11829);
 
     public LocationObserver(Context context) {
+        location.setLatitude(49.28722);
+        location.setLatitude(7.11929);
+
         // Get the location manager
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria how to select the location provider
