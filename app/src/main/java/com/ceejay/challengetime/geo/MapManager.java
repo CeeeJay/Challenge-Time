@@ -173,10 +173,6 @@ public class MapManager {
         markerAdapter.clear();
     }
 
-    public static void clearChallengeLayer(){
-        ;
-    }
-
     public static Polyline addPolyline( PolylineOptions polylineOptions ){
         return challengeLayer.addPolyline( polylineOptions );
     }

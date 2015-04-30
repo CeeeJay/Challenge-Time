@@ -33,6 +33,7 @@ public class Challenge implements Runnable{
     public HashMap<String,Timer> timers = new HashMap<>();
     public HashMap<String,Area> areas = new HashMap<>();
     public HashMap<String,Polygon> polygons = new HashMap<>();
+    public HashMap<String,Polyline> polylines = new HashMap<>();
     public HashMap<String,Function> functions = new HashMap<>();
     public HashMap<String,Holder<Integer>> integers = new HashMap<>();
     public HashMap<String,Holder<String>> strings = new HashMap<>();
@@ -67,6 +68,9 @@ public class Challenge implements Runnable{
     }
     public void addPolygon( String key , Polygon value ){
         polygons.put( key , value );
+    }
+    public void addPolyline( String key , Polyline value ){
+        polylines.put( key , value );
     }
     public void addFunction( String key , Function value ){
         functions.put( key , value );
@@ -116,7 +120,9 @@ public class Challenge implements Runnable{
         }
         for( Polygon polygon : polygons.values() ) {
             polygon.show();
-
+        }
+        for( Polyline polyline : polylines.values() ) {
+            polyline.show();
         }
 
         status = Status.SHOWN;

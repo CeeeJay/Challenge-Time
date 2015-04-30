@@ -190,12 +190,51 @@ public class ChallengeLoader {
         jsonReader.endObject();
     }
 
+    public static void readPolyline( JsonReader jsonReader , Challenge challenge ) throws IOException{
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            Polyline polyline = new Polyline();
+            challenge.addPolyline(jsonReader.nextName(), polyline);
+
+            jsonReader.beginObject();
+            while (jsonReader.hasNext()) {
+                switch (jsonReader.nextName()) {
+                    case "title":
+                        polyline.title = jsonReader.nextString();
+                        break;
+                    case "description":
+                        polyline.description = jsonReader.nextString();
+                        break;
+                    case "color":
+                        polyline.color = Color.parseColor(jsonReader.nextString());
+                        break;
+                    case "width":
+                        polyline.width = jsonReader.nextInt();
+                        break;
+                    case "points":
+                        jsonReader.beginArray();
+                        while (jsonReader.hasNext()){
+                            polyline.points.add(readPosition(jsonReader));
+                        }
+                        jsonReader.endArray();
+                        break;
+                    default:
+                        jsonReader.skipValue();
+                        break;
+                }
+            }
+            jsonReader.endObject();
+        }
+        jsonReader.endObject();
+    }
+
     public static void readGeometry(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             switch(jsonReader.nextName()){
                 case "areas":   readArea(jsonReader ,challenge); break;
                 case "polygons": readPolygon(jsonReader, challenge); break;
+                case "polylines": readPolyline(jsonReader, challenge); break;
                 default: jsonReader.skipValue(); break;
             }
         }
