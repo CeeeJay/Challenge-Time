@@ -3,12 +3,17 @@ package com.ceejay.challengetime.challenge;
 /**
  * Created by CJay on 25.04.2015 for Challenge Time.
  */
-public class BooleanParser {
-    public final static String TAG = BooleanParser.class.getSimpleName();
+public class Parser {
+    public final static String TAG = Parser.class.getSimpleName();
 
     public static String parse(final String str) {
-        class Parser {
+        class Parse {
             int pos = -1, c;
+
+            void eatChar( int chars ) {
+                pos += chars;
+                c = (pos < str.length()) ? str.charAt(pos) : -1;
+            }
 
             void eatChar() {
                 c = (++pos < str.length()) ? str.charAt(pos) : -1;
@@ -68,13 +73,26 @@ public class BooleanParser {
                     if(c == '=') eatChar();
                     eatSpace();
                     return String.valueOf(new Double( v ).compareTo(Double.parseDouble(parseExpression())) == 0);
-                }else if(c == '>'){
-                    eatChar();eatSpace();
-                    return String.valueOf(new Double( v ).compareTo(Double.parseDouble(parseExpression())) == 1);
-                }else if(c == '<'){
-                    eatChar();eatSpace();
-                    return String.valueOf(new Double( v ).compareTo(Double.parseDouble(parseExpression())) == -1);
-                }else {
+                } else if(c == '>') {
+                    eatChar();
+                    if(c == '=') {
+                        eatSpace();
+                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) != -1);
+                    }else{
+                        eatSpace();
+                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) == 1);
+                    }
+                } else if(c == '<') {
+                    eatChar();
+                    if(c == '=') {
+                        eatChar();
+                        eatSpace();
+                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) != 1);
+                    }else {
+                        eatSpace();
+                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) == -1);
+                    }
+                } else {
                     return v;
                 }
             }
@@ -121,13 +139,12 @@ public class BooleanParser {
                     if (c == ')') eatChar();
                 } else { // numbers
                     StringBuilder sb = new StringBuilder();
-                    if( c == 'f' || c == 't' ){
-                        sb.append((char)c);eatChar();
-                        sb.append((char)c);eatChar();
-                        sb.append((char)c);eatChar();
-                        sb.append((char)c);eatChar();
-                        if( c == 'e'){sb.append((char)c);eatChar();}
-                        eatSpace();
+                    if( c == 'f' ){
+                        sb.append("false");
+                        eatChar(5);
+                    }else if( c == 't'){
+                        sb.append("true");
+                        eatChar(4);
                     }else {
                         if (c == '+' || c == '-') { // unary plus & minus
                             negate = c == '-';
@@ -152,7 +169,7 @@ public class BooleanParser {
             }
         }
 
-        return new Parser().parse();
+        return new Parse().parse();
     }
 
 

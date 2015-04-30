@@ -1374,7 +1374,7 @@ public class Slider extends ViewGroup {
             ((ViewGroup)getParent()).addView(view);
             attachers.add(new Attacher(view, new Point(offset)));
             offset.x -= getResources().getDimension(R.dimen.option_button) + getResources().getDimension(R.dimen.option_button_margin);
-            //setUpButtons(getHeight() - (int) getResources().getDimension(R.dimen.panel_size));
+            setUpButtons(1920 - (int) getResources().getDimension(R.dimen.panel_size));
         }
     }
 
