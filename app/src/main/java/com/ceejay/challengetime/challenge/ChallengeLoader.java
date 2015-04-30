@@ -81,13 +81,14 @@ public class ChallengeLoader {
                     case "description":
                         area.description = jsonReader.nextString();
                         break;
-                    case "color":
-                        area.color = jsonReader.nextString();
-                        switch (area.color){
-                            case "start":   area.color="#7700FF00";break;
-                            case "point":   area.color="#77777777";break;
-                            case "finish":  area.color="#77FF0000";break;
+                    case "fillColor":
+                        String color  = jsonReader.nextString();
+                        switch (color){
+                            case "start":   color="#7700FF00";break;
+                            case "point":   color="#77777777";break;
+                            case "finish":  color="#77FF0000";break;
                         }
+                        area.fillColor = Color.parseColor(color);
                         break;
                     case "radius":
                         area.radius = jsonReader.nextInt();

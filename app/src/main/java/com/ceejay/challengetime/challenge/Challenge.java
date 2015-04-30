@@ -116,10 +116,8 @@ public class Challenge implements Runnable{
         }
         for( Polygon polygon : polygons.values() ) {
             polygon.show();
-            Log.i(TAG,"JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3");
 
         }
-        Log.i(TAG,polygons.size() + "");
 
         status = Status.SHOWN;
     }

@@ -30,8 +30,26 @@ public class Polygon {
     }
 
     public void show() {
-        PolygonOptions options = new PolygonOptions().strokeWidth(strokeWidth).strokeColor(strokeColor).fillColor(fillColor);
+        PolygonOptions options = new PolygonOptions().addAll( points ).strokeWidth( strokeWidth ).strokeColor( strokeColor ).fillColor( fillColor );
         polygon = MapManager.addPolygon(options);
+    }
+
+    public void changeStrokeColor( String color ){
+        if( polygon != null ){
+            polygon.setStrokeColor( Color.parseColor(color) );
+        }
+    }
+
+    public void changeFillColor( String color ){
+        if( polygon != null ){
+            polygon.setFillColor(Color.parseColor(color));
+        }
+    }
+
+    public void changeStrokeWidth( int width ){
+        if( polygon != null ){
+            polygon.setStrokeWidth( width );
+        }
     }
 
 }

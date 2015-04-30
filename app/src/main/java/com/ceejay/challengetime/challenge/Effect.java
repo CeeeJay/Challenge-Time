@@ -3,6 +3,7 @@ package com.ceejay.challengetime.challenge;
 import android.app.Activity;
 
 import com.ceejay.challengetime.main.MainActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -119,10 +120,46 @@ public class Effect {
                                 @Override
                                 public void run() {
                                     switch (m.group(2)) {
-                                        case "color":
-                                            context.getArea(m.group(1)).changeColor(second);
+                                        case "position":
+                                            context.getArea(m.group(1)).changePosition(readPosition(second));
+                                            break;
+                                        case "radius":
+                                            context.getArea(m.group(1)).changeRadius(Integer.parseInt(second));
+                                            break;
+                                        case "fillColor":
+                                            context.getArea(m.group(1)).changeFillColor(second);
+                                            break;
+                                        case "strokeColor":
+                                            context.getArea(m.group(1)).changeStrokeColor(second);
+                                            break;
+                                        case "strokeWidth":
+                                            context.getArea(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
                                             break;
                                     }
+                                }
+                            });
+
+                        }
+                    }
+                    break;
+                case "polygons":
+                    if( method.equals(":=") ){
+                        final Matcher m = PatternType.object.matcher(first);
+                        if( m.find() ){
+                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                switch (m.group(2)) {
+                                    case "fillColor":
+                                        context.getPolygon(m.group(1)).changeFillColor(second);
+                                        break;
+                                    case "strokeColor":
+                                        context.getPolygon(m.group(1)).changeStrokeColor(second);
+                                        break;
+                                    case "strokeWidth":
+                                        context.getPolygon(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
+                                        break;
+                                }
                                 }
                             });
 
@@ -148,6 +185,15 @@ public class Effect {
             }
         }
     }
+
+    public static LatLng readPosition(String string){
+        Matcher m= PatternType.latLng.matcher(string);
+        if(m.find()){
+            return new LatLng(Double.parseDouble(m.group(1)),Double.parseDouble(m.group(2)));
+        }
+        return null;
+    }
+
 }
 
 
