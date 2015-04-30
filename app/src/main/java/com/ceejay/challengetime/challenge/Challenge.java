@@ -1,10 +1,14 @@
 package com.ceejay.challengetime.challenge;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.geo.MapManager;
 import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -52,7 +56,7 @@ public class Challenge implements Runnable{
         dictionary.addTranslate(key, value);
     }
     public void addTimer( String key , Timer value ){
-        timers.put( key , value );
+        timers.put(key, value);
     }
     public void addInteger( String key , Integer integer ){
         this.integers.put(key, new Holder<>(integer) );
@@ -92,7 +96,7 @@ public class Challenge implements Runnable{
         return strings.get( name ).getValue();
     }
     public Timer getTimer( String name ) {
-        return timers.get( name );
+        return timers.get(name);
     }
     public Area getArea( String name ) {
         return areas.get( name );
@@ -154,6 +158,22 @@ public class Challenge implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        status = Status.HIDDEN;
+    }
+
+    public void finish(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.getAppContext());
+        alertDialog.setMessage("Challenge abgeschlossen in" + timers.get("Stoppuhr1"));
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alertDialog.show();
+
+        MapManager.showMarkerLayer();
+        stop();
         status = Status.HIDDEN;
     }
 

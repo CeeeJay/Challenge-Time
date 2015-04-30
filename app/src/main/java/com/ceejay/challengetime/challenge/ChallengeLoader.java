@@ -24,21 +24,21 @@ public class ChallengeLoader {
     public ChallengeLoader() {}
 
     public static Challenge load( Context context , String name ){
-        /*ConnectivityManager conMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager conMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED
-                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING ) {
+                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED ) {
 
+            HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
+            InputStream stream = contact.send(new Bundle());
+            return StreamToChallenge(stream);
+
+        }else if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED
+                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED) {
 
 
         }
-        else if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED
-                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED) {
-
-        }*/
-        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
-        InputStream stream = contact.send(new Bundle());
-        return StreamToChallenge(stream);
+        return null;
     }
 
     public static void readDictionary(JsonReader jsonReader,Challenge challenge) throws IOException{

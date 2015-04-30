@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
+import com.ceejay.challengetime.challenge.BooleanParser;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.ChallengeLoader;
@@ -74,7 +76,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        //Log.i(TAG, COMP.eval(" ( 2 + 3 = 5 ) && true") );
+        Log.i(TAG, System.currentTimeMillis()+"");
+        Log.i(TAG, BooleanParser.parse("true && true || ( 2 ^ 2 ) - 3 = 2  "));
+        Log.i(TAG,System.currentTimeMillis()+"");
     }
 
     @Override

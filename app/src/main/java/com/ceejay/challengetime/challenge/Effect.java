@@ -1,6 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
 import android.app.Activity;
+import android.os.Looper;
 
 import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
@@ -213,6 +214,19 @@ public class Effect {
                 case "function":case "func":
                     context.getFunction(first).call();
                     break;
+                case "sys":
+                    ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            switch(first){
+                                case "finish":
+                                    ChallengeAdapter.getFocusedChallenge().finish();
+                                    break;
+                            }
+                        }
+                    });
+                    break;
+
             }
         }
     }
