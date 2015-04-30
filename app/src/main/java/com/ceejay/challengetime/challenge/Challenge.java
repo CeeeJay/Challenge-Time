@@ -100,6 +100,9 @@ public class Challenge implements Runnable{
     public Polygon getPolygon( String name ) {
         return polygons.get( name );
     }
+    public Polyline getPolyline( String name ) {
+        return polylines.get( name );
+    }
     public Function getFunction( String name ) {
         return functions.get( name );
     }

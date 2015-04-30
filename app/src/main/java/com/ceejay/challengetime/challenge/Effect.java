@@ -142,7 +142,7 @@ public class Effect {
                         }
                     }
                     break;
-                case "polygons":
+                case "polygon":
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
@@ -166,14 +166,35 @@ public class Effect {
                         }
                     }
                     break;
+                case "polyline":
+                    if( method.equals(":=") ){
+                        final Matcher m = PatternType.object.matcher(first);
+                        if( m.find() ){
+                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                switch (m.group(2)) {
+                                    case "color":
+                                        context.getPolyline(m.group(1)).changeColor(second);
+                                        break;
+                                    case "width":
+                                        context.getPolyline(m.group(1)).changeColor(second);
+                                        break;
+                                }
+                                }
+                            });
+
+                        }
+                    }
+                    break;
                 case "timer":
                     final Matcher m = PatternType.object.matcher(first);
                     if( m.find() ) {
-                        switch (m.group(2)){
-                            case "start":case "Start":
+                        switch (m.group(2).toLowerCase()){
+                            case "start":
                                 context.getTimer(m.group(1)).start();
                                 break;
-                            case "stop":case "Stop":
+                            case "stop":
                                 context.getTimer(m.group(1)).stop();
                                 break;
                         }
