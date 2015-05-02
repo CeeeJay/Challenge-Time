@@ -1,43 +1,57 @@
 package com.ceejay.challengetime.geo;
 
+
+import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
+import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.challenge.ChallengeAdapter;
+import com.ceejay.challengetime.challenge.ChallengeLoader;
+import com.ceejay.challengetime.challenge.ChallengeObserver;
 import com.ceejay.challengetime.helper.slider.OptionButton;
+import com.ceejay.challengetime.main.BaseActivity;
+import com.ceejay.challengetime.main.MainActivity;
 import com.ceejay.challengetime.main.NavigationDrawerFragment;
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
-/**
- * Created by CJay on 02.04.2015 for Challenge Time.
- */
-public class Geo extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-    public static final String TAG = Geo.class.getSimpleName();
+public class Geo extends BaseActivity {
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private static Context context;
     public static Context getAppContext(){
         return context;
     }
 
-    private GoogleMap googleMap;
-    public MainSlider slider;
+    GoogleMap googleMap;
+    MainSlider slider;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    NavigationDrawerFragment mNavigationDrawerFragment;
 
+    ChallengeObserver challengeObserver;
+    boolean isBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context = this;
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+
+        setUpMapIfNeeded();
 
         setUser();
         User.addUserDataChangedListener(new User.UserDataChangedListener() {
@@ -47,15 +61,16 @@ public class Geo extends ActionBarActivity implements NavigationDrawerFragment.N
             }
         });
 
-        context = this;
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        setUpMapIfNeeded();
-    }
+        ChallengeAdapter.addChallenge(ChallengeLoader.load(this, "brunnen"));
+        ChallengeAdapter.addChallenge(ChallengeLoader.load( this , "brunnen2" ));
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
+        Intent i = new Intent(this , ChallengeObserver.class);
+        bindService(i, connection, Context.BIND_AUTO_CREATE);
+
+        slider = (MainSlider) findViewById(R.id.slidingDrawer);
+        slider.attachButton(new OptionButton(this));
+
+        super.startNavigationDrawer();
     }
 
     @Override
@@ -70,46 +85,61 @@ public class Geo extends ActionBarActivity implements NavigationDrawerFragment.N
         AppEventsLogger.deactivateApp(this);
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
-
     private void setUser(){
         ((TextView)findViewById(R.id.userName)).setText(User.name);
     }
 
     private void setUpMapIfNeeded() {
-
-        slider = (MainSlider) findViewById(R.id.slidingDrawer);
-        slider.attachButton( new OptionButton(this) );
-
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if (googleMap != null) {
-            MapManager.setMap( this , googleMap );
+            MapManager.setMap(this, googleMap);
             new LocationObserver(this);
         }
-
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        switch (position) {
-            case 0:
-                try {
-                    Class classe = Class.forName("com.ceejay.challengetime.editor.EditorActivity");
-                    Intent intent = new Intent(this, classe);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
+    public void onBackPressed() {
+        if( ChallengeAdapter.focusedChallenge == null ) {
+            unbindService(connection);
+            super.onBackPressed();
+        }else if(ChallengeAdapter.focusedChallenge.status == Challenge.Status.STARTED){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
+            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ChallengeAdapter.getFocusedChallenge().stop();
+                    ChallengeAdapter.focusChallenge(null);
+                    MapManager.showMarkerLayer();
                 }
-                break;
+            });
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            alertDialog.show();
+        }else if (ChallengeAdapter.focusedChallenge.status == Challenge.Status.SHOWN) {
+            ChallengeAdapter.focusChallenge(null);
         }
 
     }
 
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ChallengeObserver.ChallengeBinder binder = (ChallengeObserver.ChallengeBinder) service;
+            challengeObserver = binder.getService();
+            isBound = true;
+            ChallengeAdapter.setChallengeObserver(challengeObserver);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
+
 
 }
-
-
 

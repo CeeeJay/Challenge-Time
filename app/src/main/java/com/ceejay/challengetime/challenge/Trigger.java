@@ -18,16 +18,9 @@ public class Trigger {
     public String effect;
     public String els;
 
-    private ArrayList<Comparator> statement = new ArrayList<>();
     private Comparator comparator;
     private Executor executor;
     private Executor executorEls;
-
-    Pattern userAreaPattern = Pattern.compile("user#(\\S+) (<||>||->||<-) area#(\\S+)");
-    Pattern triggerPattern = Pattern.compile("(?:(\\S+)#)(\\S+)(<||>||->||<-||&&||\\|\\|) (?:(\\S+)#)(\\S+)");
-    Pattern pattern = Pattern.compile("(\\S+)\\s?(<||>||->||<-||&&||\\|\\|)\\s?(\\S+)");
-    Pattern boolCompPattern = Pattern.compile("bool#(\\S+) (<||>||=||<=||>=) (:bool#)?(\\S+)");
-    Pattern boolAllocPattern = Pattern.compile("bool#(\\S+) (:=) (:bool#)?(\\S+)");
 
     public Trigger( JsonReader jsonReader , Challenge context ) {
         try {

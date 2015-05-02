@@ -98,7 +98,7 @@ activity#com.ceejay.challengetime.news.News
 ADDED from AndroidManifest.xml:38:9
 	android:name
 		ADDED from AndroidManifest.xml:38:19
-activity#com.ceejay.challengetime.main.MainActivity
+activity#com.ceejay.challengetime.geo.Geo
 ADDED from AndroidManifest.xml:39:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:42:13
@@ -118,7 +118,7 @@ activity#com.ceejay.challengetime.generallys.Generallys
 ADDED from AndroidManifest.xml:46:9
 	android:name
 		ADDED from AndroidManifest.xml:46:19
-activity#com.ceejay.challengetime.geo.Geo
+activity#com.ceejay.challengetime.main.MainActivity
 ADDED from AndroidManifest.xml:47:9
 	android:name
 		ADDED from AndroidManifest.xml:47:19

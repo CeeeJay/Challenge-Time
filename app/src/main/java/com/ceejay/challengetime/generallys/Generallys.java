@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.main.BaseActivity;
 
 /**
  * Created by CJay on 02.04.2015 for Challenge Time.
  */
-public class Generallys extends Activity {
+public class Generallys extends BaseActivity {
     public final static String TAG = Generallys.class.getSimpleName();
 
     @Override
@@ -22,7 +23,7 @@ public class Generallys extends Activity {
         GenerallysAdapter adapter = new GenerallysAdapter(this);
         list.setAdapter(adapter);
 
-
+        super.startNavigationDrawer();
     }
 }
 

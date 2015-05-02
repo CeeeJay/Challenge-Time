@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
+import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.main.MainActivity;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -131,7 +132,7 @@ public class LauncherActivity extends FragmentActivity implements Runnable{
     }
 
     public void startMainActivity(){
-        startActivity(new Intent(LauncherActivity.this, MainActivity.class));
+        startActivity(new Intent(LauncherActivity.this, Geo.class));
         finish();
     }
 

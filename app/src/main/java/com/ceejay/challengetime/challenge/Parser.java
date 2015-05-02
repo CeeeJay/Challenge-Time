@@ -72,29 +72,35 @@ public class Parser {
                     eatChar();
                     if(c == '=') eatChar();
                     eatSpace();
-                    return String.valueOf(new Double( v ).compareTo(Double.parseDouble(parseExpression())) == 0);
+                    return String.valueOf(Double.valueOf( v ).compareTo(Double.parseDouble(parseExpression())) == 0);
                 } else if(c == '>') {
                     eatChar();
                     if(c == '=') {
                         eatSpace();
-                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) != -1);
+                        return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != -1);
                     }else{
                         eatSpace();
-                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) == 1);
+                        return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) == 1);
                     }
                 } else if(c == '<') {
                     eatChar();
                     if(c == '=') {
                         eatChar();
                         eatSpace();
-                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) != 1);
+                        return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != 1);
                     }else {
                         eatSpace();
-                        return String.valueOf(new Double(v).compareTo(Double.parseDouble(parseExpression())) == -1);
+                        return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) == -1);
                     }
-                } else {
-                    return v;
+                } else if(c == '!') {
+                    eatChar();
+                    if(c == '=') {
+                        eatChar();
+                        eatSpace();
+                        return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != 0);
+                    }
                 }
+                return v;
             }
 
             String parseExpression() {
@@ -132,19 +138,33 @@ public class Parser {
             String parseFactor() {
                 String v;
                 boolean negate = false;
+                boolean boolNegate = false;
                 eatSpace();
-                if (c == '(') { // brackets
+                if( c == '!' ){eatChar(); boolNegate = true;}
+                if (c == '(') {
                     eatChar();
-                    v = parseOr();
+                    if(boolNegate){
+                        v = String.valueOf(!Boolean.parseBoolean(parseOr()));
+                    }else{
+                        v = parseOr();
+                    }
                     if (c == ')') eatChar();
                 } else { // numbers
                     StringBuilder sb = new StringBuilder();
                     if( c == 'f' ){
-                        sb.append("false");
                         eatChar(5);
+                        if(boolNegate) {
+                            sb.append("true");
+                        }else{
+                            sb.append("false");
+                        }
                     }else if( c == 't'){
-                        sb.append("true");
                         eatChar(4);
+                        if(boolNegate) {
+                            sb.append("false");
+                        }else{
+                            sb.append("true");
+                        }
                     }else {
                         if (c == '+' || c == '-') { // unary plus & minus
                             negate = c == '-';

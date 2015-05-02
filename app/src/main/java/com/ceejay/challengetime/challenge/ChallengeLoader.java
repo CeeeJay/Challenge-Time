@@ -6,13 +6,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.JsonReader;
+import android.util.Log;
 
 import com.ceejay.challengetime.helper.HttpPostContact;
+import com.ceejay.challengetime.helper.ReachabilityTest;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 /**
@@ -24,21 +27,35 @@ public class ChallengeLoader {
     public ChallengeLoader() {}
 
     public static Challenge load( Context context , String name ){
-        ConnectivityManager conMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
+        InputStream stream = contact.send(new Bundle());
+        return StreamToChallenge(stream);
+    }
 
-        if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED
-                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED ) {
+    public static void load( Context context ){
+        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/script/php/load_challenge.php");
+        InputStream stream = contact.send(new Bundle());
+        Log.i(TAG, StreamToArray(stream).toString());
+    }
 
-            HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
-            InputStream stream = contact.send(new Bundle());
-            return StreamToChallenge(stream);
-
-        }else if ( conMgr.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED
-                || conMgr.getNetworkInfo(1).getState() == NetworkInfo.State.DISCONNECTED) {
-
-
+    public static ArrayList<String> StreamToArray( InputStream is ){
+        ArrayList<String> list = new ArrayList<>();
+        if (is == null) {
+            return null;
         }
-        return null;
+        try {
+            JsonReader jsonReader = new JsonReader(new InputStreamReader(is, "UTF-8"));
+            jsonReader.setLenient(true);
+            jsonReader.beginArray();
+            while (jsonReader.hasNext()){
+                list.add(jsonReader.nextString());
+            }
+            jsonReader.endArray();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public static void readDictionary(JsonReader jsonReader,Challenge challenge) throws IOException{

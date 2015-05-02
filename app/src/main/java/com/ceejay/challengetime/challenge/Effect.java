@@ -3,7 +3,7 @@ package com.ceejay.challengetime.challenge;
 import android.app.Activity;
 import android.os.Looper;
 
-import com.ceejay.challengetime.main.MainActivity;
+import com.ceejay.challengetime.geo.Geo;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.regex.Matcher;
@@ -117,32 +117,32 @@ public class Effect {
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
-                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                            ((Activity)Geo.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                switch (m.group(2)) {
-                                    case "position":
-                                        context.getArea(m.group(1)).changePosition(readPosition(second));
-                                        break;
-                                    case "radius":
-                                        context.getArea(m.group(1)).changeRadius(Integer.parseInt(second));
-                                        break;
-                                    case "fillColor":
-                                        context.getArea(m.group(1)).changeFillColor(second);
-                                        break;
-                                    case "strokeColor":
-                                        context.getArea(m.group(1)).changeStrokeColor(second);
-                                        break;
-                                    case "strokeWidth":
-                                        context.getArea(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
-                                        break;
-                                    case "focus":
-                                        context.getArea(m.group(1)).changeFocus(Boolean.parseBoolean(second));
-                                        break;
-                                    case "visible":
-                                        context.getArea(m.group(1)).changeVisible(Boolean.parseBoolean(second));
-                                        break;
-                                }
+                                    switch (m.group(2)) {
+                                        case "position":
+                                            context.getArea(m.group(1)).changePosition(readPosition(second));
+                                            break;
+                                        case "radius":
+                                            context.getArea(m.group(1)).changeRadius(Integer.parseInt(second));
+                                            break;
+                                        case "fillColor":
+                                            context.getArea(m.group(1)).changeFillColor(second);
+                                            break;
+                                        case "strokeColor":
+                                            context.getArea(m.group(1)).changeStrokeColor(second);
+                                            break;
+                                        case "strokeWidth":
+                                            context.getArea(m.group(1)).changeStrokeWidth(Integer.parseInt(second));
+                                            break;
+                                        case "focus":
+                                            context.getArea(m.group(1)).changeFocus(Boolean.parseBoolean(second));
+                                            break;
+                                        case "visible":
+                                            context.getArea(m.group(1)).changeVisible(Boolean.parseBoolean(second));
+                                            break;
+                                    }
                                 }
                             });
                         }
@@ -152,7 +152,7 @@ public class Effect {
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
-                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                            ((Activity)Geo.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                 switch (m.group(2)) {
@@ -178,20 +178,20 @@ public class Effect {
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
-                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                            ((Activity)Geo.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                switch (m.group(2)) {
-                                    case "color":
-                                        context.getPolyline(m.group(1)).changeColor(second);
-                                        break;
-                                    case "width":
-                                        context.getPolyline(m.group(1)).changeColor(second);
-                                        break;
-                                    case "visible":
-                                        context.getPolyline(m.group(1)).changeVisible(Boolean.parseBoolean(second));
-                                        break;
-                                }
+                                    switch (m.group(2)) {
+                                        case "color":
+                                            context.getPolyline(m.group(1)).changeColor(second);
+                                            break;
+                                        case "width":
+                                            context.getPolyline(m.group(1)).changeColor(second);
+                                            break;
+                                        case "visible":
+                                            context.getPolyline(m.group(1)).changeVisible(Boolean.parseBoolean(second));
+                                            break;
+                                    }
                                 }
                             });
 
@@ -215,7 +215,7 @@ public class Effect {
                     context.getFunction(first).call();
                     break;
                 case "sys":
-                    ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                    ((Activity) Geo.getAppContext()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             switch(first){

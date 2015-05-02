@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.geo.MapManager;
 import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
@@ -162,7 +163,7 @@ public class Challenge implements Runnable{
     }
 
     public void finish(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.getAppContext());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Geo.getAppContext());
         alertDialog.setMessage("Challenge abgeschlossen in" + timers.get("Stoppuhr1"));
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -183,10 +184,10 @@ public class Challenge implements Runnable{
             long sleepTime;
             while (isRunning) {
                 startTime = System.currentTimeMillis();
-                ((Activity) MainActivity.getAppContext()).runOnUiThread(new Runnable() {
+                ((Activity) Geo.getAppContext()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)((Activity) MainActivity.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("Stoppuhr1").toString());
+                        ((TextView)((Activity) Geo.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("Stoppuhr1").toString());
                     }
                 });
                 for (Trigger trigger : Challenge.this.triggers) {

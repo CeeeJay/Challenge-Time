@@ -13,6 +13,7 @@ public class PatternType {
             number = Pattern.compile("^\\-?[0-9]+$"),
             object = Pattern.compile("(\\S+)\\.(\\S+)"),
             function = Pattern.compile("(?:(\\S+)#)(\\S+)\\(\\)"),
+            variable = Pattern.compile("(\\S+)#(\\S+)"),
             time = Pattern.compile("(?:(?:(?:(\\d):)?(\\d):(\\d))|(?:(\\d)h)?(?:(\\d)m)?(?:(\\d)s)?(?:(\\d)ms)?)");
 
 }

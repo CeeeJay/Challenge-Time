@@ -17,7 +17,7 @@ public class NewsAdapter extends ArrayAdapter{
     View customView;
 
     public NewsAdapter(Context context) {
-        super(context, R.layout.info_window, new String[2]);
+        super(context, R.layout.info_window, new String[10]);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NewsAdapter extends ArrayAdapter{
 
     @Override
     public int getCount() {
-        return 2;
+        return 10;
     }
 }
 

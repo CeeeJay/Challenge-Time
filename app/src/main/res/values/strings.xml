@@ -11,9 +11,10 @@
     <string name="sightseeing_challenge">Sightseeing Challenge</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="title_section1">Challenge Builder</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Map</string>
+    <string name="title_section2">Editor</string>
+    <string name="title_section3">Generallys</string>
+    <string name="title_section4">News</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
