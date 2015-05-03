@@ -20,6 +20,7 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.challenge.ChallengeObserver;
+import com.ceejay.challengetime.helper.ReachabilityTest;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.main.BaseActivity;
 import com.ceejay.challengetime.main.MainActivity;
@@ -61,8 +62,18 @@ public class Geo extends BaseActivity {
             }
         });
 
-        ChallengeAdapter.addChallenge(ChallengeLoader.load(this, "brunnen"));
-        ChallengeAdapter.addChallenge(ChallengeLoader.load( this , "brunnen2" ));
+        new ReachabilityTest(this, "http://192.168.178.55", 80, new ReachabilityTest.Callback() {
+            @Override
+            public void onReachabilityTestPassed() {
+                ChallengeAdapter.addChallenge(ChallengeLoader.load(Geo.this, "brunnen"));
+                ChallengeAdapter.addChallenge(ChallengeLoader.load(Geo.this , "brunnen2" ));
+            }
+
+            @Override
+            public void onReachabilityTestFailed() {
+
+            }
+        }).execute();
 
         Intent i = new Intent(this , ChallengeObserver.class);
         bindService(i, connection, Context.BIND_AUTO_CREATE);

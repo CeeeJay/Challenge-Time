@@ -106,6 +106,7 @@ public class Area {
     public void changeFillColor( String color ){
         if( circle != null ){
             circle.setFillColor(Color.parseColor(color));
+            animateCircle.setStrokeColor(Color.parseColor(color));
         }
     }
 

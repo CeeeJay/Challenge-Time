@@ -14,6 +14,7 @@ public class PatternType {
             object = Pattern.compile("(\\S+)\\.(\\S+)"),
             function = Pattern.compile("(?:(\\S+)#)(\\S+)\\(\\)"),
             variable = Pattern.compile("(\\S+)#(\\S+)"),
+            userInArea = Pattern.compile("user#(\\S+)\\s+(->|<-)\\s+area#(\\S+)"),
             time = Pattern.compile("(?:(?:(?:(\\d):)?(\\d):(\\d))|(?:(\\d)h)?(?:(\\d)m)?(?:(\\d)s)?(?:(\\d)ms)?)");
 
 }

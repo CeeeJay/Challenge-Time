@@ -1,5 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
+import android.util.Log;
+
 /**
  * Created by CJay on 25.04.2015 for Challenge Time.
  */
@@ -17,6 +19,10 @@ public class Parser {
 
             void eatChar() {
                 c = (++pos < str.length()) ? str.charAt(pos) : -1;
+            }
+
+            void releaseChar() {
+                c = (--pos < str.length()) ? str.charAt(pos) : -1;
             }
 
             void eatSpace() {
@@ -84,20 +90,33 @@ public class Parser {
                     }
                 } else if(c == '<') {
                     eatChar();
-                    if(c == '=') {
+                    if( c == '=' ) {
                         eatChar();
                         eatSpace();
                         return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != 1);
-                    }else {
+                    } else if( c == '-' ){
+                        eatChar();
+                        eatSpace();
+                        return "true";
+                    } else {
                         eatSpace();
                         return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) == -1);
                     }
-                } else if(c == '!') {
+                } else if( c == '!' ) {
                     eatChar();
                     if(c == '=') {
                         eatChar();
                         eatSpace();
                         return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != 0);
+                    }
+                }else if( c == '-' ){
+                    eatChar();
+                    if( c == '>' ){
+                        eatChar();
+                        eatSpace();
+                        return "true";
+                    }else{
+                        releaseChar();
                     }
                 }
                 return v;
