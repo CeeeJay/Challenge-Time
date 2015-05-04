@@ -40,9 +40,9 @@ public class Challenge implements Runnable{
     public HashMap<String,Polygon> polygons = new HashMap<>();
     public HashMap<String,Polyline> polylines = new HashMap<>();
     public HashMap<String,Function> functions = new HashMap<>();
-    public HashMap<String,Holder<Integer>> integers = new HashMap<>();
-    public HashMap<String,Holder<String>> strings = new HashMap<>();
-    public HashMap<String,Holder<Boolean>> booleans = new HashMap<>();
+    public HashMap<String,Int> integers = new HashMap<>();
+    public HashMap<String,Str> strings = new HashMap<>();
+    public HashMap<String,Bool> booleans = new HashMap<>();
 
 
     private Thread thread;
@@ -60,13 +60,13 @@ public class Challenge implements Runnable{
         timers.put(key, value);
     }
     public void addInteger( String key , Integer integer ){
-        this.integers.put(key, new Holder<>(integer) );
+        this.integers.put( key, new Int(integer) );
     }
     public void addString( String key , String string ){
-        this.strings.put(key, new Holder<>(string) );
+        this.strings.put( key, new Str(string) );
     }
-    public void addBoolean( String key , Boolean bool ){
-        this.booleans.put(key, new Holder<>(bool));
+    public void addBool(String key, Boolean bool){
+        this.booleans.put(key, new Bool(key,bool));
     }
     public void addArea( String key , Area value ){
         areas.put( key , value );
@@ -75,26 +75,20 @@ public class Challenge implements Runnable{
         polygons.put( key , value );
     }
     public void addPolyline( String key , Polyline value ){
-        polylines.put( key , value );
+        polylines.put( key , value);
     }
     public void addFunction( String key , Function value ){
-        functions.put( key , value );
+        functions.put(key, value);
     }
     public void addTrigger( Trigger value ){
-        triggers.add( value );
+        triggers.add(value);
     }
 
     public String getTranslate( String name ) {
         return dictionary.getTranslate(name, "de");
     }
-    public Boolean getBoolean( String name ) {
-        return booleans.get( name ).getValue();
-    }
-    public Integer getInteger( String name ) {
-        return integers.get( name ).getValue();
-    }
-    public String getString( String name ) {
-        return strings.get( name ).getValue();
+    public Bool getBool(String name) {
+        return booleans.get(name);
     }
     public Timer getTimer( String name ) {
         return timers.get(name);
@@ -111,15 +105,15 @@ public class Challenge implements Runnable{
     public Function getFunction( String name ) {
         return functions.get( name );
     }
-
-    public Holder<Boolean> getBooleanHolder( String name ) {
-        return booleans.get( name );
-    }
-    public Holder<Integer> getIntegerHolder( String name ) {
+    public Int getInt(String name) {
         return integers.get( name );
     }
-    public Holder<String> getStringHolder( String name ) {
+    public Str getStr(String name) {
         return strings.get( name );
+    }
+
+    public int getVarLength() {
+        return booleans.size() + integers.size() + strings.size();
     }
 
     public void show(){
@@ -135,20 +129,17 @@ public class Challenge implements Runnable{
 
         status = Status.SHOWN;
     }
-
     public void close(){
         for( Area area : areas.values() ) {
             area.close();
         }
     }
-
     public void start(){
         thread = new Thread(this);
         isRunning = true;
         thread.start();
         status = Status.STARTED;
     }
-
     public void stop(){
         isRunning = false;
         for( Timer timer : timers.values() ){
@@ -161,7 +152,6 @@ public class Challenge implements Runnable{
         }
         status = Status.HIDDEN;
     }
-
     public void finish(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Geo.getAppContext());
         alertDialog.setMessage("Challenge abgeschlossen in" + timers.get("Stoppuhr1"));

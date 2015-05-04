@@ -1,7 +1,5 @@
 package com.ceejay.challengetime.challenge;
 
-import android.util.Log;
-
 import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.helper.Distance;
 
@@ -46,8 +44,8 @@ public class Replacer {
     public static String get( String type , String key , Challenge context ){
         try {
             switch(type){
-                case "int": return String.valueOf(context.getInteger(key));
-                case "bool": return String.valueOf(context.getBoolean(key));
+                case "int": return String.valueOf(context.getInt(key).getValue());
+                case "bool": return String.valueOf(context.getBool(key).getValue());
                 case "timer":
                     if(key.split(".")[1].equals("time")) {
                         return String.valueOf(context.getTimer(key.split(".")[0]).getTime());

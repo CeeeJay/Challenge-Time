@@ -1,7 +1,6 @@
 package com.ceejay.challengetime.challenge;
 
 import android.app.Activity;
-import android.os.Looper;
 
 import com.ceejay.challengetime.geo.Geo;
 import com.google.android.gms.maps.model.LatLng;
@@ -92,23 +91,23 @@ public class Effect {
                 case "bool":
                     if (secondType.equals("bool")) {
                         if(invert){
-                            context.getBooleanHolder(first).setValue(!context.getBooleanHolder(second).getValue());
+                            context.getBool(first).setValue(!context.getBool(second).getValue());
                         }else {
-                            context.getBooleanHolder(first).setValue(context.getBooleanHolder(second).getValue());
+                            context.getBool(first).setValue(context.getBool(second).getValue());
                         }
                     }else if (secondType.equals("boolean")){
-                        context.getBooleanHolder(first).setValue(Boolean.parseBoolean(second));
+                        context.getBool(first).setValue(Boolean.parseBoolean(second));
                     }
                     break;
                 case "int":
                     switch(method){
-                        case "+=": case "++": context.getIntegerHolder(first).setValue(context.getInteger(first)+value); break;
-                        case "-=": case "--": context.getIntegerHolder(first).setValue(context.getInteger(first)-value); break;
+                        case "+=": case "++": context.getInt(first).setValue(context.getInt(first).getValue()+value); break;
+                        case "-=": case "--": context.getInt(first).setValue(context.getInt(first).getValue()-value); break;
                         case ":=":
                             if(secondType.equals("number")){
-                                context.getIntegerHolder(first).setValue(Integer.valueOf(second));
+                                context.getInt(first).setValue(Integer.valueOf(second));
                             }else{
-                                context.getIntegerHolder(first).setValue(context.getInteger(second));
+                                context.getInt(first).setValue(context.getInt(second).getValue());
                             }
                             break;
                     }

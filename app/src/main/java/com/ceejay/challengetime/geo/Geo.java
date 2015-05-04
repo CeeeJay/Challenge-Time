@@ -9,18 +9,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.challenge.ChallengeLoader;
 import com.ceejay.challengetime.challenge.ChallengeObserver;
-import com.ceejay.challengetime.helper.ReachabilityTest;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.main.BaseActivity;
 import com.ceejay.challengetime.main.MainActivity;
@@ -62,19 +57,6 @@ public class Geo extends BaseActivity {
             }
         });
 
-        new ReachabilityTest(this, "http://192.168.178.55", 80, new ReachabilityTest.Callback() {
-            @Override
-            public void onReachabilityTestPassed() {
-                ChallengeAdapter.addChallenge(ChallengeLoader.load(Geo.this, "brunnen"));
-                ChallengeAdapter.addChallenge(ChallengeLoader.load(Geo.this , "brunnen2" ));
-            }
-
-            @Override
-            public void onReachabilityTestFailed() {
-
-            }
-        }).execute();
-
         Intent i = new Intent(this , ChallengeObserver.class);
         bindService(i, connection, Context.BIND_AUTO_CREATE);
 
@@ -115,7 +97,7 @@ public class Geo extends BaseActivity {
             super.onBackPressed();
         }else if(ChallengeAdapter.focusedChallenge.status == Challenge.Status.STARTED){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
+            alertDialog.setMessage("Moechtest du die Challenge abbrechen?");
             alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

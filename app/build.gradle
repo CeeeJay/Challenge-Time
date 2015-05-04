@@ -29,6 +29,17 @@ android {
             keyPassword "RGBmatrix8x8"
         }
     }
+    sourceSets {
+        main {
+            res.srcDirs =
+                [
+                    'src/main/res/layouts/challenge_builder',
+                    'src/main/res/layouts',
+                    'src/main/res/challengeBuilder',
+                    'src/main/res'
+                ]
+        }
+    }
 }
 
 dependencies {

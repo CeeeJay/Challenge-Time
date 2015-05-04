@@ -2,14 +2,11 @@ package com.ceejay.challengetime.challenge;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
 
 import com.ceejay.challengetime.helper.HttpPostContact;
-import com.ceejay.challengetime.helper.ReachabilityTest;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -171,7 +168,7 @@ public class ChallengeLoader {
     public static void readBool(JsonReader jsonReader , Challenge challenge) throws IOException{
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
-            challenge.addBoolean(jsonReader.nextName(), jsonReader.nextBoolean());
+            challenge.addBool(jsonReader.nextName(), jsonReader.nextBoolean());
         }
         jsonReader.endObject();
     }

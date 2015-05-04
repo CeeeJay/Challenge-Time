@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ChallengeTime.iml" filepath="$PROJECT_DIR$/ChallengeTime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Challenge-Time.iml" filepath="$PROJECT_DIR$/Challenge-Time.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
-
