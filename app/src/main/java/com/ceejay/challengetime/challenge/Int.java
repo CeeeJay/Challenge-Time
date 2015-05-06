@@ -20,6 +20,10 @@ public class Int {
     public Int(Integer value) {
         this.value = value;
     }
+    public Int(String name , Integer value) {
+        this.name = name;
+        this.value = value;
+    }
 
     public Integer getValue() {
         return value;
@@ -29,15 +33,14 @@ public class Int {
         this.value = value;
     }
 
-
     public View getListView( LayoutInflater inflater , ViewGroup container){
-        View boolView = inflater.inflate(R.layout.var_list_item, container, false);
-        ((Button)boolView.findViewById(R.id.var_type)).setText("I");
+        View view = inflater.inflate(R.layout.var_list_item, container, false);
+        ((TextView)view.findViewById(R.id.var_type)).setText("I");
         if(name != null){
-            ((TextView)boolView.findViewById(R.id.var_name)).setText(name);
+            ((TextView)view.findViewById(R.id.var_name)).setText(name);
         }
-        ((Button)boolView.findViewById(R.id.var_worth)).setText(value+"");
-        return boolView;
+        ((TextView)view.findViewById(R.id.var_worth)).setText(value+"");
+        return view;
     }
 
     @Override

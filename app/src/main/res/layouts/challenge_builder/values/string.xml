@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="triangle_up">▲</string>
+    <string name="triangle_down">▼</string>
+    <string name="triangle_right">►</string>
+    <string name="triangle_left">◄</string>
+</resources>

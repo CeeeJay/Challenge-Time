@@ -20,6 +20,10 @@ public class Str {
     public Str(String value) {
         this.value = value;
     }
+    public Str(String name , String value) {
+        this.name = name;
+        this.value = value;
+    }
 
     public String getValue() {
         return value;
@@ -31,13 +35,13 @@ public class Str {
 
 
     public View getListView( LayoutInflater inflater , ViewGroup container){
-        View boolView = inflater.inflate(R.layout.var_list_item, container, false);
-        ((Button)boolView.findViewById(R.id.var_type)).setText("S");
+        View view = inflater.inflate(R.layout.var_list_item, container, false);
+        ((TextView)view.findViewById(R.id.var_type)).setText("S");
         if(name != null){
-            ((TextView)boolView.findViewById(R.id.var_name)).setText(name);
+            ((TextView)view.findViewById(R.id.var_name)).setText(name);
         }
-        ((Button)boolView.findViewById(R.id.var_worth)).setText(value);
-        return boolView;
+        ((TextView)view.findViewById(R.id.var_worth)).setText(value);
+        return view;
     }
 
     @Override

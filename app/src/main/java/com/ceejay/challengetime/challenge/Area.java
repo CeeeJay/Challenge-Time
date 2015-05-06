@@ -5,8 +5,13 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.TextView;
 
+import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.geo.MapManager;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -87,13 +92,13 @@ public class Area {
 
     public void changePosition( LatLng position ){
         if( circle != null ){
-            circle.setCenter( position );
+            circle.setCenter(position);
         }
     }
 
     public void changeRadius( double radius ){
         if( circle != null ){
-            circle.setRadius( radius );
+            circle.setRadius(radius);
         }
     }
 
@@ -134,6 +139,16 @@ public class Area {
         stopAnimation();
         circle = null;
         animateCircle = null;
+    }
+
+    public View getListView( LayoutInflater inflater , ViewGroup container){
+        View view = inflater.inflate(R.layout.area_list_item, container, false);
+        ((TextView)view.findViewById(R.id.area_type)).setText("A");
+        if(title != null){
+            ((TextView)view.findViewById(R.id.area_name)).setText(title);
+        }
+        ((TextView)view.findViewById(R.id.area_position)).setText(position.toString()+"");
+        return view;
     }
 
 }

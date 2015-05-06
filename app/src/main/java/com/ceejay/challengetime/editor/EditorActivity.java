@@ -1,15 +1,16 @@
 package com.ceejay.challengetime.editor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
@@ -21,7 +22,7 @@ import java.util.Locale;
 /**
  * Created by CJay on 11.02.2015 for Challenge Time.
  */
-public class EditorActivity extends BaseActivity{
+public class EditorActivity extends BaseActivity implements View.OnClickListener{
     public final static String TAG = EditorActivity.class.getSimpleName();
 
     public static Challenge challenge = new Challenge();
@@ -33,26 +34,14 @@ public class EditorActivity extends BaseActivity{
         return context;
     }
 
+    private int[] tabs = {R.id.allgemein,R.id.var,R.id.geo,R.id.function,R.id.loop};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setElevation(0);
 
         context = this;
-        challenge.addBool("Hallo",true);
-        challenge.addBool("Hallo2", false);
-        challenge.addBool("Hallo3", false);
-        challenge.addBool("Hallo4",true);
-
-        challenge.addInteger("Hallo", 1);
-        challenge.addInteger("Hallo2", 2);
-        challenge.addInteger("Hallo3", 3);
-        challenge.addInteger("Hallo4", 4);
-
-        challenge.addString("Hallo", "1");
-        challenge.addString("Hallo2", "2");
-        challenge.addString("Hallo3", "3");
-        challenge.addString("Hallo4", "4");
 
         setContentView(R.layout.challenge_builder);
 
@@ -61,6 +50,61 @@ public class EditorActivity extends BaseActivity{
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        for( int tab : tabs ){
+            findViewById(tab).setOnClickListener(this);
+        }
+        highlightTab(findViewById(tabs[0]));
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                highlightTab(findViewById(tabs[position]));
+                if (position + 1 < tabs.length) {
+                    findViewById(tabs[position]).setBackgroundColor(Color.argb((int) (50 * positionOffset), 0, 0, 0));
+                    findViewById(tabs[position + 1]).setBackgroundColor(Color.argb((int) (50 - 50 * positionOffset), 0, 0, 0));
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                highlightTab(findViewById(tabs[position]));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        super.startNavigationDrawer();
+    }
+
+    @Override
+    public void onClick( View v ) {
+        highlightTab(v);
+        switch (v.getId()){
+            case R.id.allgemein:
+                mViewPager.setCurrentItem(0);
+                break;
+            case R.id.var:
+                mViewPager.setCurrentItem(1);
+                break;
+            case R.id.geo:
+                mViewPager.setCurrentItem(2);
+                break;
+            case R.id.function:
+                mViewPager.setCurrentItem(3);
+                break;
+            case R.id.loop:
+                mViewPager.setCurrentItem(4);
+                break;
+        }
+    }
+
+    public void highlightTab( View v ){
+        for( int tab : tabs ){
+            findViewById(tab).setBackgroundColor(Color.argb(50, 0, 0, 0));
+        }
+        v.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -71,7 +115,6 @@ public class EditorActivity extends BaseActivity{
 
         @Override
         public Fragment getItem(int position) {
-            Log.i(TAG, position + "");
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -107,19 +150,25 @@ public class EditorActivity extends BaseActivity{
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.editor_list_item, container, false);
+            View rootView = inflater.inflate(R.layout.var_list, container, false);
+
+            ListView list = (ListView)rootView.findViewById(R.id.listView);;
+            ListAdapter listAdapter;
 
             switch(this.getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 2:
-                    ListView list = (ListView)rootView.findViewById(R.id.listView);
-                    VarAdapter varAdapter = new VarAdapter(EditorActivity.getAppContext(),challenge);
-
-                    list.setAdapter(varAdapter);
+                    listAdapter = new VarAdapter(EditorActivity.getAppContext(),challenge);
                     break;
+                case 3:
+                    listAdapter = new AreaAdapter(EditorActivity.getAppContext(),challenge);
+                    break;
+                case 5:
+                    listAdapter = new LoopAdapter(EditorActivity.getAppContext(),challenge);
+                    break;
+                default:
+                    return rootView;
             }
-
-
-
+            list.setAdapter(listAdapter);
             return rootView;
         }
     }

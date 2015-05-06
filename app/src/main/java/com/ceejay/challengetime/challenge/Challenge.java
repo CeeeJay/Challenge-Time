@@ -60,10 +60,10 @@ public class Challenge implements Runnable{
         timers.put(key, value);
     }
     public void addInteger( String key , Integer integer ){
-        this.integers.put( key, new Int(integer) );
+        this.integers.put( key, new Int(key,integer) );
     }
     public void addString( String key , String string ){
-        this.strings.put( key, new Str(string) );
+        this.strings.put( key, new Str(key,string) );
     }
     public void addBool(String key, Boolean bool){
         this.booleans.put(key, new Bool(key,bool));

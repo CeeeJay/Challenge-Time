@@ -35,13 +35,13 @@ public class Bool{
     }
 
     public View getListView( LayoutInflater inflater , ViewGroup container){
-        View boolView = inflater.inflate(R.layout.var_list_item, container, false);
-        ((Button)boolView.findViewById(R.id.var_type)).setText("B");
+        View view = inflater.inflate(R.layout.var_list_item, container, false);
+        ((TextView)view.findViewById(R.id.var_type)).setText("B");
         if(name != null){
-            ((TextView)boolView.findViewById(R.id.var_name)).setText(name);
+            ((TextView)view.findViewById(R.id.var_name)).setText(name);
         }
-        ((Button)boolView.findViewById(R.id.var_worth)).setText(value ? "1" : "0");
-        return boolView;
+        ((TextView)view.findViewById(R.id.var_worth)).setText(String.valueOf(value));
+        return view;
     }
 
     @Override
