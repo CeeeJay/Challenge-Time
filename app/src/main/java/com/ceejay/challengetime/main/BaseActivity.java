@@ -6,7 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.editor.EditorActivity;
+import com.ceejay.challengetime.editor.Editor;
 import com.ceejay.challengetime.generallys.Generallys;
 import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.news.News;
@@ -33,20 +33,11 @@ public class BaseActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
-            case 0:
-                startActivity(new Intent(this, Geo.class));
-                break;
-            case 1:
-                startActivity(new Intent(this, EditorActivity.class));
-                break;
-            case 2:
-                startActivity(new Intent(this, Generallys.class));
-                break;
-            case 3:
-                startActivity(new Intent(this, News.class));
-                break;
-            default:
-                return;
+            case 0: startActivity(new Intent(this, Geo.class)); break;
+            case 1: startActivity(new Intent(this, Editor.class)); return;
+            case 2: startActivity(new Intent(this, Generallys.class)); break;
+            case 3: startActivity(new Intent(this, News.class)); break;
+            default: return;
         }
         overridePendingTransition(0, 0);
         finish();

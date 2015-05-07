@@ -1,6 +1,8 @@
-package com.ceejay.challengetime.editor;
+package com.ceejay.challengetime.editor.CustomEditor;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +46,8 @@ public class AreaAdapter extends ArrayAdapter {
             view.findViewById(R.id.add_list_item).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Area area = new Area();
-                    area.position = new LatLng(2,3);
-                    area.title = "test";
-                    challenge.addArea(Math.random() + "", area);
-                    AreaAdapter.this.notifyDataSetChanged();
+                    Intent intent = new Intent(getContext(),NewArea.class);
+                    ((Activity)getContext()).startActivityForResult(intent, 0);
                 }
             });
             view.findViewById(R.id.visible_list_item).setOnClickListener(new View.OnClickListener() {

@@ -1,23 +1,14 @@
-package com.ceejay.challengetime.editor;
+package com.ceejay.challengetime.editor.CustomEditor;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.Bool;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.challenge.Int;
-import com.ceejay.challengetime.challenge.Str;
-import com.ceejay.challengetime.geo.MapManager;
 
 import java.util.ArrayList;
 

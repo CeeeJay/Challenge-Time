@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.editor;
+package com.ceejay.challengetime.editor.CustomEditor;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,11 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.Area;
 import com.ceejay.challengetime.challenge.Challenge;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.ArrayList;
 
 
 /**

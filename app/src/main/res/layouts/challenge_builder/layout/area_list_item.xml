@@ -1,60 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingTop="10dp" android:paddingBottom="10dp" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_weight="0.5"
+        android:layout_height="fill_parent"
         android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/type_background"
+            android:gravity="center"
+            android:minWidth="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:text="A"
+                android:id="@+id/area_type"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_margin="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:text="Area"
-            android:id="@+id/area_type"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="#33000000"/>
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1.5"
-            android:gravity="center_vertical"
-            android:paddingStart="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Merker"
-                android:id="@+id/area_name"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="#33000000"/>
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:paddingStart="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="LatLng(2,3)"
-                android:id="@+id/area_position"/>
-        </LinearLayout>
-
+            android:textSize="20dp"
+            android:text="Merker"
+            android:id="@+id/area_name"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Merker"
+            android:id="@+id/area_position"/>
     </LinearLayout>
+
+</LinearLayout>
+
 
     <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"

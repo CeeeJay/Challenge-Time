@@ -1,6 +1,7 @@
-package com.ceejay.challengetime.editor;
+package com.ceejay.challengetime.editor.CustomEditor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,20 +11,23 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.challenge.Area;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.main.BaseActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Locale;
 
 /**
  * Created by CJay on 11.02.2015 for Challenge Time.
  */
-public class EditorActivity extends BaseActivity implements View.OnClickListener{
-    public final static String TAG = EditorActivity.class.getSimpleName();
+public class CustomEditor extends BaseActivity implements View.OnClickListener{
+    public final static String TAG = CustomEditor.class.getSimpleName();
 
     public static Challenge challenge = new Challenge();
 
@@ -35,6 +39,8 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
     }
 
     private int[] tabs = {R.id.allgemein,R.id.var,R.id.geo,R.id.function,R.id.loop};
+    public static ArrayAdapter areaArrayAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +113,22 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
         v.setBackgroundColor(Color.TRANSPARENT);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            Bundle bundle = data.getExtras();
+            Area area = new Area();
+            area.position = new LatLng(Double.valueOf(bundle.getString("position").split(",")[0]),Double.valueOf(bundle.getString("position").split(",")[1]));
+            area.title = bundle.getString("name");
+            challenge.addArea(bundle.getString("name"),area);
+            if(areaArrayAdapter != null){
+                areaArrayAdapter.notifyDataSetChanged();
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -153,22 +175,23 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
             View rootView = inflater.inflate(R.layout.var_list, container, false);
 
             ListView list = (ListView)rootView.findViewById(R.id.listView);;
-            ListAdapter listAdapter;
+            ArrayAdapter arrayAdapter;
 
             switch(this.getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 2:
-                    listAdapter = new VarAdapter(EditorActivity.getAppContext(),challenge);
+                    arrayAdapter = new VarAdapter(CustomEditor.getAppContext(),challenge);
                     break;
                 case 3:
-                    listAdapter = new AreaAdapter(EditorActivity.getAppContext(),challenge);
+                    arrayAdapter = new AreaAdapter(CustomEditor.getAppContext(),challenge);
+                    areaArrayAdapter = arrayAdapter;
                     break;
                 case 5:
-                    listAdapter = new LoopAdapter(EditorActivity.getAppContext(),challenge);
+                    arrayAdapter = new LoopAdapter(CustomEditor.getAppContext(),challenge);
                     break;
                 default:
                     return rootView;
             }
-            list.setAdapter(listAdapter);
+            list.setAdapter(arrayAdapter);
             return rootView;
         }
     }

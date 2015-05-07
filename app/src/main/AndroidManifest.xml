@@ -41,10 +41,12 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".editor.EditorActivity" />
+        <activity android:name=".editor.CustomEditor.CustomEditor" />
         <activity android:name="com.facebook.LoginActivity" />
         <activity android:name=".generallys.Generallys" />
         <activity android:name=".main.MainActivity" />
+        <activity android:name=".editor.Editor" />
+        <activity android:name=".editor.CustomEditor.NewArea" />
 
         <service
             android:name=".challenge.ChallengeObserver"
