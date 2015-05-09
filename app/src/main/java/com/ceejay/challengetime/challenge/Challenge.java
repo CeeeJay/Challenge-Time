@@ -2,15 +2,15 @@ package com.ceejay.challengetime.challenge;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Looper;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.geo.MapManager;
-import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -75,13 +75,103 @@ public class Challenge implements Runnable{
         polygons.put( key , value );
     }
     public void addPolyline( String key , Polyline value ){
-        polylines.put( key , value);
+        polylines.put(key, value);
     }
     public void addFunction( String key , Function value ){
         functions.put(key, value);
     }
     public void addTrigger( Trigger value ){
         triggers.add(value);
+    }
+
+    public void addBool(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a Bool");
+
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog, null);
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TextView name = (TextView)view.findViewById(R.id.name);
+                        TextView worth = (TextView)view.findViewById(R.id.worth);
+                        addBool(name.getText().toString(),Boolean.valueOf(worth.getText().toString()));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
+    public void addInteger(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a Integer");
+
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog, null);
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TextView name = (TextView)view.findViewById(R.id.name);
+                        TextView worth = (TextView)view.findViewById(R.id.worth);
+                        addInteger(name.getText().toString(), Integer.valueOf(worth.getText().toString()));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
+    public void addString(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a String");
+
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog, null);
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TextView name = (TextView)view.findViewById(R.id.name);
+                        TextView worth = (TextView)view.findViewById(R.id.worth);
+                        addString(name.getText().toString(), worth.getText().toString());
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
+
+    public void addArea(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a String");
+
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog2, null);
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TextView name = (TextView)view.findViewById(R.id.name);
+                        TextView worth = (TextView)view.findViewById(R.id.worth);
+                        addString(name.getText().toString(), worth.getText().toString());
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
     }
 
     public String getTranslate( String name ) {

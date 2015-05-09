@@ -3,4 +3,16 @@
     <array name="builder_types">
         <item>Custom Challenge</item>
     </array>
+
+    <array name="var_types">
+        <item>Bool</item>
+        <item>Integer</item>
+        <item>String</item>
+    </array>
+
+    <array name="area_types">
+        <item>Area</item>
+        <item>Polygon</item>
+        <item>Polyline</item>
+    </array>
 </resources>

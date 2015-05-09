@@ -11,14 +11,17 @@
         <LinearLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/type_background"
-            android:gravity="center">
+            android:background="@drawable/comperator_type_bracket"
+            android:gravity="center"
+            android:id="@+id/type_background">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30dp"
-                android:text="B"
-                android:id="@+id/var_type"/>
+                android:textColor="@color/white"
+                android:text="U"
+                android:id="@+id/type"
+                android:layout_marginStart="-8dp"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -27,18 +30,13 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:layout_margin="5dp" android:paddingStart="5dp">
+        android:layout_marginLeft="5dp" android:paddingStart="5dp">
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="30dp"
             android:text="Merker"
-            android:id="@+id/var_name"/>
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Merker"
-            android:id="@+id/var_worth"/>
+            android:id="@+id/name"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -13,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.User;
 import com.ceejay.challengetime.geo.Geo;
-import com.ceejay.challengetime.main.MainActivity;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;

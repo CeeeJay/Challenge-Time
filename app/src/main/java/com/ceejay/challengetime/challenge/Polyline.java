@@ -1,11 +1,9 @@
 package com.ceejay.challengetime.challenge;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.ceejay.challengetime.geo.MapManager;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;

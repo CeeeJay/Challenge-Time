@@ -4,4 +4,7 @@
     <string name="triangle_down">▼</string>
     <string name="triangle_right">►</string>
     <string name="triangle_left">◄</string>
+
+    <string name="name">Name</string>
+    <string name="worth">Worth</string>
 </resources>

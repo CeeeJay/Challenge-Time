@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
@@ -31,97 +30,26 @@ public class VarAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         int pos = position;
 
-        if(pos == 0){
-            View view = inflater.inflate(R.layout.heading_list_item,parent,false);
-            ((TextView)view.findViewById(R.id.header_name)).setText("Bool");
-            if(boolExpanded){
-                ((TextView)view.findViewById(R.id.visible_list_icon)).setText(getContext().getResources().getString(R.string.triangle_down));
-            }else{
-                ((TextView)view.findViewById(R.id.visible_list_icon)).setText(getContext().getResources().getString(R.string.triangle_up));
-            }
-            view.findViewById(R.id.add_list_item).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    challenge.addBool(Math.random() + "", Math.round(Math.random() * 2) != 0);
-                    VarAdapter.this.notifyDataSetChanged();
-                }
-            });
-            view.findViewById(R.id.visible_list_item).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    boolExpanded = !boolExpanded;
-                    VarAdapter.this.notifyDataSetChanged();
-                }
-            });
+        if (challenge.booleans.size() > pos && boolExpanded ) {
+            View view = new ArrayList<>(challenge.booleans.values()).get(pos).getListView(inflater, parent);
+            view.findViewById(R.id.type_background).setBackground(getContext().getResources().getDrawable(R.drawable.bool_type_background));
             return view;
         }
 
-        if(boolExpanded) {
-            if (challenge.booleans.size() > pos - 1 ) {
-                return new ArrayList<>(challenge.booleans.values()).get(pos - 1).getListView(inflater, parent);
-            }
-            pos -= challenge.booleans.size();
-        }
-        pos -= 1;
+        pos -= challenge.booleans.size();
 
-        if(pos == 0){
-            View view = inflater.inflate(R.layout.heading_list_item,parent,false);
-            ((TextView)view.findViewById(R.id.header_name)).setText("Integer");
-            if(intExpanded){
-                ((TextView)view.findViewById(R.id.visible_list_icon)).setText(getContext().getResources().getString(R.string.triangle_down));
-            }else{
-                ((TextView)view.findViewById(R.id.visible_list_icon)).setText(getContext().getResources().getString(R.string.triangle_up));
-            }
-            view.findViewById(R.id.add_list_item).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    challenge.addInteger(Math.random() + "", (int) Math.round(Math.random() * 2));
-                    VarAdapter.this.notifyDataSetChanged();
-                }
-            });
-            view.findViewById(R.id.visible_list_item).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    intExpanded = !intExpanded;
-                    VarAdapter.this.notifyDataSetChanged();
-                }
-            });
+        if (challenge.integers.size() > pos && intExpanded ) {
+            View view = new ArrayList<>(challenge.integers.values()).get(pos).getListView(inflater, parent);
+            view.findViewById(R.id.type_background).setBackground(getContext().getResources().getDrawable(R.drawable.integer_type_background));
             return view;
         }
-        if(intExpanded) {
-            if (challenge.integers.size() > pos - 1) {
-                return new ArrayList<>(challenge.integers.values()).get(pos - 1).getListView(inflater, parent);
-            }
-            pos -= challenge.integers.size();
-        }
-        pos -= 1;
 
-        if(pos == 0){
-            View view = inflater.inflate(R.layout.heading_list_item,parent,false);
-            ((TextView)view.findViewById(R.id.header_name)).setText("String");
-            if(stringExpanded){
-                ((TextView)view.findViewById(R.id.visible_list_icon)).setText(getContext().getResources().getString(R.string.triangle_down));
-            }else{
-                ((TextView)view.findViewById(R.id.visible_list_icon)).setText(getContext().getResources().getString(R.string.triangle_up));
-            }
-            view.findViewById(R.id.add_list_item).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    challenge.addString(Math.random() + "", Math.round(Math.random() * 2) + "");
-                    VarAdapter.this.notifyDataSetChanged();
-                }
-            });
-            view.findViewById(R.id.visible_list_item).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    stringExpanded = !stringExpanded;
-                    VarAdapter.this.notifyDataSetChanged();
-                }
-            });
+        pos -= challenge.integers.size();
+
+        if (challenge.strings.size() > pos && stringExpanded) {
+            View view = new ArrayList<>(challenge.strings.values()).get(pos).getListView(inflater, parent);
+            view.findViewById(R.id.type_background).setBackground(getContext().getResources().getDrawable(R.drawable.string_type_background));
             return view;
-        }
-        if (challenge.strings.size() > pos - 1 && stringExpanded) {
-            return new ArrayList<>(challenge.strings.values()).get(pos - 1).getListView(inflater, parent);
         }
 
         return null;
@@ -132,7 +60,7 @@ public class VarAdapter extends ArrayAdapter {
         return
                 (boolExpanded ? challenge.booleans.size() : 0) +
                 (intExpanded ? challenge.integers.size() : 0) +
-                (stringExpanded ? challenge.strings.size() : 0) + 3;
+                (stringExpanded ? challenge.strings.size() : 0);
     }
 
 }

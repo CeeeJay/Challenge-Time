@@ -1,6 +1,5 @@
 package com.ceejay.challengetime.generallys;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 

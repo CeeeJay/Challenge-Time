@@ -4,8 +4,6 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 /**
  * Created by CJay on 21.04.2015 for Challenge Time.

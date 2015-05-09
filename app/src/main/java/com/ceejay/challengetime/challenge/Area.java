@@ -4,7 +4,6 @@ import android.animation.IntEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,12 +141,12 @@ public class Area {
     }
 
     public View getListView( LayoutInflater inflater , ViewGroup container){
-        View view = inflater.inflate(R.layout.area_list_item, container, false);
-        ((TextView)view.findViewById(R.id.area_type)).setText("A");
+        View view = inflater.inflate(R.layout.list_item, container, false);
+        ((TextView)view.findViewById(R.id.type)).setText("A");
         if(title != null){
-            ((TextView)view.findViewById(R.id.area_name)).setText(title);
+            ((TextView)view.findViewById(R.id.name)).setText(title);
         }
-        ((TextView)view.findViewById(R.id.area_position)).setText(position.toString()+"");
+        ((TextView)view.findViewById(R.id.worth)).setText(position.toString()+"");
         return view;
     }
 

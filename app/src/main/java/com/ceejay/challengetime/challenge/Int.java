@@ -3,7 +3,6 @@ package com.ceejay.challengetime.challenge;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
@@ -34,12 +33,12 @@ public class Int {
     }
 
     public View getListView( LayoutInflater inflater , ViewGroup container){
-        View view = inflater.inflate(R.layout.var_list_item, container, false);
-        ((TextView)view.findViewById(R.id.var_type)).setText("I");
+        View view = inflater.inflate(R.layout.list_item, container, false);
+        ((TextView)view.findViewById(R.id.type)).setText("I");
         if(name != null){
-            ((TextView)view.findViewById(R.id.var_name)).setText(name);
+            ((TextView)view.findViewById(R.id.name)).setText(name);
         }
-        ((TextView)view.findViewById(R.id.var_worth)).setText(value+"");
+        ((TextView)view.findViewById(R.id.worth)).setText(value+"");
         return view;
     }
 
