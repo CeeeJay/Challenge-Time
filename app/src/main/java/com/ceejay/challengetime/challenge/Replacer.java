@@ -1,5 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
+import android.util.Log;
+
 import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.helper.Distance;
 
@@ -22,7 +24,7 @@ public class Replacer {
         m.appendTail(sb);
 
         //Replace Int , Bool , Timer Variables with worth
-        m = PatternType.variable.matcher(m.toString());
+        m = PatternType.variable.matcher(sb.toString());
         sb = new StringBuffer();
         while (m.find()) {
             m.appendReplacement(sb, get(m.group(1), m.group(2), context));
@@ -32,7 +34,8 @@ public class Replacer {
         return sb.toString();
     }
 
-    public static String userInArea( String user , String area , String type , Challenge context ){
+    public static String userInArea( String user , String type, String area, Challenge context ){
+        if( LocationObserver.position == null || context.getArea(area).position == null ) return "false";
         if( type.equals( "->" ) ){
             return String.valueOf(Distance.between( LocationObserver.position , context.getArea(area).position ) <= context.getArea(area).radius);
         }else if( type.equals( "<-" ) ){

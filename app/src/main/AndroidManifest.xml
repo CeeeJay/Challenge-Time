@@ -47,6 +47,8 @@
         <activity android:name=".main.MainActivity" />
         <activity android:name=".editor.Editor" />
         <activity android:name=".editor.CustomEditor.NewArea" />
+        <activity android:name=".editor.CustomEditor.Loop.TriggerActivity" />
+        <activity android:name=".editor.CustomEditor.Loop.EffectActivity" />
 
         <service
             android:name=".challenge.ChallengeObserver"

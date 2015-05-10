@@ -16,6 +16,9 @@ public class Trigger {
     public String effect;
     public String els;
 
+    public String name = "";
+    public String title = "";
+
     private Comparator comparator;
     private Executor executor;
     private Executor executorEls;
@@ -53,6 +56,9 @@ public class Trigger {
         if( els != null ){
             executorEls = new Executor(els , context);
         }
+    }
+
+    public Trigger() {
     }
 
     public void setTrigger( String trigger ){

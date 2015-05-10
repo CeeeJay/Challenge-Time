@@ -1,6 +1,8 @@
 package com.ceejay.challengetime.challenge;
 
 
+import android.util.Log;
+
 /**
  * Created by CJay on 24.04.2015 for Challenge Time.
  */

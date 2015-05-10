@@ -15,4 +15,15 @@
         <item>Polygon</item>
         <item>Polyline</item>
     </array>
+
+    <array name="loop">
+        <item>Trigger</item>
+        <item>Effect</item>
+    </array>
+
+    <array name="trigger_options">
+        <item>Change Value</item>
+        <item>Append Item</item>
+        <item>Prepend Item</item>
+    </array>
 </resources>

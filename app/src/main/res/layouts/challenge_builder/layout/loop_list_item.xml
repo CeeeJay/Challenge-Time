@@ -31,11 +31,11 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="Merker"
-            android:id="@+id/var_name"/>
+            android:id="@+id/name"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Merker"
-            android:id="@+id/var_worth"/>
+            android:id="@+id/worth"/>
     </LinearLayout>
 </LinearLayout>

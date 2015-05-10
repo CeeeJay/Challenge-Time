@@ -1,5 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
+import android.util.Log;
+
 /**
  * Created by CJay on 25.04.2015 for Challenge Time.
  */
@@ -43,7 +45,7 @@ public class Parser {
                 String v = parseAnd();
                 for (;;) {
                     eatSpace();
-                    if (c == '|') { // subtraction
+                    if (c == '|' ||  c == 'O') { // subtraction
                         eatChar();
                         if (c == '|') eatChar();
                         eatSpace();
@@ -58,7 +60,7 @@ public class Parser {
                 String v = parseComp();
                 for (;;) {
                     eatSpace();
-                    if (c == '&') { // subtraction
+                    if ( c == '&' ||  c == 'U' ) { // subtraction
                         eatChar();
                         if (c == '&') eatChar();
                         eatSpace();
@@ -76,6 +78,9 @@ public class Parser {
                     eatChar();
                     if(c == '=') eatChar();
                     eatSpace();
+                    if( v.equals("false") || v.equals("true") ){
+                        return String.valueOf(Boolean.valueOf( v ).compareTo(Boolean.parseBoolean(parseExpression())) == 0);
+                    }
                     return String.valueOf(Double.valueOf( v ).compareTo(Double.parseDouble(parseExpression())) == 0);
                 } else if(c == '>') {
                     eatChar();
@@ -92,10 +97,6 @@ public class Parser {
                         eatChar();
                         eatSpace();
                         return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != 1);
-                    } else if( c == '-' ){
-                        eatChar();
-                        eatSpace();
-                        return "true";
                     } else {
                         eatSpace();
                         return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) == -1);
@@ -105,17 +106,12 @@ public class Parser {
                     if(c == '=') {
                         eatChar();
                         eatSpace();
+                        if( v.equals("false") || v.equals("true") ){
+                            return String.valueOf(Boolean.valueOf( v ).compareTo(Boolean.parseBoolean(parseExpression())) != 0);
+                        }
                         return String.valueOf(Double.valueOf(v).compareTo(Double.parseDouble(parseExpression())) != 0);
                     }
-                }else if( c == '-' ){
-                    eatChar();
-                    if( c == '>' ){
-                        eatChar();
-                        eatSpace();
-                        return "true";
-                    }else{
-                        releaseChar();
-                    }
+                    releaseChar();
                 }
                 return v;
             }

@@ -15,6 +15,8 @@ public class PatternType {
             function = Pattern.compile("(?:(\\S+)#)(\\S+)\\(\\)"),
             variable = Pattern.compile("(\\S+)#(\\S+)"),
             userInArea = Pattern.compile("user#(\\S+)\\s+(->|<-)\\s+area#(\\S+)"),
+            awl2 = Pattern.compile("(&&|\\|\\||\\|&|&&\\(|\\|\\|\\()\\s*(\\s+)"),
+            awl = Pattern.compile("\\S*(U|O|X|U\\(|O\\(|X\\()\\s+(\\S+)\\s+"),
             time = Pattern.compile("(?:(?:(?:(\\d):)?(\\d):(\\d))|(?:(\\d)h)?(?:(\\d)m)?(?:(\\d)s)?(?:(\\d)ms)?)");
 
 }

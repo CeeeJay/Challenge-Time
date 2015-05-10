@@ -28,12 +28,14 @@ public class LoopAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.loop_list_item,parent,false);
         ((TextView)view.findViewById(R.id.step_number)).setText(position+1+"");
+        ((TextView)view.findViewById(R.id.name)).setText(challenge.triggers.get(position).name);
+        ((TextView)view.findViewById(R.id.worth)).setText(challenge.triggers.get(position).title);
         return view;
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return challenge.triggers.size();
     }
 }
 

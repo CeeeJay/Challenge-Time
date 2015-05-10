@@ -150,6 +150,31 @@ public class Challenge implements Runnable{
                 });
         builder.show();
     }
+    public void addTrigger(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a String");
+
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog, null);
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TextView name = (TextView)view.findViewById(R.id.name);
+                        TextView worth = (TextView)view.findViewById(R.id.worth);
+                        Trigger trigger = new Trigger();
+                        trigger.name = name.getText().toString();
+                        trigger.title = worth.getText().toString();
+                        addTrigger(trigger);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
 
     public void addArea(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

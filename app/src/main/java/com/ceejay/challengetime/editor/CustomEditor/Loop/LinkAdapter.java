@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.editor.CustomEditor;
+package com.ceejay.challengetime.editor.CustomEditor.Loop;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import com.ceejay.challengetime.R;
 public class LinkAdapter extends ArrayAdapter{
     public final static String TAG = LinkAdapter.class.getSimpleName();
 
-    private static final String[] LinkTypes = {"U","O","X","U(","O(","X("};
+    private static final String[] LinkTypes = {"U","O","X","U(","O(","X(",")"};
     private Context context;
 
 
@@ -32,13 +32,18 @@ public class LinkAdapter extends ArrayAdapter{
         View view = inflater.inflate(R.layout.link_grid_item, parent, false);
 
         LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.comperator_type_background);
-        if(LinkTypes[position].substring(1).equals("(")){
-            linearLayout.setBackground(getContext().getResources().getDrawable(R.drawable.comperator_type_bracket));
+        TextView textView = (TextView) view.findViewById(R.id.comperator_type);
+        if(LinkTypes[position].substring(0,1).equals(")")) {
+            linearLayout.setBackground(getContext().getResources().getDrawable(R.drawable.comperator_type_bracket_close));
+            textView.setText("");
         }else{
-            linearLayout.setBackground(getContext().getResources().getDrawable(R.drawable.comperator_type));
+            if (LinkTypes[position].substring(1).equals("(")) {
+                linearLayout.setBackground(getContext().getResources().getDrawable(R.drawable.comperator_type_bracket));
+            } else {
+                linearLayout.setBackground(getContext().getResources().getDrawable(R.drawable.comperator_type));
+            }
+            textView.setText(LinkTypes[position].substring(0, 1));
         }
-        TextView textView = (TextView)view.findViewById(R.id.comperator_type);
-        textView.setText(LinkTypes[position].substring(0,1));
         textView.setContentDescription(LinkTypes[position]);
         return view;
     }

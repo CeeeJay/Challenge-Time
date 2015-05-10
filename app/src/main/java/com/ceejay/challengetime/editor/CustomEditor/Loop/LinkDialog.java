@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.editor.CustomEditor;
+package com.ceejay.challengetime.editor.CustomEditor.Loop;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +19,7 @@ public class LinkDialog {
     public final static String TAG = LinkDialog.class.getSimpleName();
 
     private AlertDialog alertDialog;
+    private OnItemClickListener listener;
 
     public LinkDialog( Context context ) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -31,7 +32,7 @@ public class LinkDialog {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, view.findViewById(R.id.comperator_type).getContentDescription().toString());
+                listener.onItemClick(view.findViewById(R.id.comperator_type).getContentDescription().toString());
                 alertDialog.cancel();
             }
         });
@@ -44,9 +45,18 @@ public class LinkDialog {
         alertDialog = builder.create();
     }
 
+    public void setOnItemClickListener( OnItemClickListener listener ){
+        this.listener = listener;
+    }
+
     public void show(){
         alertDialog.show();
     }
+
+    interface OnItemClickListener{
+        void onItemClick( String content );
+    }
+
 }
 
 

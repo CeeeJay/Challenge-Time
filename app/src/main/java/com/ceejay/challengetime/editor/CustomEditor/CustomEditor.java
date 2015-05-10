@@ -10,9 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -21,6 +23,9 @@ import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Area;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.Function;
+import com.ceejay.challengetime.editor.CustomEditor.Loop.EffectActivity;
+import com.ceejay.challengetime.editor.CustomEditor.Loop.LinkDialog;
+import com.ceejay.challengetime.editor.CustomEditor.Loop.TriggerActivity;
 import com.ceejay.challengetime.main.BaseActivity;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -106,7 +111,6 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
             public void onPageScrollStateChanged(int state) {
             }
         });
-        super.startNavigationDrawer();
 
         Button button = (Button)findViewById(R.id.add_list_item);
         button.setOnClickListener(new View.OnClickListener() {
@@ -166,9 +170,7 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
                     case 3:
                         //challenge.addFunction(this);
                     case 4:
-                        LinkDialog linkDialog = new LinkDialog(context);
-                        linkDialog.show();
-                        //challenge.addTrigger(this);
+                        challenge.addTrigger(context);
                 }
             }
         });
@@ -178,21 +180,11 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
     public void onClick( View v ) {
         highlightTab(v);
         switch (v.getId()){
-            case R.id.allgemein:
-                mViewPager.setCurrentItem(0);
-                break;
-            case R.id.var:
-                mViewPager.setCurrentItem(1);
-                break;
-            case R.id.geo:
-                mViewPager.setCurrentItem(2);
-                break;
-            case R.id.function:
-                mViewPager.setCurrentItem(3);
-                break;
-            case R.id.loop:
-                mViewPager.setCurrentItem(4);
-                break;
+            case R.id.allgemein: mViewPager.setCurrentItem(0); break;
+            case R.id.var: mViewPager.setCurrentItem(1); break;
+            case R.id.geo: mViewPager.setCurrentItem(2); break;
+            case R.id.function: mViewPager.setCurrentItem(3); break;
+            case R.id.loop: mViewPager.setCurrentItem(4); break;
         }
     }
 
@@ -220,17 +212,20 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            Bundle bundle = data.getExtras();
-            Area area = new Area();
-            area.position = new LatLng(Double.valueOf(bundle.getString("position").split(",")[0]),Double.valueOf(bundle.getString("position").split(",")[1]));
-            area.title = bundle.getString("name");
-            challenge.addArea(bundle.getString("name"),area);
-            if(geometryArrayAdapter != null){
-                geometryArrayAdapter.notifyDataSetChanged();
+        Log.i(TAG,challenge.triggers.get(0).trigger);
+        if(resultCode == 2) {
+            try {
+                Bundle bundle = data.getExtras();
+                Area area = new Area();
+                area.position = new LatLng(Double.valueOf(bundle.getString("position").split(",")[0]), Double.valueOf(bundle.getString("position").split(",")[1]));
+                area.title = bundle.getString("name");
+                challenge.addArea(bundle.getString("name"), area);
+                if (geometryArrayAdapter != null) {
+                    geometryArrayAdapter.notifyDataSetChanged();
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
         }
     }
 
@@ -276,7 +271,7 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.var_list, container, false);
+            View rootView = inflater.inflate(R.layout.list, container, false);
 
             ListView list = (ListView)rootView.findViewById(R.id.listView);
             ArrayAdapter arrayAdapter;
@@ -295,6 +290,36 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
                     functionArrayAdapter = arrayAdapter;
                     break;
                 case 5:
+                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getAppContext());
+                        builder.setTitle("Pick a LOOOL")
+                            .setItems(R.array.loop, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent;
+                                    switch (which) {
+                                        case 0:
+                                            intent = new Intent(context, TriggerActivity.class);
+                                            startActivityForResult(intent, position);
+                                            break;
+                                        case 1:
+                                            intent = new Intent(context, EffectActivity.class);
+                                            startActivityForResult(intent, position);
+                                            break;
+                                    }
+                                }
+                            });
+
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.show();
+                        }
+                    });
                     arrayAdapter = new LoopAdapter(CustomEditor.getAppContext(),challenge);
                     loopArrayAdapter = arrayAdapter;
                     break;
@@ -304,6 +329,12 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
             list.setAdapter(arrayAdapter);
             return rootView;
         }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        intent.putExtra("requestCode", requestCode);
+        super.startActivityForResult(intent, requestCode);
     }
 
 }
