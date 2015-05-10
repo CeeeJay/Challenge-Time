@@ -30,13 +30,6 @@ public class EditorAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.grid_view_item, parent, false);
         ((TextView)view.findViewById(R.id.grid_item_name)).setText(array[position]);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getContext().startActivity(new Intent(getContext(),CustomEditor.class));
-                ((Activity)getContext()).finish();
-            }
-        });
         return view;
     }
 

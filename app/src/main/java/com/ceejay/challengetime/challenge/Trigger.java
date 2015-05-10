@@ -73,30 +73,15 @@ public class Trigger {
                 executorEls.execute();
             }
         }
-
-
-/*
-
-        Log.i(TAG,System.currentTimeMillis()+"");
-        for(String anweisung : trigger.split(";")) {
-            Matcher m = triggerPattern.matcher(anweisung);
-            while (m.find()) {
-                Log.i(TAG,m.group(1) + ";" + m.group(2) + ";" + m.group(3) + ";" + m.group(4) + ";" + m.group(5) );
-                if(m.group(1) == null){
-                    if(m.group(4) == null){
-                        if(m.group(3).equals("<")){
-                            Log.i(TAG,Boolean.parseBoolean("2<3")+"");
-                        }
-                    }
-                }
-            }
-        }
-        Log.i(TAG,Parse.parseBoolean("(true && false || ( false && true ) ) && ( false )"));*/
-
-
-
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"trigger\":\"" + trigger + '"' +
+                ", \"effect\":\"" + effect + '"' +
+                '}';
+    }
 }
 
 

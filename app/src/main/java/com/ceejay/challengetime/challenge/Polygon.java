@@ -3,6 +3,7 @@ package com.ceejay.challengetime.challenge;
 import android.graphics.Color;
 
 import com.ceejay.challengetime.geo.MapManager;
+import com.ceejay.challengetime.helper.Position;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -59,6 +60,18 @@ public class Polygon {
         }
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"title\":\"" + title + '"' +
+                ", \"description\":\"" + description + '"' +
+                ", \"points\":" + Position.toStr(points) +
+                ", \"fillColor\":" + fillColor +
+                ", \"strokeColor\":" + strokeColor +
+                ", \"strokeWidth\":" + strokeWidth +
+                ", \"visible\":" + visible +
+                '}';
+    }
 }
 
 

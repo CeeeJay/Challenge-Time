@@ -1,6 +1,7 @@
 package com.ceejay.challengetime.challenge;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ceejay.challengetime.geo.MapManager;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  *
  */
 public class ChallengeAdapter extends ArrayList<Challenge> {
-
+    public static final String TAG = ChallengeAdapter.class.getSimpleName();
     public static ArrayList<Challenge> challenges = new ArrayList<>();
     public static Challenge focusedChallenge;
     public static ChallengeObserver observer;
@@ -26,6 +27,7 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
         if(challenge != null) {
             challenges.add(challenge);
             MapManager.addMarker(challenge);
+            Log.i(TAG,challenge.toString());
         }
     }
 

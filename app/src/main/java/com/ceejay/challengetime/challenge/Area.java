@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.geo.MapManager;
+import com.ceejay.challengetime.helper.Position;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -150,6 +151,19 @@ public class Area {
         return view;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"title\":\"" + title + '\"' +
+                ", \"description\":\"" + description + '\"' +
+                ", \"radius\":" + radius +
+                ", \"focus\":" + focus +
+                ", \"position\":" + Position.toStr(position) +
+                ", \"visible\":" + visible +
+                ", \"strokeColor\":" + strokeColor +
+                ", \"strokeWidth\":" + strokeWidth +
+                '}';
+    }
 }
 
 

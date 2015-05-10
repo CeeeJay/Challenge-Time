@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="builder_types">
+        <item>Run Challenge</item>
         <item>Custom Challenge</item>
     </array>
 

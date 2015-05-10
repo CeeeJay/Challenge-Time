@@ -45,7 +45,7 @@ public class Bool{
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return value+"";
     }
 }
 

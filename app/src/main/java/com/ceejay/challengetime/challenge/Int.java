@@ -44,7 +44,7 @@ public class Int {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return value+"";
     }
 }
 

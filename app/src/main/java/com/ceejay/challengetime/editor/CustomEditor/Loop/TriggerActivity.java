@@ -54,13 +54,16 @@ public class TriggerActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
-        trigger.trigger = "";
+    public void onBackPressed() {
+        String str = "";
         for( TriggerLine line : lines ){
-            trigger.trigger += line.toString() + " ";
+            if(line.toString().replace(" ","").equals("")){
+                return;
+            }
+            str += line.toString() + " ";
         }
-        trigger.trigger = trigger.trigger.substring(1,trigger.trigger.length());
-        super.onPause();
+        trigger.trigger = str.substring(1,str.length());
+        super.onBackPressed();
     }
 }
 

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.geo.MapManager;
+import com.ceejay.challengetime.helper.JSONMap;
+import com.ceejay.challengetime.helper.Position;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -33,16 +35,16 @@ public class Challenge implements Runnable{
     public String publisher;
     public int publish_time;
     public int interval = 1000;
-    public Dictionary dictionary = new Dictionary();
     public ArrayList<Trigger> triggers = new ArrayList<>();
-    public HashMap<String,Timer> timers = new HashMap<>();
-    public HashMap<String,Area> areas = new HashMap<>();
-    public HashMap<String,Polygon> polygons = new HashMap<>();
-    public HashMap<String,Polyline> polylines = new HashMap<>();
-    public HashMap<String,Function> functions = new HashMap<>();
-    public HashMap<String,Int> integers = new HashMap<>();
-    public HashMap<String,Str> strings = new HashMap<>();
-    public HashMap<String,Bool> booleans = new HashMap<>();
+    public JSONMap<Translate> dictionary = new JSONMap<>();
+    public JSONMap<Timer> timers = new JSONMap<>();
+    public JSONMap<Area> areas = new JSONMap<>();
+    public JSONMap<Polygon> polygons = new JSONMap<>();
+    public JSONMap<Polyline> polylines = new JSONMap<>();
+    public JSONMap<Function> functions = new JSONMap<>();
+    public JSONMap<Int> integers = new JSONMap<>();
+    public JSONMap<Str> strings = new JSONMap<>();
+    public JSONMap<Bool> booleans = new JSONMap<>();
 
 
     private Thread thread;
@@ -54,7 +56,7 @@ public class Challenge implements Runnable{
     }
 
     public void addTranslate( String key , Translate value ){
-        dictionary.addTranslate(key, value);
+        dictionary.put(key, value);
     }
     public void addTimer( String key , Timer value ){
         timers.put(key, value);
@@ -200,7 +202,7 @@ public class Challenge implements Runnable{
     }
 
     public String getTranslate( String name ) {
-        return dictionary.getTranslate(name, "de");
+        return dictionary.get(name).getDefinition("de");
     }
     public Bool getBool(String name) {
         return booleans.get(name);
@@ -306,5 +308,40 @@ public class Challenge implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+        sb.append("\"dictionary\":" + dictionary + ",");
+        sb.append("\"position\":" + Position.toStr(position) + ",");
+        sb.append("\"name\":\"" + name + "\",");
+        sb.append("\"publisher\":\"" + publisher + "\",");
+        sb.append("\"publish_time\":" + publish_time + ",");
+        //sb.append("\"challenge_id\":" + challenge_id + ",");
+        //sb.append("\"type\":" + type + ",");
+        //sb.append("\"description\":" + description + ",");
+        //sb.append("\"record\":" + record + ",");
+        sb.append("\"variables\":{");
+            sb.append("\"bool\":" + booleans + ",");
+            sb.append("\"integer\":" + integers + ",");
+            sb.append("\"string\":" + strings );
+            //sb.append("\"timer\":" + timers );
+        sb.append("},");
+
+        sb.append("\"geometry\":{");
+            sb.append("\"areas\":" + areas + ",");
+            sb.append("\"polygons\":" + polygons + ",");
+            sb.append("\"polylines\":" + polylines );
+            //sb.append("\"timer\":" + timers );
+        sb.append("},");
+
+        sb.append("\"functions\":" + functions + ",");
+        sb.append("\"loop\":" + triggers );
+        sb.append("}");
+
+        return sb.toString();
     }
 }

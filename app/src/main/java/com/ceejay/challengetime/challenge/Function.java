@@ -61,6 +61,14 @@ public class Function {
         return view;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"name\":\"" + name + '"' +
+                ", \"trigger\":\"" + trigger + '"' +
+                ", \"effect\":\"" + effect + '"' +
+                '}';
+    }
 }
 
 

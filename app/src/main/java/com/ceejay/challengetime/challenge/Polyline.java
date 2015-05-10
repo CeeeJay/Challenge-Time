@@ -3,6 +3,7 @@ package com.ceejay.challengetime.challenge;
 import android.graphics.Color;
 
 import com.ceejay.challengetime.geo.MapManager;
+import com.ceejay.challengetime.helper.Position;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -52,6 +53,17 @@ public class Polyline {
         }
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"title\":\"" + title + '"' +
+                ", \"description\":\"" + description + '"' +
+                ", \"points\":" + Position.toStr(points) +
+                ", \"color\":" + color +
+                ", \"width\":" + width +
+                ", \"visible\":" + visible +
+                '}';
+    }
 }
 
 

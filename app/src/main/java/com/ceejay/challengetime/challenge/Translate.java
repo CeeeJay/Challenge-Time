@@ -20,6 +20,20 @@ public class Translate {
         return translate.get(language);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        if(!translate.isEmpty()){
+            sb.append("\"name\":\"" + name + "\",");
+            for (String key : translate.keySet()) {
+                sb.append("\"" + key + "\":\"" + translate.get(key) + "\",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }
 
 
