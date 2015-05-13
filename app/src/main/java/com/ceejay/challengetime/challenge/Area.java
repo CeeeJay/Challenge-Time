@@ -160,6 +160,7 @@ public class Area {
                 ", \"focus\":" + focus +
                 ", \"position\":" + Position.toStr(position) +
                 ", \"visible\":" + visible +
+                ", \"fillColor\":" + fillColor +
                 ", \"strokeColor\":" + strokeColor +
                 ", \"strokeWidth\":" + strokeWidth +
                 '}';

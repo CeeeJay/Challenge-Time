@@ -80,8 +80,7 @@ public class Timer implements Runnable {
         public void tick( long time );
     }
 
-    @Override
-    public String toString() {
+    public String parseTime() {
         String returner = "";
 
         String milliSeconds = (currentTime / 10 ) % 100 + "";
@@ -120,7 +119,13 @@ public class Timer implements Runnable {
         }
 
         return returner;
+    }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "\"reverse\":" + reverse +
+                '}';
     }
 }
 

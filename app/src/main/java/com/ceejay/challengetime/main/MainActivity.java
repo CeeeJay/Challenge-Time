@@ -1,164 +1,174 @@
 package com.ceejay.challengetime.main;
 
-
-import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.User;
-import com.ceejay.challengetime.challenge.Challenge;
-import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.challenge.ChallengeLoader;
-import com.ceejay.challengetime.challenge.ChallengeObserver;
-import com.ceejay.challengetime.geo.LocationObserver;
-import com.ceejay.challengetime.geo.MainSlider;
-import com.ceejay.challengetime.geo.MapManager;
-import com.ceejay.challengetime.helper.slider.OptionButton;
-import com.facebook.AppEventsLogger;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-    public static final String TAG = MainActivity.class.getSimpleName();
+public class MainActivity extends ActionBarActivity implements OnItemClickListener{
 
-    private static Context context;
-    public static Context getAppContext(){
-        return context;
-    }
-
-    GoogleMap googleMap;
-    MainSlider slider;
-
-    NavigationDrawerFragment mNavigationDrawerFragment;
-
-    ChallengeObserver challengeObserver;
-    boolean isBound = false;
+    private ActionBar actionBar;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        context = this;
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+        moveDrawerToTop();
+        initActionBar() ;
+        initDrawer();
+        //Quick cheat: Add Fragment 1 to default view
+        onItemClick(null, null, 0, 0);
+    }
 
-        setUpMapIfNeeded();
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
 
-        setUser();
-        User.addUserDataChangedListener(new User.UserDataChangedListener() {
+    private void moveDrawerToTop() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+
+        // HACK: "steal" the first child of decor view
+        ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+        View child = decor.getChildAt(0);
+        decor.removeView(child);
+        LinearLayout container = (LinearLayout) drawer.findViewById(R.id.drawer_content); // This is the container we defined just now.
+        container.addView(child, 0);
+        drawer.findViewById(R.id.drawer).setPadding(0, getStatusBarHeight(), 0, 0);
+
+        // Make the drawer replace the first child
+        decor.addView(drawer);
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    private int getContentIdResource() {
+        return getResources().getIdentifier("content", "id", "android");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mDrawerToggle.syncState();
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        switch (item.getItemId()){
+            case R.id.action_settings: return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initActionBar() {
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(new ColorDrawable(Color.TRANSPARENT));
+        setTitle("Test");
+    }
+
+    private void initDrawer() {
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView)findViewById(R.id.drawer);
+        mDrawerLayout.setDrawerListener(createDrawerToggle());
+        ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_items));
+        mDrawerList.setAdapter(adapter);
+        mDrawerList.setOnItemClickListener(this);
+    }
+
+    private DrawerListener createDrawerToggle() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
             @Override
-            public void onChange() {
-                setUser();
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
             }
-        });
 
-        ChallengeAdapter.addChallenge(ChallengeLoader.load( this , "brunnen" ));
-        ChallengeAdapter.addChallenge(ChallengeLoader.load( this , "brunnen2" ));
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
 
-        Intent i = new Intent(this , ChallengeObserver.class);
-        bindService(i, connection, Context.BIND_AUTO_CREATE);
-
-        slider = (MainSlider) findViewById(R.id.slidingDrawer);
-        slider.attachButton( new OptionButton(this) );
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-
+            @Override
+            public void onDrawerStateChanged(int state) {
+            }
+        };
+        return mDrawerToggle;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        AppEventsLogger.activateApp(this);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mDrawerLayout.closeDrawer(mDrawerList);
+        changeFragment(position,false);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
-
-    private void setUser(){
-        ((TextView)findViewById(R.id.userName)).setText(User.name);
-    }
-
-    private void setUpMapIfNeeded() {
-        googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        if (googleMap != null) {
-            MapManager.setMap(this, googleMap);
-            new LocationObserver(this);
+    public void changeFragment( int position , boolean direction ){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ftx = fragmentManager.beginTransaction();
+        if( direction ) {
+            ftx.setCustomAnimations(R.anim.fade_in_next, R.anim.fade_out_previous);
+        }else{
+            ftx.setCustomAnimations(R.anim.fade_in_previous, R.anim.fade_out_next);
         }
+        if(position == 0) {
+            ftx.replace(R.id.main_content, new FragmentFirst());
+        } else if(position == 1) {
+            ftx.replace(R.id.main_content, new FragmentSecond());
+        }
+        ftx.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        if( ChallengeAdapter.focusedChallenge == null ) {
-            unbindService(connection);
-            super.onBackPressed();
-        }else if(ChallengeAdapter.focusedChallenge.status == Challenge.Status.STARTED){
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setMessage("Möchtest du die Challenge abbrechen?");
-            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ChallengeAdapter.getFocusedChallenge().stop();
-                    ChallengeAdapter.focusChallenge(null);
-                    MapManager.showMarkerLayer();
-                }
-            });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            alertDialog.show();
-        }else if (ChallengeAdapter.focusedChallenge.status == Challenge.Status.SHOWN) {
-            ChallengeAdapter.focusChallenge(null);
+    public void changeFragment( Fragment fragment, boolean direction ){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ftx = fragmentManager.beginTransaction();
+
+        if( direction ) {
+            ftx.setCustomAnimations(R.anim.fade_in_next, R.anim.fade_out_previous);
+        }else{
+            ftx.setCustomAnimations(R.anim.fade_in_previous, R.anim.fade_out_next);
         }
 
+        ftx.replace(R.id.main_content, fragment);
+        ftx.commit();
     }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        switch (position) {
-            case 0:
-                try {
-                    Class classe = Class.forName("com.ceejay.challengetime.editor.EditorActivity");
-                    Intent intent = new Intent(this, classe);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            break;
-        }
-
-    }
-
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ChallengeObserver.ChallengeBinder binder = (ChallengeObserver.ChallengeBinder) service;
-            challengeObserver = binder.getService();
-            isBound = true;
-            ChallengeAdapter.setChallengeObserver(challengeObserver);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBound = false;
-        }
-    };
-
-
 }
-

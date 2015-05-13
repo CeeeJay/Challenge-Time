@@ -18,6 +18,7 @@ public class Comparator {
     }
 
     public boolean compare(){
+        Log.i(TAG,comparable+""+Parser.parse(Replacer.replace(comparable, context)));
         return Boolean.parseBoolean(Parser.parse(Replacer.replace(comparable,context)));
     }
 }

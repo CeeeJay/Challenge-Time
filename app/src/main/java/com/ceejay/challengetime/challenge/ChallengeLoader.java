@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.Log;
 
 import com.ceejay.challengetime.helper.HttpPostContact;
@@ -111,13 +112,23 @@ public class ChallengeLoader {
                         area.description = jsonReader.nextString();
                         break;
                     case "fillColor":
-                        String color  = jsonReader.nextString();
-                        switch (color){
-                            case "start":   color="#7700FF00";break;
-                            case "point":   color="#77777777";break;
-                            case "finish":  color="#77FF0000";break;
+                        if( jsonReader.peek() == JsonToken.STRING ) {
+                            String color = jsonReader.nextString();
+                            switch (color) {
+                                case "start":
+                                    color = "#7700FF00";
+                                    break;
+                                case "point":
+                                    color = "#77777777";
+                                    break;
+                                case "finish":
+                                    color = "#77FF0000";
+                                    break;
+                            }
+                            area.fillColor = Color.parseColor(color);
+                        }else if( jsonReader.peek() == JsonToken.NUMBER ){
+                            area.fillColor = jsonReader.nextInt();
                         }
-                        area.fillColor = Color.parseColor(color);
                         break;
                     case "radius":
                         area.radius = jsonReader.nextInt();

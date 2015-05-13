@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ public class Challenge implements Runnable{
     public LatLng position;
     public String publisher;
     public int publish_time;
-    public int interval = 1000;
+    public int interval = 100;
     public ArrayList<Trigger> triggers = new ArrayList<>();
     public JSONMap<Translate> dictionary = new JSONMap<>();
     public JSONMap<Timer> timers = new JSONMap<>();
@@ -164,7 +165,7 @@ public class Challenge implements Runnable{
                     public void onClick(DialogInterface dialog, int id) {
                         TextView name = (TextView)view.findViewById(R.id.name);
                         TextView worth = (TextView)view.findViewById(R.id.worth);
-                        Trigger trigger = new Trigger();
+                        Trigger trigger = new Trigger(Challenge.this);
                         trigger.name = name.getText().toString();
                         trigger.title = worth.getText().toString();
                         addTrigger(trigger);
@@ -177,7 +178,6 @@ public class Challenge implements Runnable{
                 });
         builder.show();
     }
-
     public void addArea(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Pick a String");
@@ -229,10 +229,6 @@ public class Challenge implements Runnable{
         return strings.get( name );
     }
 
-    public int getVarLength() {
-        return booleans.size() + integers.size() + strings.size();
-    }
-
     public void show(){
         for( Area area : areas.values() ) {
             area.show();
@@ -271,7 +267,7 @@ public class Challenge implements Runnable{
     }
     public void finish(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Geo.getAppContext());
-        alertDialog.setMessage("Challenge abgeschlossen in" + timers.get("Stoppuhr1"));
+        alertDialog.setMessage("Challenge abgeschlossen in " + timers.get("timer"));
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -294,7 +290,7 @@ public class Challenge implements Runnable{
                 ((Activity) Geo.getAppContext()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)((Activity) Geo.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("Stoppuhr1").toString());
+                        ((TextView)((Activity) Geo.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("timer").parseTime());
                     }
                 });
                 for (Trigger trigger : Challenge.this.triggers) {
@@ -324,11 +320,13 @@ public class Challenge implements Runnable{
         //sb.append("\"type\":" + type + ",");
         //sb.append("\"description\":" + description + ",");
         //sb.append("\"record\":" + record + ",");
+
+        sb.append("\"timer\":" + timers + ",");
+
         sb.append("\"variables\":{");
             sb.append("\"bool\":" + booleans + ",");
             sb.append("\"integer\":" + integers + ",");
             sb.append("\"string\":" + strings );
-            //sb.append("\"timer\":" + timers );
         sb.append("},");
 
         sb.append("\"geometry\":{");

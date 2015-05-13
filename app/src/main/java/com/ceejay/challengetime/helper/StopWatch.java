@@ -90,7 +90,7 @@ public class StopWatch {
 
     public void vibrate( int time ){
         if(vibrator== null){
-            vibrator = (Vibrator) MainActivity.getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+            //vibrator = (Vibrator) MainActivity.getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
         }
         if(vibrator != null){
             vibrator.vibrate(time);

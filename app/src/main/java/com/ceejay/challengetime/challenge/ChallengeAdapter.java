@@ -27,7 +27,6 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
         if(challenge != null) {
             challenges.add(challenge);
             MapManager.addMarker(challenge);
-            Log.i(TAG,challenge.toString());
         }
     }
 

@@ -58,11 +58,20 @@ public class Trigger {
         }
     }
 
-    public Trigger() {
-    }
+    public Trigger( Challenge context ) { this.context = context; }
 
     public void setTrigger( String trigger ){
         this.trigger = trigger;
+        if(trigger == null) {
+            comparator = new Comparator("true", context);
+        }else{
+            comparator = new Comparator(trigger, context);
+        }
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
+        executor = new Executor(effect,context);
     }
 
     public void execute(){

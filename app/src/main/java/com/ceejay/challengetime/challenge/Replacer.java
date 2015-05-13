@@ -14,7 +14,6 @@ public class Replacer {
     public final static String TAG = Replacer.class.getSimpleName();
 
     public static String replace( String string , Challenge context ){
-
         //Replace User in Area statement
         Matcher m = PatternType.userInArea.matcher(string);
         StringBuffer sb = new StringBuffer();
