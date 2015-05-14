@@ -33,9 +33,9 @@ public class Adapter extends ArrayAdapter {
         ((TextView)view.findViewById(R.id.name)).setText(areas.get(position).title);
         ((TextView)view.findViewById(R.id.step_number)).setText(position+1+"");
         if( position == 0 ) {
-            view.findViewById(R.id.loop_list_icon).setBackground(getContext().getResources().getDrawable(R.drawable.integer_type_background));
-        }else if( position == areas.size() - 1 ){
             view.findViewById(R.id.loop_list_icon).setBackground(getContext().getResources().getDrawable(R.drawable.string_type_background));
+        }else if( position == areas.size() - 1 ){
+            view.findViewById(R.id.loop_list_icon).setBackground(getContext().getResources().getDrawable(R.drawable.integer_type_background));
         }else{
             view.findViewById(R.id.loop_list_icon).setBackground(getContext().getResources().getDrawable(R.drawable.bool_type_background));
         }

@@ -1,6 +1,5 @@
 package com.ceejay.challengetime.helper;
 
-import com.ceejay.challengetime.challenge.Str;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;

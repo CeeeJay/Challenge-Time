@@ -49,12 +49,11 @@ public class MapManager {
 
         markerLayer = new Layer( gMap );
         challengeLayer = new Layer( gMap );
-
         markerAdapter = new HashMap<>();
 
         googleMap = gMap;
         googleMap.setMyLocationEnabled(true);
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(49.28722, 7.11829)).draggable(true));
+        final Marker TestMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(49.28722, 7.11829)).draggable(true));
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {}
@@ -74,6 +73,7 @@ public class MapManager {
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                if(TestMarker == marker)return true;
                 zoom(marker);
                 marker.showInfoWindow();
                 for (OnMarkerFocusChangeListener onMarkerFocusChangeListener : onMarkerFocusChangeListeners) {

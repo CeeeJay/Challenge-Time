@@ -7,6 +7,7 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 
+import com.ceejay.challengetime.challenge.helper.PatternType;
 import com.ceejay.challengetime.helper.HttpPostContact;
 import com.google.android.gms.maps.model.LatLng;
 

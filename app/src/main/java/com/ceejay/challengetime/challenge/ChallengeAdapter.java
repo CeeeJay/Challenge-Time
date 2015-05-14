@@ -1,7 +1,6 @@
 package com.ceejay.challengetime.challenge;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.ceejay.challengetime.geo.MapManager;
 

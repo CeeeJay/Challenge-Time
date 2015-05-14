@@ -1,7 +1,6 @@
-package com.ceejay.challengetime.challenge;
+package com.ceejay.challengetime.challenge.helper;
 
-import android.util.Log;
-
+import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.helper.Distance;
 

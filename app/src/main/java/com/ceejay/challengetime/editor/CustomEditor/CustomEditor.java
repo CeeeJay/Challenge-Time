@@ -1,16 +1,17 @@
 package com.ceejay.challengetime.editor.CustomEditor;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,12 @@ import android.widget.ListView;
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Area;
 import com.ceejay.challengetime.challenge.Challenge;
+import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.Function;
 import com.ceejay.challengetime.editor.CustomEditor.Loop.EffectActivity;
-import com.ceejay.challengetime.editor.CustomEditor.Loop.LinkDialog;
 import com.ceejay.challengetime.editor.CustomEditor.Loop.TriggerActivity;
-import com.ceejay.challengetime.main.BaseActivity;
+import com.ceejay.challengetime.geo.Geo;
+import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Locale;
@@ -34,76 +36,71 @@ import java.util.Locale;
 /**
  * Created by CJay on 11.02.2015 for Challenge Time.
  */
-public class CustomEditor extends BaseActivity implements View.OnClickListener{
+public class CustomEditor extends Fragment implements View.OnClickListener{
     public final static String TAG = CustomEditor.class.getSimpleName();
 
     public static Challenge challenge;
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-    private static Context context;
-    public static Context getAppContext(){
-        return context;
-    }
+    private Context context;
+    private View view;
 
     private int position = 0;
 
     private int[] tabs = {R.id.allgemein,R.id.var,R.id.geo,R.id.function,R.id.loop};
     public static ArrayAdapter varArrayAdapter, geometryArrayAdapter, functionArrayAdapter, loopArrayAdapter ;
 
+    public CustomEditor() {
+        this.context = MainActivity.getAppContext();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getSupportActionBar().setElevation(0);
+    public void onAttach(final Activity activity) {
+        ((MainActivity)activity).setObBackPressedListener(new MainActivity.OnBackPressedListener() {
+            @Override
+            public boolean onBackPressed() {
+                ((MainActivity)activity).changeFragment(new Geo(),false);
+                return true;
+            }
+        });
+        super.onAttach(activity);
+    }
 
-        context = this;
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.challenge_builder, container, false);
+        this.view = view;
 
         challenge = new Challenge();
 
-        challenge.addBool("test", true);
-        challenge.addBool("test2", false);
-        challenge.addBool("test3", true);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
-        challenge.addInteger("lol", 123);
-
-        challenge.addString("Penis", "lol");
-
-
-        Area area = new Area();
-        area.position = new LatLng(2,3);
-        area.title = "lol";
-        challenge.addArea("test", area);
-
-        Function function = new Function();
-        function.effect = "area#start.color := green";
-        challenge.addFunction( "hmm" , function );
-
-        setContentView(R.layout.challenge_builder);
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         for( int tab : tabs ){
-            findViewById(tab).setOnClickListener(this);
+            view.findViewById(tab).setOnClickListener(this);
         }
-        highlightTab(findViewById(tabs[0]));
+        highlightTab(view.findViewById(tabs[0]));
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                highlightTab(findViewById(tabs[position]));
+                highlightTab(view.findViewById(tabs[position]));
                 if (position + 1 < tabs.length) {
-                    findViewById(tabs[position]).setBackgroundColor(Color.argb((int) (50 * positionOffset), 0, 0, 0));
-                    findViewById(tabs[position + 1]).setBackgroundColor(Color.argb((int) (50 - 50 * positionOffset), 0, 0, 0));
+                    Drawable first = getResources().getDrawable(R.drawable.border_bottom);
+                    Drawable second = getResources().getDrawable(R.drawable.border_bottom);
+                    first.setAlpha((int) (255 * positionOffset));
+                    second.setAlpha((int) (255 * ( 1 - positionOffset)));
+                    view.findViewById(tabs[position +1]).setBackground(first);
+                    view.findViewById(tabs[position]).setBackground(second);
                 }
             }
 
             @Override
             public void onPageSelected(int pos) {
-                highlightTab(findViewById(tabs[pos]));
+                //highlightTab(view.findViewById(tabs[pos]));
                 position = pos;
             }
 
@@ -112,24 +109,24 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
             }
         });
 
-        Button button = (Button)findViewById(R.id.add_list_item);
+        Button button = (Button)view.findViewById(R.id.add_list_item);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CustomEditor.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 switch(position) {
                     case 1:
                         builder.setTitle("Pick a DataType")
-                            .setItems(R.array.var_types, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which) {
-                                        case 0: challenge.addBool(context); break;
-                                        case 1: challenge.addInteger(context); break;
-                                        case 2: challenge.addString(context); break;
+                                .setItems(R.array.var_types, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which) {
+                                            case 0: challenge.addBool(context); break;
+                                            case 1: challenge.addInteger(context); break;
+                                            case 2: challenge.addString(context); break;
+                                        }
+                                        refresh();
                                     }
-                                    refresh();
-                                }
-                            });
+                                });
 
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
@@ -168,23 +165,25 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
                         builder.show();
                         break;
                     case 3:
-                        //challenge.addFunction(this);
+                        challenge.addFunction(context);
                     case 4:
                         challenge.addTrigger(context);
                 }
             }
         });
+
+        return view;
     }
 
     @Override
     public void onClick( View v ) {
-        highlightTab(v);
+        //highlightTab(v);
         switch (v.getId()){
-            case R.id.allgemein: mViewPager.setCurrentItem(0); break;
-            case R.id.var: mViewPager.setCurrentItem(1); break;
-            case R.id.geo: mViewPager.setCurrentItem(2); break;
+            case R.id.allgemein:mViewPager.setCurrentItem(0); break;
+            case R.id.var:      mViewPager.setCurrentItem(1); break;
+            case R.id.geo:      mViewPager.setCurrentItem(2); break;
             case R.id.function: mViewPager.setCurrentItem(3); break;
-            case R.id.loop: mViewPager.setCurrentItem(4); break;
+            case R.id.loop:     mViewPager.setCurrentItem(4); break;
         }
     }
 
@@ -205,12 +204,18 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
 
     public void highlightTab( View v ){
         for( int tab : tabs ){
-            findViewById(tab).setBackgroundColor(Color.argb(50, 0, 0, 0));
+            view.findViewById(tab).setBackgroundColor(Color.TRANSPARENT);
         }
-        v.setBackgroundColor(Color.TRANSPARENT);
+        v.setBackground(getResources().getDrawable(R.drawable.border_bottom));
     }
 
     @Override
+    public void onDestroy() {
+        ChallengeAdapter.addChallenge(challenge);
+        super.onDestroy();
+    }
+
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(TAG,challenge.triggers.get(0).trigger);
         if(resultCode == 2) {
@@ -227,7 +232,7 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -249,9 +254,7 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0: return getString(R.string.title_section1).toUpperCase(l);
-                case 1: return getString(R.string.title_section2).toUpperCase(l);
-                case 2: return getString(R.string.title_section3).toUpperCase(l);
+                case 0: return "TEST";
             }
             return "sss";
         }
@@ -278,33 +281,33 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
 
             switch(this.getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 2:
-                    arrayAdapter = new VarAdapter(CustomEditor.getAppContext(),challenge);
+                    arrayAdapter = new VarAdapter(MainActivity.getAppContext(),challenge);
                     varArrayAdapter = arrayAdapter;
                     break;
                 case 3:
-                    arrayAdapter = new GeometryAdapter(CustomEditor.getAppContext(),challenge);
+                    arrayAdapter = new GeometryAdapter(MainActivity.getAppContext(),challenge);
                     geometryArrayAdapter = arrayAdapter;
                     break;
                 case 4:
-                    arrayAdapter = new FunctionAdapter(CustomEditor.getAppContext(),challenge);
+                    arrayAdapter = new FunctionAdapter(MainActivity.getAppContext(),challenge);
                     functionArrayAdapter = arrayAdapter;
                     break;
                 case 5:
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getAppContext());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getAppContext());
                         builder.setTitle("Pick a LOOOL")
                             .setItems(R.array.loop, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent;
                                     switch (which) {
                                         case 0:
-                                            intent = new Intent(context, TriggerActivity.class);
+                                            intent = new Intent(MainActivity.getAppContext(), TriggerActivity.class);
                                             startActivityForResult(intent, position);
                                             break;
                                         case 1:
-                                            intent = new Intent(context, EffectActivity.class);
+                                            intent = new Intent(MainActivity.getAppContext(), EffectActivity.class);
                                             startActivityForResult(intent, position);
                                             break;
                                     }
@@ -320,7 +323,7 @@ public class CustomEditor extends BaseActivity implements View.OnClickListener{
                         builder.show();
                         }
                     });
-                    arrayAdapter = new LoopAdapter(CustomEditor.getAppContext(),challenge);
+                    arrayAdapter = new LoopAdapter(MainActivity.getAppContext(),challenge);
                     loopArrayAdapter = arrayAdapter;
                     break;
                 default:

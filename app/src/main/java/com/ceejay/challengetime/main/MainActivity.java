@@ -1,10 +1,11 @@
 package com.ceejay.challengetime.main;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
+import com.ceejay.challengetime.Settings;
+import com.ceejay.challengetime.challenge.ChallengeObserver;
+import com.ceejay.challengetime.editor.Editor;
+import com.ceejay.challengetime.geo.Geo;
+import com.ceejay.challengetime.geo.MainSlider;
+import com.google.android.gms.maps.GoogleMap;
 
 public class MainActivity extends ActionBarActivity implements OnItemClickListener{
 
@@ -33,9 +41,24 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    GoogleMap googleMap;
+    MainSlider slider;
+
+    ChallengeObserver challengeObserver;
+    boolean isBound = false;
+
+    private static Context context;
+    public static Context getAppContext(){
+        return context;
+    }
+    public static Activity getActivity(){
+        return (ActionBarActivity)context;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_main);
         moveDrawerToTop();
         initActionBar() ;
@@ -139,23 +162,11 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mDrawerLayout.closeDrawer(mDrawerList);
-        changeFragment(position,false);
-    }
-
-    public void changeFragment( int position , boolean direction ){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ftx = fragmentManager.beginTransaction();
-        if( direction ) {
-            ftx.setCustomAnimations(R.anim.fade_in_next, R.anim.fade_out_previous);
-        }else{
-            ftx.setCustomAnimations(R.anim.fade_in_previous, R.anim.fade_out_next);
+        switch (position){
+            case 0:changeFragment(new Geo(), true);break;
+            case 1:changeFragment(new Editor(), true);break;
+            case 2:startActivity(new Intent(this, Settings.class));break;
         }
-        if(position == 0) {
-            ftx.replace(R.id.main_content, new FragmentFirst());
-        } else if(position == 1) {
-            ftx.replace(R.id.main_content, new FragmentSecond());
-        }
-        ftx.commit();
     }
 
     public void changeFragment( Fragment fragment, boolean direction ){
@@ -170,5 +181,23 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 
         ftx.replace(R.id.main_content, fragment);
         ftx.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if( listener == null || !listener.onBackPressed()) {
+            super.onBackPressed();
+        }
+    }
+
+    public OnBackPressedListener listener;
+    public interface OnBackPressedListener{
+        boolean onBackPressed();
+    }
+    public void setObBackPressedListener(OnBackPressedListener listener) {
+        this.listener = listener;
+    }
+    public void removeObBackPressedListener() {
+        this.listener = null;
     }
 }

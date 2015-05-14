@@ -1,4 +1,4 @@
-package com.ceejay.challengetime.challenge;
+package com.ceejay.challengetime.challenge.helper;
 
 import java.util.regex.Pattern;
 

@@ -4,20 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.geo.MapManager;
 import com.ceejay.challengetime.helper.JSONMap;
 import com.ceejay.challengetime.helper.Position;
+import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by CJay on 18.04.2015 for Challenge Time.
@@ -155,7 +153,7 @@ public class Challenge implements Runnable{
     }
     public void addTrigger(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Pick a String");
+        builder.setTitle("Pick a Trigger");
 
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog, null);
@@ -180,8 +178,7 @@ public class Challenge implements Runnable{
     }
     public void addArea(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Pick a String");
-
+        builder.setTitle("Pick a Area");
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog2, null);
         builder.setView(view)
@@ -191,6 +188,31 @@ public class Challenge implements Runnable{
                         TextView name = (TextView)view.findViewById(R.id.name);
                         TextView worth = (TextView)view.findViewById(R.id.worth);
                         addString(name.getText().toString(), worth.getText().toString());
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
+    public void addFunction(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Pick a Function");
+
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog2, null);
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        TextView name = (TextView)view.findViewById(R.id.name);
+                        TextView worth = (TextView)view.findViewById(R.id.worth);
+                        Function function = new Function();
+                        function.name = name.getText().toString();
+                        function.trigger = worth.getText().toString();
+                        addFunction(function.name,function);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -266,7 +288,7 @@ public class Challenge implements Runnable{
         status = Status.HIDDEN;
     }
     public void finish(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Geo.getAppContext());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.getAppContext());
         alertDialog.setMessage("Challenge abgeschlossen in " + timers.get("timer"));
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -287,10 +309,11 @@ public class Challenge implements Runnable{
             long sleepTime;
             while (isRunning) {
                 startTime = System.currentTimeMillis();
-                ((Activity) Geo.getAppContext()).runOnUiThread(new Runnable() {
+                ((Activity) MainActivity.getAppContext()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)((Activity) Geo.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("timer").parseTime());
+                        if(Challenge.this.getTimer("timer")!=null)
+                        ((TextView)((Activity) MainActivity.getAppContext()).findViewById(R.id.challengeRecord)).setText(Challenge.this.getTimer("timer").parseTime());
                     }
                 });
                 for (Trigger trigger : Challenge.this.triggers) {

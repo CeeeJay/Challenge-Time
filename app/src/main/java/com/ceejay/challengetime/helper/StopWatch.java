@@ -1,9 +1,6 @@
 package com.ceejay.challengetime.helper;
 
-import android.content.Context;
 import android.os.Vibrator;
-
-import com.ceejay.challengetime.main.MainActivity;
 
 import java.util.ArrayList;
 

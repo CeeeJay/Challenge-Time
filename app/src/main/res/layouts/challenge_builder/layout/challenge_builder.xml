@@ -1,105 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/drawer_layout"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context="com.ceejay.challengetime.MainActivity">
-
-    <RelativeLayout
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:orientation="vertical"
+        android:padding="0dp">
+
         <LinearLayout
-            android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-            android:orientation="vertical"
-            android:padding="0dp"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="#FB3">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/allgemein">
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/gear"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/var">
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/tool"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/geo">
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/area"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/function">
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/function"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/loop">
-                    <ImageView
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/loop"/>
-                </RelativeLayout>
-            </LinearLayout>
-
-            <android.support.v4.view.ViewPager
-                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/pager"
-                android:layout_width="match_parent" android:layout_height="match_parent"
-                tools:context=".MainActivity" />
+            android:layout_height="50dp"
+            android:background="#FB3">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:id="@+id/allgemein">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/gear"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:id="@+id/var">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/tool"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:id="@+id/geo">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/area"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:id="@+id/function">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/function"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:id="@+id/loop">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/loop"/>
+            </RelativeLayout>
         </LinearLayout>
 
-        <Button
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/type"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
-            android:layout_marginEnd="30dp"
-            android:textSize="30dp"
-            android:textColor="#000"
-            android:text="+"
-            android:id="@+id/add_list_item"/>
+        <android.support.v4.view.ViewPager
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/pager"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            tools:context=".MainActivity" />
+    </LinearLayout>
 
-    </RelativeLayout>
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/type"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:textSize="30dp"
+        android:textColor="#000"
+        android:text="+"
+        android:id="@+id/add_list_item"/>
 
-
-    <fragment android:id="@+id/navigation_drawer"
-    android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:name="com.ceejay.challengetime.main.NavigationDrawerFragment"
-    tools:layout="@layout/fragment_navigation_drawer" />
-</android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

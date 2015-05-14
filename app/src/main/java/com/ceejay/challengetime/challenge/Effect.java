@@ -2,7 +2,8 @@ package com.ceejay.challengetime.challenge;
 
 import android.app.Activity;
 
-import com.ceejay.challengetime.geo.Geo;
+import com.ceejay.challengetime.challenge.helper.PatternType;
+import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.regex.Matcher;
@@ -116,7 +117,7 @@ public class Effect {
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
-                            ((Activity)Geo.getAppContext()).runOnUiThread(new Runnable() {
+                            ((Activity) MainActivity.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     switch (m.group(2)) {
@@ -151,7 +152,7 @@ public class Effect {
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
-                            ((Activity)Geo.getAppContext()).runOnUiThread(new Runnable() {
+                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                 switch (m.group(2)) {
@@ -177,7 +178,7 @@ public class Effect {
                     if( method.equals(":=") ){
                         final Matcher m = PatternType.object.matcher(first);
                         if( m.find() ){
-                            ((Activity)Geo.getAppContext()).runOnUiThread(new Runnable() {
+                            ((Activity)MainActivity.getAppContext()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     switch (m.group(2)) {
@@ -214,7 +215,7 @@ public class Effect {
                     context.getFunction(first).call();
                     break;
                 case "sys":
-                    ((Activity) Geo.getAppContext()).runOnUiThread(new Runnable() {
+                    ((Activity) MainActivity.getAppContext()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             switch(first){
