@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.helper.PatternType;
 import com.ceejay.challengetime.challenge.Trigger;
+import com.ceejay.challengetime.challenge.helper.PatternType;
 import com.ceejay.challengetime.editor.CustomEditor.CustomEditor;
 
 import java.util.ArrayList;

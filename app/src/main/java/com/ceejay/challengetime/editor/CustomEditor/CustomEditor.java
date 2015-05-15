@@ -21,15 +21,12 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.challenge.Area;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
-import com.ceejay.challengetime.challenge.Function;
 import com.ceejay.challengetime.editor.CustomEditor.Loop.EffectActivity;
 import com.ceejay.challengetime.editor.CustomEditor.Loop.TriggerActivity;
 import com.ceejay.challengetime.geo.Geo;
 import com.ceejay.challengetime.main.MainActivity;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Locale;
 

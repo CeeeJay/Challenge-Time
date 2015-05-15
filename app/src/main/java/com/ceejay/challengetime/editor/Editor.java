@@ -51,13 +51,8 @@ public class Editor extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0:
-                        //startActivity(new Intent(context, RunEditor.class));
-                        ((MainActivity)context).changeFragment(new RunEditor(),true);
-                        break;
-                    case 1:
-                        ((MainActivity)context).changeFragment(new CustomEditor(), true);
-                        break;
+                    case 0: ((MainActivity)context).changeFragment(new RunEditor(),true); break;
+                    case 1: ((MainActivity)context).changeFragment(new CustomEditor(), true); break;
                 }
             }
         });

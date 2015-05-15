@@ -25,7 +25,7 @@ public class EditorAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.grid_view_item, parent, false);
+        View view = inflater.inflate(R.layout.grid_view_item2, parent, false);
         ((TextView)view.findViewById(R.id.grid_item_name)).setText(array[position]);
         return view;
     }
