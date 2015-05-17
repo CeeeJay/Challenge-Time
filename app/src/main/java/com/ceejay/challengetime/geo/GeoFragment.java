@@ -10,40 +10,52 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.ChallengeObserver;
+import com.ceejay.challengetime.editor.RunEditor.Adapter;
+import com.ceejay.challengetime.helper.Position;
 import com.ceejay.challengetime.helper.slider.OptionButton;
 import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
-public class Geo extends Fragment {
+import java.util.ArrayList;
+
+public class GeoFragment extends Fragment {
     public static final String TAG = MainActivity.class.getSimpleName();
+
+    private static GeoFragment ourInstance = new GeoFragment();
+
+    public static GeoFragment getInstance() {
+        return ourInstance;
+    }
 
     private MainSlider slider;
     private ChallengeObserver challengeObserver;
     private Context context;
     boolean isBound = false;
     private GoogleMap googleMap;
-    public ActionBarActivity activity;
 
-    public Geo() {
+    public GeoFragment() {
         this.context = MainActivity.getAppContext();
     }
 
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        this.activity = (ActionBarActivity)activity;
-        ((MainActivity)activity).setObBackPressedListener(new MainActivity.OnBackPressedListener() {
+        ((MainActivity)activity).setOnBackPressedListener(new MainActivity.OnBackPressedListener() {
             @Override
             public boolean onBackPressed() {
                 if (ChallengeAdapter.focusedChallenge == null) {
@@ -74,22 +86,39 @@ public class Geo extends Fragment {
         });
     }
 
+    public ChallengeAdapter.OnChallengeFocusChangeListener listener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_geo, container, false);
+        final View view = inflater.inflate(R.layout.activity_geo, container, false);
 
         Intent i = new Intent(MainActivity.getAppContext() , ChallengeObserver.class);
         MainActivity.getAppContext().bindService(i, connection, Context.BIND_AUTO_CREATE);
 
         slider = (MainSlider) view.findViewById(R.id.slidingDrawer);
         slider.attachButton(new OptionButton(MainActivity.getAppContext()));
+
+        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        String[] string = {"lol","ss"};
+        listView.setAdapter(new ArrayAdapter<>(context,android.R.layout.simple_list_item_1,string));
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if( listener != null ) {
+            ChallengeAdapter.removeOnChallengeFocusChangeListener(listener);
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
         googleMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+        Log.i(TAG,new Position(49.28682,7.11829).distanceTo(new LatLng(49.28742,7.11972))+"");
+
         if (googleMap != null) {
             MapManager.setMap(MainActivity.getAppContext(), googleMap);
             for (Challenge challenge : ChallengeAdapter.challenges ) {

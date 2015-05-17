@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:padding="10dp"
-    android:background="@drawable/run">
+    android:background="@drawable/maraton"
+    android:layout_margin="10dp">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -30,6 +31,7 @@
                 android:gravity="center"
                 android:background="@drawable/seperator_horizontal_white"
                 android:paddingTop="5dp"
+                android:text="dies ist ein test"
                 android:paddingBottom="5dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"/>

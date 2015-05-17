@@ -1,6 +1,7 @@
 package com.ceejay.challengetime.editor.RunEditor;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Area;
+import com.ceejay.challengetime.challenge.Challenge;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,11 @@ public class Adapter extends ArrayAdapter {
     public Adapter(Context context , ArrayList<Area> areas) {
         super(context, R.layout.loop_list_item);
         this.areas = areas;
+    }
+
+    public Adapter(Context context , Challenge challenge ) {
+        super(context, R.layout.loop_list_item);
+        this.areas = new ArrayList<>(challenge.areas.values());
     }
 
     @Override

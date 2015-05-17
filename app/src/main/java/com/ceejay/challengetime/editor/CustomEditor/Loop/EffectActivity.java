@@ -8,7 +8,7 @@ import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.challenge.Trigger;
-import com.ceejay.challengetime.editor.CustomEditor.CustomEditor;
+import com.ceejay.challengetime.editor.CustomEditor.CustomEditorFragment;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class EffectActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trigger_list);
 
-        trigger = CustomEditor.challenge.triggers.get(getIntent().getIntExtra("requestCode",0));
+        trigger = CustomEditorFragment.challenge.triggers.get(getIntent().getIntExtra("requestCode",0));
         if(trigger.effect != null){
             String[] lines = trigger.effect.split(";");
             for( String line : lines ){

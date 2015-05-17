@@ -1,5 +1,10 @@
 package com.ceejay.challengetime.challenge;
 
+import android.content.Context;
+import android.os.Vibrator;
+
+import com.ceejay.challengetime.main.MainActivity;
+
 import java.util.ArrayList;
 
 /**
@@ -53,6 +58,8 @@ public class Timer implements Runnable {
             isClockRunning = true;
             thread = new Thread(this);
             thread.start();
+            Vibrator vibrator = (Vibrator) MainActivity.getAppContext().getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(500);
         }
     }
 

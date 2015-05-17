@@ -37,6 +37,9 @@ public class ChallengeObserver extends Service {
     public void setChallenge( Challenge challenge ){
         this.challenge = challenge;
     }
+    public Challenge getChallenge( ){
+        return challenge;
+    }
 
     public void start(){
         if(challenge != null){

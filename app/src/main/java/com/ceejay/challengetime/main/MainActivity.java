@@ -14,6 +14,8 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,31 +30,22 @@ import android.widget.ListView;
 
 import com.ceejay.challengetime.R;
 import com.ceejay.challengetime.Settings;
-import com.ceejay.challengetime.challenge.ChallengeObserver;
-import com.ceejay.challengetime.editor.Editor;
-import com.ceejay.challengetime.geo.Geo;
-import com.ceejay.challengetime.geo.MainSlider;
-import com.google.android.gms.maps.GoogleMap;
+import com.ceejay.challengetime.editor.EditorFragment;
+import com.ceejay.challengetime.geo.GeoFragment;
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements OnItemClickListener{
 
     private ActionBar actionBar;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
-    GoogleMap googleMap;
-    MainSlider slider;
-
-    ChallengeObserver challengeObserver;
-    boolean isBound = false;
-
+    private Toolbar toolbar;
     private static Context context;
     public static Context getAppContext(){
         return context;
     }
     public static Activity getActivity(){
-        return (ActionBarActivity)context;
+        return (AppCompatActivity)context;
     }
 
     @Override
@@ -60,6 +53,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_main);
+        //initToolBar();
         moveDrawerToTop();
         initActionBar() ;
         initDrawer();
@@ -122,6 +116,14 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
         return super.onOptionsItemSelected(item);
     }
 
+    private void initToolBar() {
+        /*toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.app_name);
+            setSupportActionBar(toolbar);
+        }*/
+    }
+
     private void initActionBar() {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -153,8 +155,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
             }
 
             @Override
-            public void onDrawerStateChanged(int state) {
-            }
+            public void onDrawerStateChanged(int state) {}
         };
         return mDrawerToggle;
     }
@@ -163,8 +164,8 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         mDrawerLayout.closeDrawer(mDrawerList);
         switch (position){
-            case 0:changeFragment(new Geo(), true);break;
-            case 1:changeFragment(new Editor(), true);break;
+            case 0:changeFragment(GeoFragment.getInstance(), true);break;
+            case 1:changeFragment(EditorFragment.getInstance(), true);break;
             case 2:startActivity(new Intent(this, Settings.class));break;
         }
     }
@@ -178,7 +179,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
         }else{
             ftx.setCustomAnimations(R.anim.fade_in_previous, R.anim.fade_out_next);
         }
-
+        removeOnBackPressedListener();
         ftx.replace(R.id.main_content, fragment);
         ftx.commit();
     }
@@ -194,10 +195,10 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
     public interface OnBackPressedListener{
         boolean onBackPressed();
     }
-    public void setObBackPressedListener(OnBackPressedListener listener) {
+    public void setOnBackPressedListener(OnBackPressedListener listener) {
         this.listener = listener;
     }
-    public void removeObBackPressedListener() {
+    public void removeOnBackPressedListener() {
         this.listener = null;
     }
 }

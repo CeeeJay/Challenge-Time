@@ -11,29 +11,35 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.ceejay.challengetime.R;
-import com.ceejay.challengetime.editor.CustomEditor.CustomEditor;
-import com.ceejay.challengetime.editor.RunEditor.RunEditor;
-import com.ceejay.challengetime.geo.Geo;
+import com.ceejay.challengetime.editor.CustomEditor.CustomEditorFragment;
+import com.ceejay.challengetime.editor.RunEditor.RunEditorFragment;
+import com.ceejay.challengetime.geo.GeoFragment;
 import com.ceejay.challengetime.main.MainActivity;
 
 /**
  * Created by CJay on 07.05.2015 for Challenge Time.
  */
-public class Editor extends Fragment{
-    public final static String TAG = Editor.class.getSimpleName();
+public class EditorFragment extends Fragment{
+    public final static String TAG = EditorFragment.class.getSimpleName();
+
+    private static EditorFragment ourInstance = new EditorFragment();
+
+    public static EditorFragment getInstance() {
+        return ourInstance;
+    }
 
     public Context context;
 
-    public Editor() {
+    public EditorFragment() {
         this.context = MainActivity.getAppContext();
     }
 
     @Override
     public void onAttach(final Activity activity) {
-        ((MainActivity)activity).setObBackPressedListener(new MainActivity.OnBackPressedListener() {
+        ((MainActivity)activity).setOnBackPressedListener(new MainActivity.OnBackPressedListener() {
             @Override
             public boolean onBackPressed() {
-                ((MainActivity)activity).changeFragment(new Geo(),false);
+                ((MainActivity) activity).changeFragment(new GeoFragment(), false);
                 return true;
             }
         });
@@ -51,8 +57,8 @@ public class Editor extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: ((MainActivity)context).changeFragment(new RunEditor(),true); break;
-                    case 1: ((MainActivity)context).changeFragment(new CustomEditor(), true); break;
+                    case 0: ((MainActivity)context).changeFragment(RunEditorFragment.getInstance(),true); break;
+                    case 1: ((MainActivity)context).changeFragment(CustomEditorFragment.getInstance(), true); break;
                 }
             }
         });

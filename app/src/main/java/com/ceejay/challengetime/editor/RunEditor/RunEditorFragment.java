@@ -17,7 +17,8 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.challenge.Timer;
 import com.ceejay.challengetime.challenge.Trigger;
-import com.ceejay.challengetime.geo.Geo;
+import com.ceejay.challengetime.editor.EditorFragment;
+import com.ceejay.challengetime.geo.GeoFragment;
 import com.ceejay.challengetime.main.MainActivity;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -26,24 +27,30 @@ import java.util.ArrayList;
 /**
  * Created by CJay on 10.05.2015 for Challenge Time.
  */
-public class RunEditor extends Fragment {
-    public final static String TAG = RunEditor.class.getSimpleName();
+public class RunEditorFragment extends Fragment {
+    public final static String TAG = RunEditorFragment.class.getSimpleName();
 
-    private ArrayList<Area> areas = new ArrayList<>();
+    private static RunEditorFragment ourInstance = new RunEditorFragment();
+
+    public static RunEditorFragment getInstance() {
+        return ourInstance;
+    }
+
+    private ArrayList<Area> areas;
     private Challenge challenge;
     private ArrayAdapter adapter;
     public Context context;
 
-    public RunEditor() {
+    public RunEditorFragment() {
         this.context = MainActivity.getAppContext();
     }
 
     @Override
     public void onAttach(final Activity activity) {
-        ((MainActivity)activity).setObBackPressedListener(new MainActivity.OnBackPressedListener() {
+        ((MainActivity)activity).setOnBackPressedListener(new MainActivity.OnBackPressedListener() {
             @Override
             public boolean onBackPressed() {
-                ((MainActivity)activity).changeFragment(new Geo(),false);
+                ((MainActivity) activity).changeFragment(new EditorFragment(), false);
                 return true;
             }
         });
@@ -53,6 +60,7 @@ public class RunEditor extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trigger_list, container, false);
+        areas = new ArrayList<>();
         challenge = new Challenge();
         challenge.position = new LatLng(49.28722,7.11829);
 

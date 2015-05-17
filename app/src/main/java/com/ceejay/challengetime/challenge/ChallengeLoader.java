@@ -26,35 +26,9 @@ public class ChallengeLoader {
     public ChallengeLoader() {}
 
     public static Challenge load( Context context , String name ){
-        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/challanges/" + name + ".challenge");
+        HttpPostContact contact = new HttpPostContact("http://192.168.178.47/challanges/" + name + ".challenge");
         InputStream stream = contact.send(new Bundle());
         return StreamToChallenge(stream);
-    }
-
-    public static void load( Context context ){
-        HttpPostContact contact = new HttpPostContact("http://192.168.178.55/script/php/load_challenge.php");
-        InputStream stream = contact.send(new Bundle());
-        Log.i(TAG, StreamToArray(stream).toString());
-    }
-
-    public static ArrayList<String> StreamToArray( InputStream is ){
-        ArrayList<String> list = new ArrayList<>();
-        if (is == null) {
-            return null;
-        }
-        try {
-            JsonReader jsonReader = new JsonReader(new InputStreamReader(is, "UTF-8"));
-            jsonReader.setLenient(true);
-            jsonReader.beginArray();
-            while (jsonReader.hasNext()){
-                list.add(jsonReader.nextString());
-            }
-            jsonReader.endArray();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
     }
 
     public static void readDictionary(JsonReader jsonReader,Challenge challenge) throws IOException{
@@ -84,12 +58,8 @@ public class ChallengeLoader {
                     /*case "startTime":
                         timer.startTime = jsonReader.nextInt();
                         break;*/
-                    case "reverse":
-                        timer.reverse = jsonReader.nextBoolean();
-                        break;
-                    default:
-                        jsonReader.skipValue();
-                        break;
+                    case "reverse": timer.reverse = jsonReader.nextBoolean(); break;
+                    default: jsonReader.skipValue(); break;
                 }
             }
             jsonReader.endObject();
@@ -106,12 +76,8 @@ public class ChallengeLoader {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 switch (jsonReader.nextName()) {
-                    case "title":
-                        area.title = jsonReader.nextString();
-                        break;
-                    case "description":
-                        area.description = jsonReader.nextString();
-                        break;
+                    case "title": area.title = jsonReader.nextString(); break;
+                    case "description": area.description = jsonReader.nextString(); break;
                     case "fillColor":
                         if( jsonReader.peek() == JsonToken.STRING ) {
                             String color = jsonReader.nextString();
@@ -131,21 +97,11 @@ public class ChallengeLoader {
                             area.fillColor = jsonReader.nextInt();
                         }
                         break;
-                    case "radius":
-                        area.radius = jsonReader.nextInt();
-                        break;
-                    case "position":
-                        area.position = readPosition(jsonReader);
-                        break;
-                    case "focus":
-                        area.focus = jsonReader.nextBoolean();
-                        break;
-                    case "visible":
-                        area.visible = jsonReader.nextBoolean();
-                        break;
-                    default:
-                        jsonReader.skipValue();
-                        break;
+                    case "radius": area.radius = jsonReader.nextInt(); break;
+                    case "position": area.position = readPosition(jsonReader); break;
+                    case "focus": area.focus = jsonReader.nextBoolean(); break;
+                    case "visible": area.visible = jsonReader.nextBoolean(); break;
+                    default: jsonReader.skipValue();  break;
                 }
             }
             jsonReader.endObject();
@@ -202,21 +158,11 @@ public class ChallengeLoader {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 switch (jsonReader.nextName()) {
-                    case "title":
-                        polygon.title = jsonReader.nextString();
-                        break;
-                    case "description":
-                        polygon.description = jsonReader.nextString();
-                        break;
-                    case "strokeColor":
-                        polygon.strokeColor = Color.parseColor(jsonReader.nextString());
-                        break;
-                    case "strokeWidth":
-                        polygon.strokeWidth = jsonReader.nextInt();
-                        break;
-                    case "fillColor":
-                        polygon.fillColor = Color.parseColor(jsonReader.nextString());
-                        break;
+                    case "title": polygon.title = jsonReader.nextString(); break;
+                    case "description": polygon.description = jsonReader.nextString(); break;
+                    case "strokeColor": polygon.strokeColor = Color.parseColor(jsonReader.nextString()); break;
+                    case "strokeWidth": polygon.strokeWidth = jsonReader.nextInt(); break;
+                    case "fillColor": polygon.fillColor = Color.parseColor(jsonReader.nextString()); break;
                     case "points":
                         jsonReader.beginArray();
                         while (jsonReader.hasNext()){
@@ -224,12 +170,8 @@ public class ChallengeLoader {
                         }
                         jsonReader.endArray();
                         break;
-                    case "visible":
-                        polygon.visible = jsonReader.nextBoolean();
-                        break;
-                    default:
-                        jsonReader.skipValue();
-                        break;
+                    case "visible": polygon.visible = jsonReader.nextBoolean(); break;
+                    default: jsonReader.skipValue(); break;
                 }
             }
             jsonReader.endObject();
@@ -246,18 +188,10 @@ public class ChallengeLoader {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 switch (jsonReader.nextName()) {
-                    case "title":
-                        polyline.title = jsonReader.nextString();
-                        break;
-                    case "description":
-                        polyline.description = jsonReader.nextString();
-                        break;
-                    case "color":
-                        polyline.color = Color.parseColor(jsonReader.nextString());
-                        break;
-                    case "width":
-                        polyline.width = jsonReader.nextInt();
-                        break;
+                    case "title": polyline.title = jsonReader.nextString(); break;
+                    case "description": polyline.description = jsonReader.nextString(); break;
+                    case "color": polyline.color = Color.parseColor(jsonReader.nextString()); break;
+                    case "width": polyline.width = jsonReader.nextInt(); break;
                     case "points":
                         jsonReader.beginArray();
                         while (jsonReader.hasNext()){
@@ -265,12 +199,8 @@ public class ChallengeLoader {
                         }
                         jsonReader.endArray();
                         break;
-                    case "visible":
-                        polyline.visible = jsonReader.nextBoolean();
-                        break;
-                    default:
-                        jsonReader.skipValue();
-                        break;
+                    case "visible": polyline.visible = jsonReader.nextBoolean(); break;
+                    default: jsonReader.skipValue(); break;
                 }
             }
             jsonReader.endObject();
@@ -298,9 +228,7 @@ public class ChallengeLoader {
                 case "integer": readInteger(jsonReader, challenge); break;
                 case "string":  readString(jsonReader, challenge); break;
                 case "bool":    readBool(jsonReader, challenge); break;
-                default:
-                    jsonReader.skipValue();
-                    break;
+                default: jsonReader.skipValue(); break;
             }
         }
         jsonReader.endObject();

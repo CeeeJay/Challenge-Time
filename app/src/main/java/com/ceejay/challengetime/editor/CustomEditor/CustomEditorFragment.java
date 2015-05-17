@@ -25,7 +25,8 @@ import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.challenge.ChallengeAdapter;
 import com.ceejay.challengetime.editor.CustomEditor.Loop.EffectActivity;
 import com.ceejay.challengetime.editor.CustomEditor.Loop.TriggerActivity;
-import com.ceejay.challengetime.geo.Geo;
+import com.ceejay.challengetime.editor.EditorFragment;
+import com.ceejay.challengetime.geo.GeoFragment;
 import com.ceejay.challengetime.main.MainActivity;
 
 import java.util.Locale;
@@ -33,8 +34,14 @@ import java.util.Locale;
 /**
  * Created by CJay on 11.02.2015 for Challenge Time.
  */
-public class CustomEditor extends Fragment implements View.OnClickListener{
-    public final static String TAG = CustomEditor.class.getSimpleName();
+public class CustomEditorFragment extends Fragment implements View.OnClickListener{
+    public final static String TAG = CustomEditorFragment.class.getSimpleName();
+
+    private static CustomEditorFragment ourInstance = new CustomEditorFragment();
+
+    public static CustomEditorFragment getInstance() {
+        return ourInstance;
+    }
 
     public static Challenge challenge;
 
@@ -48,16 +55,16 @@ public class CustomEditor extends Fragment implements View.OnClickListener{
     private int[] tabs = {R.id.allgemein,R.id.var,R.id.geo,R.id.function,R.id.loop};
     public static ArrayAdapter varArrayAdapter, geometryArrayAdapter, functionArrayAdapter, loopArrayAdapter ;
 
-    public CustomEditor() {
+    public CustomEditorFragment() {
         this.context = MainActivity.getAppContext();
     }
 
     @Override
     public void onAttach(final Activity activity) {
-        ((MainActivity)activity).setObBackPressedListener(new MainActivity.OnBackPressedListener() {
+        ((MainActivity)activity).setOnBackPressedListener(new MainActivity.OnBackPressedListener() {
             @Override
             public boolean onBackPressed() {
-                ((MainActivity)activity).changeFragment(new Geo(),false);
+                ((MainActivity) activity).changeFragment(new EditorFragment(), false);
                 return true;
             }
         });

@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <array name="builder_types">
+        <item>Run Challenge</item>
+        <item>Custom Challenge</item>
+    </array>
+
+    <array name="var_types">
+        <item>Bool</item>
+        <item>Integer</item>
+        <item>String</item>
+    </array>
+
+    <array name="area_types">
+        <item>Area</item>
+        <item>Polygon</item>
+        <item>Polyline</item>
+    </array>
+
+    <array name="loop">
+        <item>Trigger</item>
+        <item>Effect</item>
+    </array>
+
+    <array name="trigger_options">
+        <item>Change Value</item>
+        <item>Append Item</item>
+        <item>Prepend Item</item>
+    </array>
+
     <string-array name="nav_items">
         <item>Map</item>
         <item>Editor</item>
         <item>Pref</item>
+        <item>Pref2</item>
     </string-array>
 </resources>

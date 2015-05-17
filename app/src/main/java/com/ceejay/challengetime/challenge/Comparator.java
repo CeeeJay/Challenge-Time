@@ -1,6 +1,8 @@
 package com.ceejay.challengetime.challenge;
 
 
+import android.util.Log;
+
 import com.ceejay.challengetime.challenge.helper.Replacer;
 
 /**

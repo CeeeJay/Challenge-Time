@@ -1,5 +1,7 @@
 package com.ceejay.challengetime.challenge.helper;
 
+import android.util.Log;
+
 import com.ceejay.challengetime.challenge.Challenge;
 import com.ceejay.challengetime.geo.LocationObserver;
 import com.ceejay.challengetime.helper.Distance;
@@ -17,7 +19,7 @@ public class Replacer {
         Matcher m = PatternType.userInArea.matcher(string);
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
-            m.appendReplacement(sb, userInArea(m.group(1),m.group(2),m.group(3),context));
+            m.appendReplacement(sb, userInArea(m.group(1), m.group(2), m.group(3), context));
         }
         m.appendTail(sb);
 
@@ -32,21 +34,21 @@ public class Replacer {
         return sb.toString();
     }
 
-    public static String userInArea( String user , String type, String area, Challenge context ){
-        if( LocationObserver.position == null || context.getArea(area).position == null ) return "false";
+    public static String userInArea( String user, String type, String area, Challenge context ){
+        if( LocationObserver.location == null || context.getArea(area).position == null ) return "false";
         if( type.equals( "->" ) ){
-            return String.valueOf(Distance.between( LocationObserver.position , context.getArea(area).position ) <= context.getArea(area).radius);
+            return String.valueOf(Distance.between( LocationObserver.location , context.getArea(area).position ) <= context.getArea(area).radius);
         }else if( type.equals( "<-" ) ){
-            return String.valueOf(Distance.between(LocationObserver.position, context.getArea(area).position) > context.getArea(area).radius);
+            return String.valueOf(Distance.between(LocationObserver.location, context.getArea(area).position) > context.getArea(area).radius);
         }
-        return "";
+        return "false";
     }
 
     public static String get( String type , String key , Challenge context ){
         try {
             switch(type){
                 case "int": return String.valueOf(context.getInt(key).getValue());
-                case "bool": return String.valueOf(context.getBool(key).getValue());
+                case "bool":return String.valueOf(context.getBool(key).getValue());
                 case "timer":
                     if(key.split(".")[1].equals("time")) {
                         return String.valueOf(context.getTimer(key.split(".")[0]).getTime());
@@ -56,7 +58,7 @@ public class Replacer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return "false";
     }
 
 }

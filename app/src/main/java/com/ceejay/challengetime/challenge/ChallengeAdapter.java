@@ -51,19 +51,17 @@ public class ChallengeAdapter extends ArrayList<Challenge> {
         return focusedChallenge;
     }
 
-    public static void setFocusedChallenge(Challenge focusedChallenge) {
-        ChallengeAdapter.focusedChallenge = focusedChallenge;
-    }
-
-    public static interface OnChallengeFocusChangeListener {
-        public void onChallengeFocusChange( Challenge challenge );
+    public interface OnChallengeFocusChangeListener {
+        void onChallengeFocusChange( Challenge challenge );
     }
     public static void addOnChallengeFocusChangeListener(@NonNull OnChallengeFocusChangeListener onChallengeFocusChangeListener){
         onChallengeFocusChangeListeners.add(onChallengeFocusChangeListener);
     }
     public static void removeOnChallengeFocusChangeListener(@NonNull OnChallengeFocusChangeListener onChallengeFocusChangeListener){
-        if( onChallengeFocusChangeListeners.contains(onChallengeFocusChangeListener) ) {
-            onChallengeFocusChangeListeners.remove(onChallengeFocusChangeListener);
+        synchronized (onChallengeFocusChangeListeners) {
+            if (onChallengeFocusChangeListeners.contains(onChallengeFocusChangeListener)) {
+                onChallengeFocusChangeListeners.remove(onChallengeFocusChangeListener);
+            }
         }
     }
     public static void removeAllOnChallengeFocusChangeListener( ) {
